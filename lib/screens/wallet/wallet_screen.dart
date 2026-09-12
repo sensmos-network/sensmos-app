@@ -920,7 +920,7 @@ class _WalletScreenState extends State<WalletScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(tr('DO ODBIORU'),
+              Text(tr('W SENSMOS'),
                   style: const TextStyle(
                       color: AppTheme.muted, fontSize: 11, letterSpacing: 0.8)),
               const SizedBox(height: 6),
@@ -936,6 +936,10 @@ class _WalletScreenState extends State<WalletScreen> {
                       style: TextStyle(color: AppTheme.muted, fontSize: 14, fontWeight: FontWeight.w600)),
                 ],
               ),
+              const SizedBox(height: 6),
+              Text(
+                  tr('Zarobione GALU — do odbioru na portfel on-chain albo do wykorzystania na usługi (Store, LoRa).'),
+                  style: const TextStyle(color: AppTheme.muted, fontSize: 12)),
               const SizedBox(height: 14),
               SizedBox(
                 width: double.infinity,
@@ -943,12 +947,18 @@ class _WalletScreenState extends State<WalletScreen> {
                   style: FilledButton.styleFrom(
                       backgroundColor: AppTheme.teal,
                       padding: const EdgeInsets.symmetric(vertical: 14)),
-                  onPressed: _busy ? null : _claim,
+                  // Bez POL claim i tak padnie na gazie z błędem RPC — szary przycisk mówi to wcześniej.
+                  onPressed: (_busy || _lowGas) ? null : _claim,
                   icon: const Icon(Icons.download, color: Colors.black, size: 18),
                   label: Text(tr('Odbierz (Claim)'),
                       style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w600)),
                 ),
               ),
+              if (_lowGas) ...[
+                const SizedBox(height: 6),
+                Text(tr('Odbiór wymaga POL na gaz — patrz portfel on-chain poniżej.'),
+                    style: const TextStyle(color: AppTheme.amber, fontSize: 12)),
+              ],
               if (_claimPending > 0) ...[
                 const SizedBox(height: 6),
                 _smallRow(tr('Wypłata w toku'), _claimPending),
@@ -979,18 +989,24 @@ class _WalletScreenState extends State<WalletScreen> {
       );
 
   // Wpłata (Deposit) — włączona 2026-09-09, patrz kDepositEnabled u góry pliku.
-  Widget _actions() => Row(children: [
-        Expanded(
-          child: OutlinedButton.icon(
-            style: OutlinedButton.styleFrom(
-                foregroundColor: AppTheme.teal,
-                side: const BorderSide(color: AppTheme.teal),
-                padding: const EdgeInsets.symmetric(vertical: 14)),
-            onPressed: _busy ? null : _deposit,
-            icon: const Icon(Icons.upload, size: 18),
-            label: Text(tr('Wpłać (Deposit)')),
+  Widget _actions() => Column(children: [
+        Row(children: [
+          Expanded(
+            child: OutlinedButton.icon(
+              style: OutlinedButton.styleFrom(
+                  foregroundColor: AppTheme.teal,
+                  side: const BorderSide(color: AppTheme.teal),
+                  padding: const EdgeInsets.symmetric(vertical: 14)),
+              onPressed: _busy ? null : _deposit,
+              icon: const Icon(Icons.upload, size: 18),
+              label: Text(tr('Wpłać (Deposit)')),
+            ),
           ),
-        ),
+        ]),
+        const SizedBox(height: 6),
+        Text(
+            tr('Przenosi GALU z portfela on-chain do Sensmos — na opłacanie usług (Store, LoRa).'),
+            style: const TextStyle(color: AppTheme.muted, fontSize: 12)),
       ]);
 
   Widget _onchainCard() => Card(
@@ -1002,6 +1018,10 @@ class _WalletScreenState extends State<WalletScreen> {
               Text(tr('PORTFEL ON-CHAIN (Polygon)'),
                   style: const TextStyle(
                       color: AppTheme.muted, fontSize: 11, letterSpacing: 0.8)),
+              const SizedBox(height: 6),
+              Text(
+                  tr('Twoje własne środki na portfelu. Nie płacą za usługi — do tego służy Wpłata.'),
+                  style: const TextStyle(color: AppTheme.muted, fontSize: 12)),
               const SizedBox(height: 16),
               _assetRow('GALU', _weiToDouble(_dhv), AppTheme.amber, 3, 26,
                   onSend: (_busy || _dhv <= BigInt.zero) ? null : _sendGalu),

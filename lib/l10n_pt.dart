@@ -23,7 +23,15 @@ const Map<String, String> ptMap = {
   "Nazwa / tag noda": "Nome / tag do nó",
   "Twoja etykieta, żeby łatwiej rozpoznać node — np. Garaż albo Router.": "Sua etiqueta para reconhecer o nó mais facilmente — ex.: Garagem ou Roteador.",
   // ── Carteira: senha / envio / QR / reformulação do saldo (1.5.48) ──
-  "DO ODBIORU": "A RECEBER",
+  "W SENSMOS": "NO SENSMOS",
+  "Zarobione GALU — do odbioru na portfel on-chain albo do wykorzystania na usługi (Store, LoRa).":
+      "GALU ganhos — levantar para a carteira on-chain ou usar em serviços (Store, LoRa).",
+  "Odbiór wymaga POL na gaz — patrz portfel on-chain poniżej.":
+      "Levantar exige POL para gás — veja a carteira on-chain abaixo.",
+  "Przenosi GALU z portfela on-chain do Sensmos — na opłacanie usług (Store, LoRa).":
+      "Transfere GALU da carteira on-chain para o Sensmos — para pagar serviços (Store, LoRa).",
+  "Twoje własne środki na portfelu. Nie płacą za usługi — do tego służy Wpłata.":
+      "Os teus próprios fundos, on-chain. Não pagam serviços — para isso serve o Depósito.",
   "Zarobione": "Ganho",
   "Wydane": "Gasto",
   "PORTFEL ON-CHAIN (Polygon)": "CARTEIRA ON-CHAIN (Polygon)",

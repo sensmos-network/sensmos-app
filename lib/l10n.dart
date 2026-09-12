@@ -90,7 +90,15 @@ const Map<String, String> _enMap = {
   "Nazwa / tag noda": "Node name / tag",
   "Twoja etykieta, żeby łatwiej rozpoznać node — np. Garaż albo Router.": "Your own label to recognise the node — e.g. Garage or Router.",
   // ── Portfel: hasło / wysyłka / QR / przebudowa salda (1.5.48) ──
-  "DO ODBIORU": "TO COLLECT",
+  "W SENSMOS": "IN SENSMOS",
+  "Zarobione GALU — do odbioru na portfel on-chain albo do wykorzystania na usługi (Store, LoRa).":
+      "Earned GALU — claim to your on-chain wallet or spend on services (Store, LoRa).",
+  "Odbiór wymaga POL na gaz — patrz portfel on-chain poniżej.":
+      "Claiming needs POL for gas — see the on-chain wallet below.",
+  "Przenosi GALU z portfela on-chain do Sensmos — na opłacanie usług (Store, LoRa).":
+      "Moves GALU from your on-chain wallet into Sensmos — to pay for services (Store, LoRa).",
+  "Twoje własne środki na portfelu. Nie płacą za usługi — do tego służy Wpłata.":
+      "Your own funds, on-chain. They don't pay for services — use Deposit for that.",
   "Zarobione": "Earned",
   "Wydane": "Spent",
   "PORTFEL ON-CHAIN (Polygon)": "ON-CHAIN WALLET (Polygon)",
@@ -1154,7 +1162,15 @@ const Map<String, String> _deMap = {
   "Nazwa / tag noda": "Node-Name / Tag",
   "Twoja etykieta, żeby łatwiej rozpoznać node — np. Garaż albo Router.": "Dein eigenes Label, um den Node leichter zu erkennen — z. B. Garage oder Router.",
   // ── Wallet: Passwort / Senden / QR / Saldo-Umbau (1.5.48) ──
-  "DO ODBIORU": "ABZUHOLEN",
+  "W SENSMOS": "IN SENSMOS",
+  "Zarobione GALU — do odbioru na portfel on-chain albo do wykorzystania na usługi (Store, LoRa).":
+      "Verdiente GALU — auf die On-Chain-Wallet abholen oder für Dienste ausgeben (Store, LoRa).",
+  "Odbiór wymaga POL na gaz — patrz portfel on-chain poniżej.":
+      "Abholen braucht POL für Gas — siehe On-Chain-Wallet unten.",
+  "Przenosi GALU z portfela on-chain do Sensmos — na opłacanie usług (Store, LoRa).":
+      "Überträgt GALU von der On-Chain-Wallet nach Sensmos — zum Bezahlen von Diensten (Store, LoRa).",
+  "Twoje własne środki na portfelu. Nie płacą za usługi — do tego służy Wpłata.":
+      "Dein eigenes Guthaben on-chain. Es bezahlt keine Dienste — dafür ist Einzahlen da.",
   "Zarobione": "Verdient",
   "Wydane": "Ausgegeben",
   "PORTFEL ON-CHAIN (Polygon)": "ON-CHAIN-WALLET (Polygon)",
