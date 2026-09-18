@@ -53,9 +53,18 @@ def klucze_slownika(nazwa_mapy, pliki):
     klucze = set()
     for p in pliki:
         s = io.open(p, encoding='utf-8').read()
-        i = s.find(nazwa_mapy)
+        # Szukamy DEFINICJI mapy, nie pierwszej wzmianki o niej. Nazwa pada wczesniej w tablicy
+        # jezykow (`'de': _deMap`), wiec `find(nazwa)` startowal tuz pod nia i zbieral klucze
+        # WSZYSTKICH map ponizej — kazdy napis wygladal na przetlumaczony wszedzie i narzedzie
+        # zawsze pokazywalo zero brakow.
+        i = s.find(nazwa_mapy + ' = {')
+        if i < 0:
+            i = s.find(nazwa_mapy + '= {')
         if i < 0:
             continue
+        # koniec mapy: pierwsza linia zaczynajaca sie od '};' po jej poczatku
+        koniec = s.find(chr(10) + '};', i)
+        s = s[:koniec] if koniec > 0 else s
         # od nawiasu klamrowego do konca mapy; wystarczy nam zgrubnie — bierzemy
         # wszystkie literaly po lewej stronie dwukropka
         for m in re.finditer(r'"((?:[^"\\]|\\.)*)"\s*:', s[i:]):

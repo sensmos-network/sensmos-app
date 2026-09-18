@@ -71,6 +71,7 @@ const Map<String, String> ptMap = {
   "Wyłączyć hasło?": "Desativar senha?",
   "Klucz wróci do ochrony samego telefonu. Podaj obecne hasło.": "A chave voltará à proteção apenas do telefone. Digite a senha atual.",
   "Hasło wyłączone.": "Senha desativada.",
+  "Twoje pliki szyfruje klucz z portfela, więc bez odblokowania nie ma czym ich otworzyć ani sprawdzić miejsca w sieci.": "Os teus ficheiros são cifrados com uma chave da carteira — sem desbloquear não há como abri-los nem verificar o espaço na rede.",
   "Odblokuj portfel": "Desbloquear carteira",
   "Portfel jest chroniony hasłem. Podaj je, aby wykonywać operacje.": "A carteira é protegida por senha. Digite-a para realizar operações.",
   "Zapomniałem": "Esqueci",
