@@ -420,20 +420,26 @@ class _NodesScreenState extends State<NodesScreen> {
         SnackBar(content: Text(tr('Usunięto z aplikacji: %s', [short]))));
   }
 
-  Future<void> _deleteFromNetwork(String id) async {
+  // gateway = nazwa albo EUI bramy: ta sama trasa DELETE, tylko teksty dla bramy
+  Future<void> _deleteFromNetwork(String id, {String? gateway}) async {
     final short = id.length > 8 ? '${id.substring(0, 8)}…' : id;
     final ok = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text(tr('Usunąć node z sieci?')),
-        content: Text(tr(
+        title: Text(gateway != null ? tr('Odpiąć bramę?') : tr('Usunąć node z sieci?')),
+        content: Text(gateway != null
+            ? tr('Brama %s zniknie z Twojego portfela i przestanie zarabiać. '
+                'Możesz ją później sparować ponownie po EUI. '
+                'Zarobione GALU zostają w portfelu.', [gateway])
+            : tr(
             'Node %s i WSZYSTKIE jego dane zostaną trwale usunięte z SENSMOS. '
             'Możesz go później dodać ponownie (onboarding przez Bluetooth). '
             'Zarobione GALU pozostają w Twoim portfelu.', [short])),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(tr('Anuluj'))),
           TextButton(onPressed: () => Navigator.pop(ctx, true),
-              child: Text(tr('Usuń permanentnie'), style: const TextStyle(color: Color(0xFFFF4444)))),
+              child: Text(gateway != null ? tr('Odepnij') : tr('Usuń permanentnie'),
+                  style: const TextStyle(color: Color(0xFFFF4444)))),
         ],
       ),
     );
@@ -456,7 +462,8 @@ class _NodesScreenState extends State<NodesScreen> {
       final ns = context.read<NodeService>();
       if (ns.nodes.any((x) => x.id == id)) context.read<CoreBloc>().add(NodeRemoved(id));
       _fetchMyBeNodes();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(tr('Node usunięty z sieci'))));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(gateway != null ? tr('Brama odpięta') : tr('Node usunięty z sieci'))));
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -1399,7 +1406,7 @@ class _NodesScreenState extends State<NodesScreen> {
             )),
             const SizedBox(width: 8),
             Expanded(child: OutlinedButton.icon(
-              onPressed: () => _deleteFromNetwork(id),
+              onPressed: () => _deleteFromNetwork(id, gateway: name.isNotEmpty ? name : eui),
               icon: const Icon(Icons.link_off, size: 16),
               label: FittedBox(fit: BoxFit.scaleDown, child: Text(tr('Odepnij bramę'), maxLines: 1)),
               style: OutlinedButton.styleFrom(

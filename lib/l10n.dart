@@ -1264,7 +1264,7 @@ const Map<String, String> _enMap = {
       "It does not mean anything is lost — your files sit on the sellers' disks regardless of this connection. Try again in a moment.",
   "Sprawdzam…": "Checking…",
   "Sparowane urządzenia": "Paired devices",
-  "komputery wpuszczone na to konto": "computers allowed into this account",
+  "komputery i Home Assistant z dostępem do konta": "computers and Home Assistant with access to this account",
   "Sparuj urządzenie": "Pair a device",
   "to urządzenie": "this device",
   "Dostęp znika natychmiast. Jeśli to token tego telefonu, powiadomienia i tunele odłączą się do czasu ponownego zalogowania.":
@@ -1274,9 +1274,9 @@ const Map<String, String> _enMap = {
   "Nic jeszcze nie sparowano.": "Nothing paired yet.",
   "bez nazwy": "unnamed",
   "ostatnio: %s": "last used: %s",
-  "Na komputerze pojawi się kod. Przepisz go tutaj albo zeskanuj — to ten sam kod.":
-      "A code appears on the computer. Type it here or scan it — it is the same code.",
-  "Kod z komputera": "Code from the computer",
+  "Urządzenie, które parujesz (np. komputer albo Home Assistant), pokaże kod. Wpisz go tutaj — albo zeskanuj, jeśli widać kod QR.":
+      "The device you're pairing (e.g. a computer or Home Assistant) shows a code. Type it here — or scan it if a QR code is shown.",
+  "Kod z urządzenia": "Code from the device",
   "Zeskanuj": "Scan",
   "Zeskanuj kod": "Scan the code",
   "Sprawdź kod": "Check the code",
@@ -1327,6 +1327,12 @@ const Map<String, String> _enMap = {
   "Beacon: %s temu": "Beacon: %s ago",
   "brama odrzuciła (%s)": "gateway rejected it (%s)",
   "Zarobek: %s GALU": "Earned: %s GALU",
+  "Odpiąć bramę?": "Unpair this gateway?",
+  "Brama %s zniknie z Twojego portfela i przestanie zarabiać. Możesz ją później sparować ponownie po EUI. Zarobione GALU zostają w portfelu.": "Gateway %s will be removed from your wallet and stop earning. You can pair it again later by its EUI. GALU already earned stays in your wallet.",
+  "Brama odpięta": "Gateway unpaired",
+  "Zapisano": "Saved",
+  "Zegar telefonu odbiega o ponad godzinę — włącz automatyczny czas i spróbuj ponownie.": "Your phone's clock is off by more than an hour — turn on automatic time and try again.",
+  "Nie udało się sparować bramy (%s).": "Could not pair the gateway (%s).",
 };
 
 /// Nadpisania niemieckie. Brak wpisu → fallback EN → klucz (PL).
@@ -2540,7 +2546,7 @@ const Map<String, String> _deMap = {
       "Das heißt nicht, dass etwas verloren ist — deine Dateien liegen unabhängig von dieser Verbindung auf den Platten der Anbieter. Versuch es gleich noch einmal.",
   "Sprawdzam…": "Prüfe…",
   "Sparowane urządzenia": "Gekoppelte Geräte",
-  "komputery wpuszczone na to konto": "Computer mit Zugang zu diesem Konto",
+  "komputery i Home Assistant z dostępem do konta": "Computer und Home Assistant mit Zugang zu diesem Konto",
   "Sparuj urządzenie": "Gerät koppeln",
   "to urządzenie": "dieses Gerät",
   "Dostęp znika natychmiast. Jeśli to token tego telefonu, powiadomienia i tunele odłączą się do czasu ponownego zalogowania.":
@@ -2550,9 +2556,9 @@ const Map<String, String> _deMap = {
   "Nic jeszcze nie sparowano.": "Noch nichts gekoppelt.",
   "bez nazwy": "ohne Namen",
   "ostatnio: %s": "zuletzt: %s",
-  "Na komputerze pojawi się kod. Przepisz go tutaj albo zeskanuj — to ten sam kod.":
-      "Auf dem Computer erscheint ein Code. Tippe ihn hier ein oder scanne ihn — es ist derselbe Code.",
-  "Kod z komputera": "Code vom Computer",
+  "Urządzenie, które parujesz (np. komputer albo Home Assistant), pokaże kod. Wpisz go tutaj — albo zeskanuj, jeśli widać kod QR.":
+      "Das Gerät, das du koppelst (z. B. ein Computer oder Home Assistant), zeigt einen Code an. Tippe ihn hier ein — oder scanne ihn, falls ein QR-Code angezeigt wird.",
+  "Kod z urządzenia": "Code vom Gerät",
   "Zeskanuj": "Scannen",
   "Zeskanuj kod": "Code scannen",
   "Sprawdź kod": "Code prüfen",
@@ -2603,4 +2609,10 @@ const Map<String, String> _deMap = {
   "Beacon: %s temu": "Beacon: vor %s",
   "brama odrzuciła (%s)": "vom Gateway abgelehnt (%s)",
   "Zarobek: %s GALU": "Verdient: %s GALU",
+  "Odpiąć bramę?": "Gateway entkoppeln?",
+  "Brama %s zniknie z Twojego portfela i przestanie zarabiać. Możesz ją później sparować ponownie po EUI. Zarobione GALU zostają w portfelu.": "Gateway %s wird aus deinem Wallet entfernt und verdient nichts mehr. Du kannst es später über seine EUI erneut koppeln. Bereits verdiente GALU bleiben in deinem Wallet.",
+  "Brama odpięta": "Gateway entkoppelt",
+  "Zapisano": "Gespeichert",
+  "Zegar telefonu odbiega o ponad godzinę — włącz automatyczny czas i spróbuj ponownie.": "Die Uhr deines Telefons weicht um mehr als eine Stunde ab — schalte die automatische Uhrzeit ein und versuche es erneut.",
+  "Nie udało się sparować bramy (%s).": "Gateway konnte nicht gekoppelt werden (%s).",
 };

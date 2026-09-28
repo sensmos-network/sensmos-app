@@ -63,14 +63,18 @@ class _GatewayScreenState extends State<GatewayScreen> {
     if (mounted) setState(() => _gps = false);
   }
 
-  String? _reason(String? r) {
+  String? _reason(String? r, bool approx) {
     if (r == null) return null;
     if (r.startsWith('too_far')) {
-      return tr('Wpisana pozycja jest za daleko od miejsca, z którego łączy się brama (%s). Przyjęliśmy przybliżoną pozycję z łącza.',
-          [r.split(':').last]);
+      final km = r.split(':').last;
+      return approx
+          ? tr('Wpisana pozycja jest za daleko od miejsca, z którego łączy się brama (%s). Przyjęliśmy przybliżoną pozycję z łącza.', [km])
+          : tr('Pozycja jest za daleko od miejsca, z którego łączy się brama (%s). Brama jest sparowana, ale bez pozycji nie zarabia.', [km]);
     }
     if (r.startsWith('country_mismatch')) {
-      return tr('Wpisana pozycja jest w innym kraju niż łącze bramy. Przyjęliśmy przybliżoną pozycję z łącza.');
+      return approx
+          ? tr('Wpisana pozycja jest w innym kraju niż łącze bramy. Przyjęliśmy przybliżoną pozycję z łącza.')
+          : tr('Pozycja jest w innym kraju niż łącze bramy. Brama jest sparowana, ale bez pozycji nie zarabia.');
     }
     return tr('Nie udało się ustawić pozycji (%s).', [r]);
   }
@@ -105,22 +109,28 @@ class _GatewayScreenState extends State<GatewayScreen> {
         throw Exception(switch (j['error']) {
           'gateway_silent' => tr('Brama nie wysyła teraz danych do sensmos.com:1700. Dopisz ten adres w forwarderze bramy i spróbuj za minutę.'),
           'gateway_taken'  => tr('Ta brama jest już sparowana z innym portfelem.'),
-          _ => j['error'] ?? res.statusCode,
+          final String e when e.startsWith('stale timestamp') =>
+              tr('Zegar telefonu odbiega o ponad godzinę — włącz automatyczny czas i spróbuj ponownie.'),
+          _ => tr('Nie udało się sparować bramy (%s).', [j['error'] ?? res.statusCode]),
         });
       }
       if (!mounted) return;
       final keptOld = widget.existing?['located'] == true;
-      final why = (j['located'] == true || !hasPos) ? null
+      // przybliżona z łącza: świeża z tej odpowiedzi albo stara, gdy GeoIP tym razem zawiódł
+      final approx = j['approx'] == true || widget.existing?['geo_state'] == 'geoip';
+      final why = j['located'] == true || (!hasPos && (keptOld || approx)) ? null
+          : !hasPos ? tr('Bez pozycji — brama nie zarabia. Ustaw pozycję.')
           : keptOld ? tr('Nowa pozycja odrzucona — zostaje poprzednia, brama dalej zarabia.')
-          : _reason(j['reason']?.toString());
+          : _reason(j['reason']?.toString(), approx);
+      final done = widget.existing != null ? tr('Zapisano') : tr('Brama sparowana');
       if (why != null) {
         await showDialog<void>(context: context, builder: (ctx) => AlertDialog(
-          title: Text(tr('Brama sparowana')),
+          title: Text(done),
           content: Text(why),
           actions: [FilledButton(onPressed: () => Navigator.pop(ctx), child: Text(tr('Rozumiem')))],
         ));
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(tr('Brama sparowana'))));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(done)));
       }
       if (mounted) Navigator.of(context).popUntil((r) => r.isFirst);
     } catch (e) {

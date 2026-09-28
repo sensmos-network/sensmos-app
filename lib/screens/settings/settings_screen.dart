@@ -55,7 +55,7 @@ class SettingsScreen extends StatelessWidget {
               context,
               icon: Icons.devices_other,
               title: tr('Sparowane urządzenia'),
-              sub: tr('komputery wpuszczone na to konto'),
+              sub: tr('komputery i Home Assistant z dostępem do konta'),
               builder: (_) => const DevicesScreen(),
             ),
             const Divider(color: AppTheme.border, height: 1),

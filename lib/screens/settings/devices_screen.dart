@@ -218,7 +218,8 @@ class _PairScreenState extends State<PairScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(tr('Sparuj urządzenie'))),
       body: ListView(padding: const EdgeInsets.all(16), children: [
-        Text(tr('Na komputerze pojawi się kod. Przepisz go tutaj albo zeskanuj — to ten sam kod.'),
+        Text(tr('Urządzenie, które parujesz (np. komputer albo Home Assistant), pokaże kod. '
+                'Wpisz go tutaj — albo zeskanuj, jeśli widać kod QR.'),
             style: const TextStyle(color: AppTheme.muted, fontSize: 12, height: 1.35)),
         const SizedBox(height: 14),
         Row(children: [
@@ -230,7 +231,7 @@ class _PairScreenState extends State<PairScreen> {
             onChanged: (_) => setState(() {}),
             style: const TextStyle(color: AppTheme.text, letterSpacing: 2, fontFamily: 'monospace'),
             decoration: InputDecoration(
-              labelText: tr('Kod z komputera'),
+              labelText: tr('Kod z urządzenia'),
               labelStyle: const TextStyle(color: AppTheme.muted),
               enabledBorder: const OutlineInputBorder(borderSide: BorderSide(color: AppTheme.border)),
               focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: AppTheme.teal)),
