@@ -23,6 +23,7 @@ import '../../config.dart';
 import '../entities/entities_screen.dart';
 import '../setup/setup_screen.dart';
 import '../node/node_manager_screen.dart';
+import 'gateway_screen.dart';
 import '../node/emergency_screen.dart';
 import '../terminal/terminal_screen.dart';
 import '../terminal/terminal_hosts_screen.dart';
@@ -64,6 +65,7 @@ class _NodesScreenState extends State<NodesScreen> {
   final _attachments = <String, List<Map<String, dynamic>>>{}; // Additions: przystawki, za które node ręczy
   Map<String, dynamic>? _storePkg;   // karta Storage: /v1/store/package/:owner (na portfel, bez podpisu)
   List<Map<String, dynamic>> _myBeNodes = []; // WSZYSTKIE nody walleta wg BE — PRYMARNE źródło
+  List<Map<String, dynamic>> _myGateways = []; // bramy LoRaWAN walleta (kind='gateway') — osobna sekcja
   final _nodeErr = <String, String>{};
   String? _balance;
   BleService? _bleRef;
@@ -382,7 +384,11 @@ class _NodesScreenState extends State<NodesScreen> {
         headers: {'X-App-Key': Config.appKey, 'X-App-Version': Config.appVersion},
       ).timeout(const Duration(seconds: 6));
       final j = jsonDecode(res.body) as Map<String, dynamic>;
-      if (mounted) setState(() => _myBeNodes = List<Map<String, dynamic>>.from(j['nodes'] ?? []));
+      final all = List<Map<String, dynamic>>.from(j['nodes'] ?? []);
+      if (mounted) setState(() {
+        _myBeNodes  = all.where((n) => n['kind'] != 'gateway').toList();
+        _myGateways = all.where((n) => n['kind'] == 'gateway').toList();
+      });
     } catch (e) { Log.w('nodes', 'by-owner: $e'); }
   }
 
@@ -646,7 +652,7 @@ class _NodesScreenState extends State<NodesScreen> {
             const InboxBellSlot(),
           ],
         ),
-        body: list.isEmpty
+        body: list.isEmpty && _myGateways.isEmpty
             ? _buildEmpty()
             : RefreshIndicator(
                 onRefresh: _refresh,
@@ -662,6 +668,7 @@ class _NodesScreenState extends State<NodesScreen> {
                     // o wpisach celowanych (kraj / wersja FW / konkretne portfele).
                     NewsSection(owner: state.wallet?.address),
                     ...list.map(_buildCard),
+                    ..._myGateways.map(_gatewayCard),
                     // Karta Storage: na portfel, nie na noda — dlatego pod listą, nie w karcie.
                     // Warunku „co najmniej jeden node" JUŻ NIE MA (2026-09-09): miejsce kupuje się
                     // na adres, a pokrycie sprawdza BE przy zakładaniu pakietu. Ukrywanie karty
@@ -1337,6 +1344,59 @@ class _NodesScreenState extends State<NodesScreen> {
   }
 
   // ── Storage (na portfel) ──
+  Widget _gatewayCard(Map<String, dynamic> g) {
+    final id = g['device_id'].toString();
+    final eui = (g['gw_eui'] ?? '').toString().toUpperCase();
+    final name = (g['gw_name'] ?? '').toString();
+    final secs = _beSecs(g);
+    final online = g['status'] == 'online';
+    return Card(
+      margin: const EdgeInsets.only(bottom: 10),
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Row(children: [
+            const Icon(Icons.cell_tower, color: AppTheme.teal, size: 20),
+            const SizedBox(width: 8),
+            Expanded(child: Text(name.isNotEmpty ? name : eui,
+                style: const TextStyle(color: AppTheme.text, fontWeight: FontWeight.w600))),
+            Text(online ? tr('online') : (secs == null ? tr('offline') : _ago(secs)),
+                style: TextStyle(color: online ? const Color(0xFF2ECC71) : AppTheme.muted, fontSize: 12)),
+          ]),
+          const SizedBox(height: 4),
+          Text('${tr('Brama LoRaWAN')} · $eui · ${id.substring(0, 8)}',
+              style: const TextStyle(color: AppTheme.muted, fontSize: 12)),
+          if (g['located'] != true) Padding(
+            padding: const EdgeInsets.only(top: 6),
+            child: Text(tr('Bez pozycji — brama nie zarabia. Ustaw pozycję.'),
+                style: const TextStyle(color: Color(0xFFFFB020), fontSize: 12)),
+          ),
+          const SizedBox(height: 10),
+          Row(children: [
+            Expanded(child: OutlinedButton.icon(
+              onPressed: () async {
+                final ok = await Navigator.push<bool>(context,
+                    MaterialPageRoute(builder: (_) => GatewayScreen(existing: g)));
+                if (ok == true) _fetchMyBeNodes();
+              },
+              icon: const Icon(Icons.edit_location_alt_outlined, size: 16),
+              label: FittedBox(fit: BoxFit.scaleDown, child: Text(tr('Nazwa i pozycja'), maxLines: 1)),
+            )),
+            const SizedBox(width: 8),
+            Expanded(child: OutlinedButton.icon(
+              onPressed: () => _deleteFromNetwork(id),
+              icon: const Icon(Icons.link_off, size: 16),
+              label: FittedBox(fit: BoxFit.scaleDown, child: Text(tr('Odepnij bramę'), maxLines: 1)),
+              style: OutlinedButton.styleFrom(
+                  foregroundColor: const Color(0xFFFF6666),
+                  side: const BorderSide(color: Color(0x55FF6666))),
+            )),
+          ]),
+        ]),
+      ),
+    );
+  }
+
   Widget _storageCard() {
     final p = _storePkg;
     final has = p?['has_package'] == true;

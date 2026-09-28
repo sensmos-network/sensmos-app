@@ -11,6 +11,7 @@ import '../../services/ble_service.dart';
 import '../../services/node_service.dart';
 import '../setup/setup_screen.dart';
 import '../../l10n.dart';
+import '../nodes/gateway_screen.dart';
 
 class NodeManagerScreen extends StatefulWidget {
   const NodeManagerScreen({super.key, this.popOnActivate = false,
@@ -146,6 +147,14 @@ class _NodeManagerScreenState extends State<NodeManagerScreen> {
             backgroundColor: AppTheme.teal,
             foregroundColor: AppTheme.bg,
             padding: const EdgeInsets.symmetric(vertical: 16)),
+      ),
+      const SizedBox(height: 12),
+      OutlinedButton.icon(
+        onPressed: () => Navigator.push(context,
+            MaterialPageRoute(builder: (_) => const GatewayScreen())),
+        icon: const Icon(Icons.cell_tower, size: 18),
+        label: Text(tr('Dodaj bramę LoRaWAN (np. Crankk)')),
+        style: OutlinedButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 14)),
       ),
       if (_error != null) ...[const SizedBox(height: 12), _errorBox(_error!)],
     ]);
