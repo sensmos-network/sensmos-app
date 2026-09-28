@@ -634,8 +634,11 @@ class _NodesScreenState extends State<NodesScreen> {
     };
   }
 
-  int get _totalNodes => _myBeNodes.length;
-  int get _reportingCount => _myBeNodes.where((n) => n['ws_online'] == true || (n['status'] == 'online')).length;
+  // Licznik „Online" obejmuje też bramy LoRaWAN — właściciel samych bram nie może widzieć 0/0.
+  int get _totalNodes => _myBeNodes.length + _myGateways.length;
+  int get _reportingCount =>
+      _myBeNodes.where((n) => n['ws_online'] == true || (n['status'] == 'online')).length +
+      _myGateways.where((g) => g['status'] == 'online').length;
 
   @override
   Widget build(BuildContext context) {
@@ -648,7 +651,8 @@ class _NodesScreenState extends State<NodesScreen> {
           actions: [
             IconButton(icon: const Icon(Icons.refresh), onPressed: _refresh, tooltip: tr('Odśwież')),
             IconButton(icon: const Icon(Icons.add), tooltip: tr('Dodaj node'),
-                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const NodeManagerScreen()))),
+                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const NodeManagerScreen()))
+                    .then((_) { if (mounted) _fetchMyBeNodes(); })),
             const InboxBellSlot(),
           ],
         ),
@@ -1350,6 +1354,8 @@ class _NodesScreenState extends State<NodesScreen> {
     final name = (g['gw_name'] ?? '').toString();
     final secs = _beSecs(g);
     final online = g['status'] == 'online';
+    final geo = g['geo_state'];
+    final st = g['gw_stats'] is Map ? Map<String, dynamic>.from(g['gw_stats']) : null;
     return Card(
       margin: const EdgeInsets.only(bottom: 10),
       child: Padding(
@@ -1366,18 +1372,27 @@ class _NodesScreenState extends State<NodesScreen> {
           const SizedBox(height: 4),
           Text('${tr('Brama LoRaWAN')} · $eui · ${id.substring(0, 8)}',
               style: const TextStyle(color: AppTheme.muted, fontSize: 12)),
-          if (g['located'] != true) Padding(
-            padding: const EdgeInsets.only(top: 6),
-            child: Text(tr('Bez pozycji — brama nie zarabia. Ustaw pozycję.'),
-                style: const TextStyle(color: Color(0xFFFFB020), fontSize: 12)),
-          ),
+          const SizedBox(height: 8),
+          _gwStat(Icons.place_outlined,
+              geo == 'gps' ? tr('Pozycja: wpisana')
+                  : geo == 'geoip' ? tr('Pozycja: przybliżona z łącza bramy')
+                  : tr('Bez pozycji — brama nie zarabia.'),
+              warn: geo != 'gps' && geo != 'geoip'),
+          if (st != null) ...[
+            _gwStat(Icons.hearing, tr('Słyszy nodów: %s · słyszą ją: %s (24 h)',
+                ['${st['hears'] ?? 0}', '${st['heard_by'] ?? 0}'])),
+            _gwStat(Icons.graphic_eq, tr('Ramki Sensmos (24 h): %s', ['${st['frames_24h'] ?? 0}'])),
+            _gwStat(Icons.wifi_tethering, _beaconLine(st)),
+          ],
+          _gwStat(Icons.savings_outlined, tr('Zarobek: %s GALU',
+              [(double.tryParse('${g['earned_total']}') ?? 0).toStringAsFixed(2)])),
           const SizedBox(height: 10),
           Row(children: [
             Expanded(child: OutlinedButton.icon(
               onPressed: () async {
-                final ok = await Navigator.push<bool>(context,
+                await Navigator.push(context,
                     MaterialPageRoute(builder: (_) => GatewayScreen(existing: g)));
-                if (ok == true) _fetchMyBeNodes();
+                if (mounted) _fetchMyBeNodes();
               },
               icon: const Icon(Icons.edit_location_alt_outlined, size: 16),
               label: FittedBox(fit: BoxFit.scaleDown, child: Text(tr('Nazwa i pozycja'), maxLines: 1)),
@@ -1395,6 +1410,27 @@ class _NodesScreenState extends State<NodesScreen> {
         ]),
       ),
     );
+  }
+
+  Widget _gwStat(IconData icon, String text, {bool warn = false}) => Padding(
+        padding: const EdgeInsets.only(top: 4),
+        child: Row(children: [
+          Icon(icon, size: 14, color: warn ? const Color(0xFFFFB020) : AppTheme.muted),
+          const SizedBox(width: 6),
+          Expanded(child: Text(text, style: TextStyle(
+              color: warn ? const Color(0xFFFFB020) : AppTheme.muted, fontSize: 12))),
+        ]),
+      );
+
+  // Ostatni beacon z RAM serwera (po restarcie BE licznik startuje od zera — dlatego czas, nie liczba).
+  String _beaconLine(Map<String, dynamic> st) {
+    final s = st['last_beacon_s'];
+    if (s == null) return tr('Beacon: jeszcze nie nadany');
+    final n = num.tryParse('$s') ?? 0;
+    var line = n < 60 ? tr('Beacon: przed chwilą') : tr('Beacon: %s temu', [_ago(n)]);
+    final ack = st['tx_ack'];
+    if (ack != null && ack != 'NONE') line += ' · ${tr('brama odrzuciła (%s)', ['$ack'])}';
+    return line;
   }
 
   Widget _storageCard() {

@@ -66,22 +66,23 @@ class _GatewayScreenState extends State<GatewayScreen> {
   String? _reason(String? r) {
     if (r == null) return null;
     if (r.startsWith('too_far')) {
-      return tr('Pozycja jest za daleko od miejsca, z którego łączy się brama (%s). Brama jest sparowana, ale bez pozycji nie zarabia.',
+      return tr('Wpisana pozycja jest za daleko od miejsca, z którego łączy się brama (%s). Przyjęliśmy przybliżoną pozycję z łącza.',
           [r.split(':').last]);
     }
     if (r.startsWith('country_mismatch')) {
-      return tr('Pozycja jest w innym kraju niż łącze bramy. Brama jest sparowana, ale bez pozycji nie zarabia.');
+      return tr('Wpisana pozycja jest w innym kraju niż łącze bramy. Przyjęliśmy przybliżoną pozycję z łącza.');
     }
     return tr('Nie udało się ustawić pozycji (%s).', [r]);
   }
 
   Future<void> _save() async {
     final eui = _eui.text.toLowerCase().replaceAll(RegExp(r'[^0-9a-f]'), '');
-    final lat = double.tryParse(_lat.text.trim().replaceAll(',', '.'));
-    final lon = double.tryParse(_lon.text.trim().replaceAll(',', '.'));
+    final latT = _lat.text.trim().replaceAll(',', '.'), lonT = _lon.text.trim().replaceAll(',', '.');
+    final hasPos = latT.isNotEmpty || lonT.isNotEmpty;   // pozycja opcjonalna — bez niej BE bierze GeoIP łącza
+    final lat = double.tryParse(latT), lon = double.tryParse(lonT);
     if (eui.length != 16) { setState(() => _error = tr('EUI bramy to 16 znaków szesnastkowych')); return; }
-    if (lat == null || lon == null || lat.abs() > 90 || lon.abs() > 180) {
-      setState(() => _error = tr('Podaj pozycję bramy'));
+    if (hasPos && (lat == null || lon == null || lat.abs() > 90 || lon.abs() > 180)) {
+      setState(() => _error = tr('Podaj obie współrzędne albo zostaw obie puste'));
       return;
     }
     final owner = context.read<CoreBloc>().state.wallet?.address;
@@ -90,7 +91,7 @@ class _GatewayScreenState extends State<GatewayScreen> {
     setState(() { _busy = true; _error = null; });
     try {
       // lat/lon lecą jako te same napisy, które wchodzą do podpisu
-      final latS = lat.toStringAsFixed(5), lonS = lon.toStringAsFixed(5);
+      final latS = hasPos ? lat!.toStringAsFixed(5) : '', lonS = hasPos ? lon!.toStringAsFixed(5) : '';
       final ts = DateTime.now().millisecondsSinceEpoch ~/ 1000;
       final sig = await wallet.signMessage('sensmos:ownertoken:gateway:$ts:$eui:$latS:$lonS');
       final res = await http.post(
@@ -109,7 +110,7 @@ class _GatewayScreenState extends State<GatewayScreen> {
       }
       if (!mounted) return;
       final keptOld = widget.existing?['located'] == true;
-      final why = j['located'] == true ? null
+      final why = (j['located'] == true || !hasPos) ? null
           : keptOld ? tr('Nowa pozycja odrzucona — zostaje poprzednia, brama dalej zarabia.')
           : _reason(j['reason']?.toString());
       if (why != null) {
@@ -121,7 +122,7 @@ class _GatewayScreenState extends State<GatewayScreen> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(tr('Brama sparowana'))));
       }
-      if (mounted) Navigator.pop(context, true);
+      if (mounted) Navigator.of(context).popUntil((r) => r.isFirst);
     } catch (e) {
       if (mounted) setState(() => _error = e.toString().replaceFirst('Exception: ', ''));
     }
@@ -180,7 +181,7 @@ class _GatewayScreenState extends State<GatewayScreen> {
             label: Text(tr('Jestem przy bramie — użyj pozycji telefonu')),
           ),
           const SizedBox(height: 6),
-          Text(tr('Pozycja musi zgadzać się z krajem i okolicą, z której łączy się brama.'),
+          Text(tr('Pozycja jest opcjonalna — bez niej bierzemy przybliżoną z łącza bramy. Wpisana musi zgadzać się z krajem i okolicą łącza.'),
               style: const TextStyle(color: AppTheme.muted, fontSize: 12)),
           if (_error != null) Padding(
             padding: const EdgeInsets.only(top: 14),
