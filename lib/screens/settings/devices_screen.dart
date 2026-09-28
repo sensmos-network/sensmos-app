@@ -226,6 +226,8 @@ class _PairScreenState extends State<PairScreen> {
             controller: _code,
             textCapitalization: TextCapitalization.characters,
             inputFormatters: [UpperCaseFormatter()],
+            // Bez tego „Sprawdź kod" zostaje wyszarzony po wpisaniu kodu ręcznie (działał tylko skan).
+            onChanged: (_) => setState(() {}),
             style: const TextStyle(color: AppTheme.text, letterSpacing: 2, fontFamily: 'monospace'),
             decoration: InputDecoration(
               labelText: tr('Kod z komputera'),
