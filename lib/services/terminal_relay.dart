@@ -249,6 +249,12 @@ class _RelaySocket implements SSHSocket {
   Future<void> close() { onClose(); _finish(); return _done.future; }
   @override
   void destroy() { onClose(); _finish(); }
+  @override
+  Future<void> flush() async {
+    while ((_pumping || _outBuf.isNotEmpty) && !_closed) {
+      await Future.delayed(const Duration(milliseconds: 3));
+    }
+  }
 
   void _finish() {
     _closed = true;      // zatrzymaj pompę pace

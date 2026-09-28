@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:http/http.dart' as http;
+import 'package:wallet/wallet.dart' show EthereumAddress, EtherAmount;
 import 'package:web3dart/web3dart.dart';
-import 'package:web3dart/crypto.dart';
 import '../config.dart';
 
 /// EthService — interakcja on-chain z kontraktem GALU na Polygon (model v9).

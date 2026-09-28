@@ -21,6 +21,32 @@ import '../../services/integrations/ssh_secrets.dart';
 /// RemoteTerminal — zdalny terminal do LAN-u noda przez tunel. Node = głupia rura, SSH E2E w apce.
 /// Bierze device_id + etykietę (NIE SavedNode) — działa też dla nodów widocznych tylko z BE
 /// (bez lokalnego wpisu), bo tunel idzie przez relay, nie po lokalnej sieci.
+// dartssh2 4 nie proponuje już SHA-1, CBC ani ssh-rsa. Terminal łączy się ze sprzętem w LAN-ie
+// właściciela (stare routery, NAS, dropbear), który często nic innego nie umie — dokładamy je na KONIEC
+// list, więc nowoczesny serwer dalej wynegocjuje mocne algorytmy, a stary nadal się połączy (jak w 2.14).
+const _sshAlgorithms = SSHAlgorithms(
+  kex: [
+    SSHKexType.x25519Rfc, SSHKexType.x25519, SSHKexType.nistp521, SSHKexType.nistp384,
+    SSHKexType.nistp256, SSHKexType.dhGexSha256, SSHKexType.dh14Sha256,
+    SSHKexType.dh14Sha1, SSHKexType.dhGexSha1, SSHKexType.dh1Sha1,
+  ],
+  hostkey: [
+    SSHHostkeyType.ed25519, SSHHostkeyType.rsaSha512, SSHHostkeyType.rsaSha256,
+    SSHHostkeyType.ecdsa521, SSHHostkeyType.ecdsa384, SSHHostkeyType.ecdsa256,
+    SSHHostkeyType.rsaSha1,
+  ],
+  cipher: [
+    SSHCipherType.aes256gcm, SSHCipherType.aes128gcm, SSHCipherType.chacha20poly1305,
+    SSHCipherType.aes256ctr, SSHCipherType.aes128ctr,
+    SSHCipherType.aes128cbc, SSHCipherType.aes256cbc,
+  ],
+  mac: [
+    SSHMacType.hmacSha256Etm, SSHMacType.hmacSha512Etm, SSHMacType.hmacSha256,
+    SSHMacType.hmacSha512, SSHMacType.hmacSha1,
+    SSHMacType.hmacSha256_96, SSHMacType.hmacSha512_96, SSHMacType.hmacMd5,
+  ],
+);
+
 class TerminalScreen extends StatefulWidget {
   final String deviceId;
   final String label;
@@ -224,6 +250,7 @@ class _TerminalScreenState extends State<TerminalScreen> {
         socket,
         username: _user.text.trim().isEmpty ? 'root' : _user.text.trim(),
         onPasswordRequest: () => _pass.text,
+        algorithms: _sshAlgorithms,
       );
       _ssh = ssh;
       final session = await ssh.shell(

@@ -21,7 +21,7 @@ dependencies:
   web_socket_channel: ^2.4.0
 
   # RemoteTerminal (SSH przez tunel noda + emulator terminala)
-  dartssh2: ^2.14.0
+  dartssh2: ^4.1.0
   xterm: ^4.0.0
 
   # BLE + discovery
@@ -32,9 +32,10 @@ dependencies:
   mobile_scanner: ^5.2.3
 
   # Crypto wallet
-  web3dart: ^2.7.3
+  web3dart: ^3.0.3
+  wallet: ^0.0.18   # EthereumAddress/EtherAmount (od web3dart 3 poza nim)
   ed25519_hd_key: ^2.2.0
-  pointycastle: ^3.7.4
+  pointycastle: ^4.0.0
 
   # HMAC-SHA256 do dowodu otwarcia tunelu (pairing_service) — była tranzytywna, teraz wprost
   crypto: ^3.0.3
@@ -44,7 +45,7 @@ dependencies:
     path: ../SHARED/sensmos_store
 
   # Store: wybór pliku z telefonu (strumień, bez ładowania do RAM) i zapis pobranego (SAF)
-  file_picker: ^8.1.2
+  file_picker: ^10.3.3
 
   # Secure storage (Keychain / Keystore)
   flutter_secure_storage: ^9.0.0

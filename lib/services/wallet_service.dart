@@ -4,7 +4,6 @@ import 'dart:typed_data';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pointycastle/export.dart';
 import 'package:web3dart/web3dart.dart';
-import 'package:web3dart/crypto.dart';
 import '../config.dart';
 import '../l10n.dart';
 import '../models/wallet.dart';
@@ -56,7 +55,7 @@ class WalletService {
   Future<AppWallet> create() async {
     final rng = Random.secure();
     final priv = EthPrivateKey.createRandom(rng);
-    final addr = priv.address.hexEip55;
+    final addr = priv.address.eip55With0x;
     // Kanoniczne 64 hex z liczby klucza. web3dart (encodeBigInt, ze znakiem) zapisuje
     // klucz jako 33 bajty (wiodący 00 gdy najwyższy bit = 1, ~50% przypadków) lub <32
     // (wiodące zero); przez privateKeyInt dostajemy zawsze dokładnie 32 bajty — inaczej
@@ -183,7 +182,7 @@ class WalletService {
     final clean = privateKeyHex.trim();
     var pk = clean.startsWith('0x') ? clean.substring(2) : clean;
     pk = pk.length > 64 ? pk.substring(pk.length - 64) : pk.padLeft(64, '0');
-    return EthPrivateKey.fromHex(pk).address.hexEip55;
+    return EthPrivateKey.fromHex(pk).address.eip55With0x;
   }
 
   Future<AppWallet> restore(String privateKeyHex) async {
@@ -192,7 +191,7 @@ class WalletService {
     // Normalizuj do 64 hex: obetnij wiodący bajt znaku (00) albo dopełnij zerami.
     pk = pk.length > 64 ? pk.substring(pk.length - 64) : pk.padLeft(64, '0');
     final priv = EthPrivateKey.fromHex(pk);
-    final addr = priv.address.hexEip55;
+    final addr = priv.address.eip55With0x;
     await _storage.write(key: Config.kWalletKey, value: pk);
     await _storage.write(key: Config.kWalletAddr, value: addr);
     // Recovery przez BLE RESETUJE hasło: node oddał surowy klucz (zaszyfrowany PIN-em,
