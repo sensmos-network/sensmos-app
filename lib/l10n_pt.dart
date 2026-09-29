@@ -1070,4 +1070,17 @@ const Map<String, String> ptMap = {
   "To urządzenie jest sparowane z innym portfelem.": "Este dispositivo está pareado com outra carteira.",
   "Ktoś właśnie paruje to urządzenie. Spróbuj za 3 minuty.": "Alguém está pareando este dispositivo agora. Tente de novo em 3 minutos.",
   "Nie udało się sparować (%s).": "Não foi possível parear (%s).",
+  // ── Urządzenie LoRa (komunikator) — wiadomości z telefonu (1.5.82) ──
+  "Urządzenia LoRa": "Dispositivos LoRa",
+  "Urządzenie LoRa": "Dispositivo LoRa",
+  "słyszą: %s": "ouvido por: %s",
+  "nikt w ostatnich 6 h": "ninguém nas últimas 6 h",
+  "Wiadomość idzie przez bramę Sensmos, która słyszy urządzenie. Wiadomości z urządzenia przychodzą jako powiadomienia (dzwonek).": "A mensagem vai por um gateway Sensmos que ouve o dispositivo. Mensagens do dispositivo chegam como notificações (sino).",
+  "Wiadomość do urządzenia": "Mensagem para o dispositivo",
+  "wysłano radiem": "enviada por rádio",
+  "doręczono ✓": "entregue ✓",
+  "nie doręczono": "não entregue",
+  "Wiadomość jest pusta, dłuższa niż 100 bajtów albo zawiera niedozwolone znaki.": "A mensagem está vazia, tem mais de 100 bytes ou contém caracteres não permitidos.",
+  "To urządzenie nie jest sparowane z Twoim portfelem.": "Este dispositivo não está pareado com a sua carteira.",
+  "Nie udało się wysłać wiadomości (%s).": "Não foi possível enviar a mensagem (%s).",
 };

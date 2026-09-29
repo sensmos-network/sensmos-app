@@ -1350,6 +1350,19 @@ const Map<String, String> _enMap = {
   "To urządzenie jest sparowane z innym portfelem.": "This device is paired with another wallet.",
   "Ktoś właśnie paruje to urządzenie. Spróbuj za 3 minuty.": "Someone is pairing this device right now. Try again in 3 minutes.",
   "Nie udało się sparować (%s).": "Could not pair (%s).",
+  // ── Urządzenie LoRa (komunikator) — wiadomości z telefonu (1.5.82) ──
+  "Urządzenia LoRa": "LoRa devices",
+  "Urządzenie LoRa": "LoRa device",
+  "słyszą: %s": "heard by: %s",
+  "nikt w ostatnich 6 h": "no one in the last 6 h",
+  "Wiadomość idzie przez bramę Sensmos, która słyszy urządzenie. Wiadomości z urządzenia przychodzą jako powiadomienia (dzwonek).": "Messages go out through a Sensmos gateway that hears the device. Messages from the device arrive as notifications (bell).",
+  "Wiadomość do urządzenia": "Message to the device",
+  "wysłano radiem": "sent over radio",
+  "doręczono ✓": "delivered ✓",
+  "nie doręczono": "not delivered",
+  "Wiadomość jest pusta, dłuższa niż 100 bajtów albo zawiera niedozwolone znaki.": "The message is empty, longer than 100 bytes or contains disallowed characters.",
+  "To urządzenie nie jest sparowane z Twoim portfelem.": "This device isn't paired with your wallet.",
+  "Nie udało się wysłać wiadomości (%s).": "Could not send the message (%s).",
 };
 
 /// Nadpisania niemieckie. Brak wpisu → fallback EN → klucz (PL).
@@ -2649,4 +2662,17 @@ const Map<String, String> _deMap = {
   "To urządzenie jest sparowane z innym portfelem.": "Dieses Gerät ist mit einer anderen Wallet gekoppelt.",
   "Ktoś właśnie paruje to urządzenie. Spróbuj za 3 minuty.": "Jemand koppelt dieses Gerät gerade. Versuche es in 3 Minuten erneut.",
   "Nie udało się sparować (%s).": "Koppeln fehlgeschlagen (%s).",
+  // ── Urządzenie LoRa (komunikator) — wiadomości z telefonu (1.5.82) ──
+  "Urządzenia LoRa": "LoRa-Geräte",
+  "Urządzenie LoRa": "LoRa-Gerät",
+  "słyszą: %s": "gehört von: %s",
+  "nikt w ostatnich 6 h": "niemand in den letzten 6 h",
+  "Wiadomość idzie przez bramę Sensmos, która słyszy urządzenie. Wiadomości z urządzenia przychodzą jako powiadomienia (dzwonek).": "Die Nachricht geht über ein Sensmos-Gateway, das das Gerät hört. Nachrichten vom Gerät kommen als Benachrichtigungen an (Glocke).",
+  "Wiadomość do urządzenia": "Nachricht an das Gerät",
+  "wysłano radiem": "per Funk gesendet",
+  "doręczono ✓": "zugestellt ✓",
+  "nie doręczono": "nicht zugestellt",
+  "Wiadomość jest pusta, dłuższa niż 100 bajtów albo zawiera niedozwolone znaki.": "Die Nachricht ist leer, länger als 100 Bytes oder enthält unzulässige Zeichen.",
+  "To urządzenie nie jest sparowane z Twoim portfelem.": "Dieses Gerät ist nicht mit deinem Wallet gekoppelt.",
+  "Nie udało się wysłać wiadomości (%s).": "Nachricht konnte nicht gesendet werden (%s).",
 };
