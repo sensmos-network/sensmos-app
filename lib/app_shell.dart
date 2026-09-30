@@ -13,6 +13,7 @@ import 'services/push_service.dart';
 import 'services/wallet_service.dart';
 import 'util/owner_token_gate.dart';
 import 'screens/nodes/nodes_screen.dart';
+import 'screens/kom/kom_screen.dart';
 import 'services/node_service.dart';
 import 'screens/wallet/wallet_screen.dart';
 import 'screens/settings/settings_screen.dart';
@@ -266,6 +267,7 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
 
   final _screens = const [
     NodesScreen(),
+    KomScreen(),
     WalletScreen(),
     SettingsScreen(),
   ];
@@ -276,6 +278,7 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
     hasNodes
         ? (Icons.sensors_outlined, Icons.sensors, 'Nody')
         : (Icons.home_outlined, Icons.home, 'Start'),
+    (Icons.forum_outlined, Icons.forum, 'Komunikator'),
     (Icons.account_balance_wallet_outlined, Icons.account_balance_wallet, 'Portfel'),
     (Icons.settings_outlined, Icons.settings, 'Ustawienia'),
   ];
@@ -330,17 +333,25 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
             ),
           ),
       ]),
-      bottomNavigationBar: NavigationBar(
-        backgroundColor: AppTheme.surface,
-        indicatorColor: AppTheme.teal.withValues(alpha: 0.15),
-        selectedIndex: _index,
-        onDestinationSelected: (i) => setState(() => _index = i),
-        destinations: _items(context.watch<NodeService>().nodes.isNotEmpty)
-            .map((e) => NavigationDestination(
-          icon:         Icon(e.$1, color: AppTheme.muted),
-          selectedIcon: Icon(e.$2, color: AppTheme.teal),
-          label: tr(e.$3),
-        )).toList(),
+      // Etykieta paska („Communicator”, „Kommunikator”) nie ma się łamać na dwie linie ani
+      // zmniejszać: NavigationBar rysuje Text(label) bez limitu linii, ale dziedziczy maxLines/
+      // overflow z DefaultTextStyle — stąd jedna linia z wielokropkiem.
+      bottomNavigationBar: DefaultTextStyle.merge(
+        maxLines: 1,
+        softWrap: false,
+        overflow: TextOverflow.ellipsis,
+        child: NavigationBar(
+          backgroundColor: AppTheme.surface,
+          indicatorColor: AppTheme.teal.withValues(alpha: 0.15),
+          selectedIndex: _index,
+          onDestinationSelected: (i) => setState(() => _index = i),
+          destinations: _items(context.watch<NodeService>().nodes.isNotEmpty)
+              .map((e) => NavigationDestination(
+            icon:         Icon(e.$1, color: AppTheme.muted),
+            selectedIcon: Icon(e.$2, color: AppTheme.teal),
+            label: tr(e.$3),
+          )).toList(),
+        ),
       ),
     );
   }

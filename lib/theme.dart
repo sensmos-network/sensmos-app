@@ -46,6 +46,17 @@ class AppTheme {
             style: _btn().copyWith(side: WidgetStatePropertyAll(
                 const BorderSide(color: border)))),
         textButtonTheme: TextButtonThemeData(style: _btn(pad: 12)),
+        // Przełączniki (np. widoczność komunikatora): zaznaczone w kolorze marki, nie w domyślnym
+        // „secondaryContainer”, który tu wychodził fioletowy.
+        segmentedButtonTheme: SegmentedButtonThemeData(style: ButtonStyle(
+          backgroundColor: WidgetStateProperty.resolveWith((s) => !s.contains(WidgetState.selected)
+              ? Colors.transparent
+              : s.contains(WidgetState.disabled) ? teal.withValues(alpha: 0.35) : teal),
+          foregroundColor: WidgetStateProperty.resolveWith((s) => s.contains(WidgetState.selected)
+              ? bg
+              : s.contains(WidgetState.disabled) ? muted : text),
+          side: const WidgetStatePropertyAll(BorderSide(color: border)),
+        )),
         // Jednolite pola tekstowe w CAŁEJ apce: ten sam fill/label/ikony i to samo teal-owe
         // podświetlenie na focusie. Wcześniej każdy TextField miał własną dekorację → różne
         // kolory/ramki/podświetlenia. Pola mogą nadpisać label/icon, resztę dziedziczą stąd.

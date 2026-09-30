@@ -23,8 +23,8 @@ class OnboardingScreen extends StatelessWidget {
         builder: (_) => const NodeManagerScreen(existingOnly: true)));
   }
 
-  /// Konto bez sprzętu. Miejsce w Store kupuje się na ADRES, nie na node (bramka zdjęta
-  /// 2026-09-09), więc ktoś, kto chce tylko trzymać pliki, nie ma po co kupować płytki.
+  /// Konto bez sprzętu: sam portfel wystarcza do komunikatora, a miejsce w Store kupuje się na
+  /// ADRES, nie na node (bramka zdjęta 2026-09-09).
   /// UWAGA: portfel zakładany razem z nodem dostaje zaszyfrowaną kopię NA TYM NODZIE. Tutaj
   /// takiej kopii nie ma i nie będzie — jedyną drogą odzysku jest eksport klucza z ekranu
   /// portfela, więc od razu tam kierujemy.
@@ -107,8 +107,7 @@ class OnboardingScreen extends StatelessWidget {
                   style: const TextStyle(color: AppTheme.muted, fontSize: 15)),
               const SizedBox(height: 40),
               // Cztery obietnice wzięte z sekcji „co daje Sensmos" na stronie, żeby człowiek,
-              // który tam był, zobaczył tu to samo. Ostatnia jest nowa i tłumaczy przycisk poniżej:
-              // bez niej „Chcę tylko miejsce na pliki" wyskakuje znikąd.
+              // który tam był, zobaczył tu to samo.
               _bullet(Icons.lock_outline, tr('Twoja domowa sieć z dowolnego miejsca — bez VPN-u')),
               _bullet(Icons.hub_outlined, tr('Home Assistant bez abonamentu')),
               _bullet(Icons.wifi_tethering, tr('LoRa działa, gdy internet nie działa')),
@@ -130,16 +129,11 @@ class OnboardingScreen extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               // Druga droga nowego startu, nie „powrót": albo przychodzisz ze sprzętem,
-              // albo chcesz samego miejsca na pliki.
+              // albo korzystasz bez noda (sam portfel).
               _secondary(
-                icon: Icons.folder_outlined,
-                label: tr('Chcę tylko miejsce na pliki'),
+                icon: Icons.account_balance_wallet_outlined,
+                label: tr('Chcę korzystać bez noda (tylko portfel)'),
                 onTap: () => _walletOnly(context),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 6),
-                child: Text(tr('Zakładamy portfel, node nie jest potrzebny.'),
-                    style: const TextStyle(color: AppTheme.muted, fontSize: 12)),
               ),
 
               const SizedBox(height: 28),

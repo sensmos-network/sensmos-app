@@ -24,7 +24,6 @@ import '../entities/entities_screen.dart';
 import '../setup/setup_screen.dart';
 import '../node/node_manager_screen.dart';
 import 'gateway_screen.dart';
-import 'ldev_chat_screen.dart';
 import '../node/emergency_screen.dart';
 import '../terminal/terminal_screen.dart';
 import '../terminal/terminal_hosts_screen.dart';
@@ -67,8 +66,6 @@ class _NodesScreenState extends State<NodesScreen> {
   Map<String, dynamic>? _storePkg;   // karta Storage: /v1/store/package/:owner (na portfel, bez podpisu)
   List<Map<String, dynamic>> _myBeNodes = []; // WSZYSTKIE nody walleta wg BE — PRYMARNE źródło
   List<Map<String, dynamic>> _myGateways = []; // bramy LoRaWAN walleta (kind='gateway') — osobna sekcja
-  List<Map<String, dynamic>> _ldevs = [];      // urządzenia LoRa (komunikatory) z /v1/ldev/mine
-  bool _ldevBusy = false;
   final _nodeErr = <String, String>{};
   String? _balance;
   BleService? _bleRef;
@@ -213,7 +210,6 @@ class _NodesScreenState extends State<NodesScreen> {
     _pruneStale();
     _fetchBalance();
     _fetchStorePkg();
-    _fetchLdevs();
     for (final n in ns.nodes) { _fetchBeData(n.id); }
   }
 
@@ -394,33 +390,6 @@ class _NodesScreenState extends State<NodesScreen> {
         _myGateways = all.where((n) => n['kind'] == 'gateway').toList();
       });
     } catch (e) { Log.w('nodes', 'by-owner: $e'); }
-  }
-
-  // Lista wymaga podpisu, więc tylko przy starcie i odświeżeniu, bez pollingu. Portfel
-  // zablokowany albo błąd → zostaje to, co było (na starcie pusto, sekcji nie widać).
-  Future<void> _fetchLdevs() async {
-    final owner = context.read<CoreBloc>().state.wallet?.address.toLowerCase();
-    if (owner == null || _ldevBusy) return;
-    final wallet = context.read<WalletService>();
-    _ldevBusy = true;
-    try {
-      if (!await wallet.isUnlocked()) return;
-      final ts = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-      final sig = await wallet.signMessage('sensmos:ownertoken:ldev_mine:$ts');
-      final res = await http.post(
-        Uri.parse('${Config.beUrl}/v1/ldev/mine'),
-        headers: const {'Content-Type': 'application/json', 'X-App-Key': Config.appKey},
-        body: jsonEncode({'owner': owner, 'ts': ts, 'sig': sig}),
-      ).timeout(const Duration(seconds: 10));
-      if (res.statusCode != 200) return;
-      final j = jsonDecode(res.body) as Map<String, dynamic>;
-      final list = List<Map<String, dynamic>>.from(j['devices'] ?? []);
-      if (mounted) setState(() => _ldevs = list);
-    } catch (e) {
-      Log.w('nodes', 'ldev/mine: $e');
-    } finally {
-      _ldevBusy = false;
-    }
   }
 
   // Zapomnij node WYLACZNIE lokalnie — nie rusza BE. Dla wpisow, ktorych nie da sie
@@ -690,11 +659,11 @@ class _NodesScreenState extends State<NodesScreen> {
             IconButton(icon: const Icon(Icons.refresh), onPressed: _refresh, tooltip: tr('Odśwież')),
             IconButton(icon: const Icon(Icons.add), tooltip: tr('Dodaj node'),
                 onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const NodeManagerScreen()))
-                    .then((_) { if (mounted) { _fetchMyBeNodes(); _fetchLdevs(); } })),
+                    .then((_) { if (mounted) _fetchMyBeNodes(); })),
             const InboxBellSlot(),
           ],
         ),
-        body: list.isEmpty && _myGateways.isEmpty && _ldevs.isEmpty
+        body: list.isEmpty && _myGateways.isEmpty
             ? _buildEmpty()
             : RefreshIndicator(
                 onRefresh: _refresh,
@@ -711,14 +680,6 @@ class _NodesScreenState extends State<NodesScreen> {
                     NewsSection(owner: state.wallet?.address),
                     ...list.map(_buildCard),
                     ..._myGateways.map(_gatewayCard),
-                    if (_ldevs.isNotEmpty) ...[
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(4, 8, 4, 8),
-                        child: Text(tr('Urządzenia LoRa'),
-                            style: const TextStyle(color: AppTheme.text, fontSize: 14, fontWeight: FontWeight.w600)),
-                      ),
-                      ..._ldevs.map(_ldevCard),
-                    ],
                     // Karta Storage: na portfel, nie na noda — dlatego pod listą, nie w karcie.
                     // Warunku „co najmniej jeden node" JUŻ NIE MA (2026-09-09): miejsce kupuje się
                     // na adres, a pokrycie sprawdza BE przy zakładaniu pakietu. Ukrywanie karty
@@ -1454,26 +1415,6 @@ class _NodesScreenState extends State<NodesScreen> {
             )),
           ]),
         ]),
-      ),
-    );
-  }
-
-  Widget _ldevCard(Map<String, dynamic> d) {
-    final id8 = '${d['id8']}';
-    final name = (d['name'] ?? '').toString().trim();
-    final heard = ((d['heard'] as List?) ?? const []).map((e) => '$e').toList();
-    return Card(
-      margin: const EdgeInsets.only(bottom: 10),
-      child: ListTile(
-        leading: const Icon(Icons.sensors, color: AppTheme.teal),
-        title: Text(name.isNotEmpty ? name : id8,
-            style: const TextStyle(color: AppTheme.text, fontWeight: FontWeight.w600)),
-        subtitle: Text('${tr('Urządzenie LoRa')} · $id8 · ${tr('słyszą: %s',
-                [heard.isEmpty ? tr('nikt w ostatnich 6 h') : heard.join(', ')])}',
-            style: const TextStyle(color: AppTheme.muted, fontSize: 12)),
-        trailing: const Icon(Icons.chevron_right, color: AppTheme.muted),
-        onTap: () => Navigator.push(context, MaterialPageRoute(
-            builder: (_) => LdevChatScreen(id8: id8, name: name.isNotEmpty ? name : null))),
       ),
     );
   }
