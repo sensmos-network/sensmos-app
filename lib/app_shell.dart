@@ -333,26 +333,58 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
             ),
           ),
       ]),
-      // Etykieta paska („Communicator”, „Kommunikator”) nie ma się łamać na dwie linie ani
-      // zmniejszać: NavigationBar rysuje Text(label) bez limitu linii, ale dziedziczy maxLines/
-      // overflow z DefaultTextStyle — stąd jedna linia z wielokropkiem.
-      bottomNavigationBar: DefaultTextStyle.merge(
-        maxLines: 1,
-        softWrap: false,
-        overflow: TextOverflow.ellipsis,
-        child: NavigationBar(
-          backgroundColor: AppTheme.surface,
-          indicatorColor: AppTheme.teal.withValues(alpha: 0.15),
-          selectedIndex: _index,
-          onDestinationSelected: (i) => setState(() => _index = i),
-          destinations: _items(context.watch<NodeService>().nodes.isNotEmpty)
-              .map((e) => NavigationDestination(
-            icon:         Icon(e.$1, color: AppTheme.muted),
-            selectedIcon: Icon(e.$2, color: AppTheme.teal),
-            label: tr(e.$3),
-          )).toList(),
-        ),
+      // Własny pasek zamiast NavigationBar: tamten rysuje etykietę bez limitu linii i resetuje
+      // DefaultTextStyle w swoim Material, więc „Communicator” łamał się na dwie linie. Tu etykieta
+      // ma jedną linię z wielokropkiem, czcionka bez zmian; wygląd jak Material 3 (pastylka pod ikoną).
+      bottomNavigationBar: _BottomBar(
+        items: _items(context.watch<NodeService>().nodes.isNotEmpty),
+        index: _index,
+        onTap: (i) => setState(() => _index = i),
       ),
     );
   }
+}
+
+class _BottomBar extends StatelessWidget {
+  final List<(IconData, IconData, String)> items;
+  final int index;
+  final ValueChanged<int> onTap;
+  const _BottomBar({required this.items, required this.index, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) => Material(
+        color: AppTheme.surface,
+        child: SafeArea(
+          top: false,
+          child: SizedBox(
+            height: 80,
+            child: Row(children: [
+              for (var i = 0; i < items.length; i++)
+                Expanded(child: InkWell(
+                  onTap: () => onTap(i),
+                  child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 150),
+                      width: 64, height: 32,
+                      decoration: BoxDecoration(
+                        color: i == index ? AppTheme.teal.withValues(alpha: 0.15) : Colors.transparent,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      alignment: Alignment.center,
+                      child: Icon(i == index ? items[i].$2 : items[i].$1, color: i == index ? AppTheme.teal : AppTheme.muted),
+                    ),
+                    const SizedBox(height: 4),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: Text(tr(items[i].$3),
+                          maxLines: 1, softWrap: false, overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500,
+                              color: i == index ? AppTheme.text : AppTheme.muted)),
+                    ),
+                  ]),
+                )),
+            ]),
+          ),
+        ),
+      );
 }
