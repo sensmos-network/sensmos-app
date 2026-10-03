@@ -47,6 +47,28 @@ class KomBle {
   final link = ValueNotifier(KomLink.idle);
   final saved = ValueNotifier<KomSaved?>(null);
   final info = ValueNotifier<Map<String, dynamic>?>(null);
+
+  // Żywe instancje — zakładka Komunikator stoi w IndexedStack, więc jej auto-łączenie chodzi od
+  // startu apki; releaseForNode musi do niej sięgnąć z ekranu dodawania noda.
+  static final _instances = <KomBle>{};
+  KomBle() { _instances.add(this); }
+
+  /// Płytka dodawana właśnie jako NODE przestała być komunikatorem (przeflashowana). Bez tego
+  /// auto-łączenie co kilka sekund łapie tę samą płytkę i zrywa połączenie ekranu dodawania noda
+  /// (XIAO 98a3b78b, 2026-10-03). Zapis znika też wtedy, gdy zakładka nie zdążyła wstać.
+  static Future<void> releaseForNode(String remoteId) async {
+    for (final k in _instances.toList()) {
+      if (k.saved.value?.remoteId == remoteId) await k.forget();
+    }
+    try {
+      final p = await SharedPreferences.getInstance();
+      final raw = p.getString(_kSaved);
+      if (raw != null && (jsonDecode(raw) as Map<String, dynamic>)['remoteId'] == remoteId) {
+        await p.remove(_kSaved);
+        await p.remove(_pinKey(remoteId));
+      }
+    } catch (_) {}
+  }
   final _events = StreamController<Map<String, dynamic>>.broadcast();
   Stream<Map<String, dynamic>> get events => _events.stream;
 
@@ -368,6 +390,7 @@ class KomBle {
   }
 
   void dispose() {
+    _instances.remove(this);
     _close();
     _events.close();
   }

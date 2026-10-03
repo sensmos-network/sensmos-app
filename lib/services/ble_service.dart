@@ -8,6 +8,7 @@ import '../config.dart';
 import '../l10n.dart';
 import '../log.dart';
 import 'attest_service.dart';
+import 'kom_ble.dart';
 
 class BleService {
   BluetoothDevice?         _device;
@@ -56,6 +57,20 @@ class BleService {
 
   Future<void> connect(BluetoothDevice device) async {
     _device = device;
+    await KomBle.releaseForNode(device.remoteId.str);
+    // Płytka przeflashowana (z komunikatora albo noda sparowanego wcześniej z tym telefonem): Android
+    // trzyma stary bond, szyfruje łącze starym kluczem, płytka go nie ma (`encryption_change:key_missing`)
+    // i telefon sam zrywa połączenie — w apce „requestMtu, device is disconnected" 4× pod rząd.
+    // Node nie korzysta z parowania systemowego (PIN idzie w apce), więc stary bond kasujemy przed połączeniem.
+    if (Platform.isAndroid) {
+      try {
+        final bond = await device.bondState.first.timeout(const Duration(seconds: 2));
+        if (bond == BluetoothBondState.bonded) {
+          print('[BLE] usuwam stary bond ${device.remoteId.str} przed połączeniem');
+          await device.removeBond();
+        }
+      } catch (_) {}
+    }
     try { await device.clearGattCache(); } catch (_) {}
     // Android często rzuca code 62 (ConnectionFailedToBeEstablished) / 133 na 1. próbie —
     // flaky GATT. Ponów kilka razy z narastającą przerwą; między próbami rozłącz i wyczyść.
