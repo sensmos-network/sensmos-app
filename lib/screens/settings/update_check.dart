@@ -6,6 +6,10 @@ import '../../config.dart';
 import '../../l10n.dart';
 import '../../theme.dart';
 
+/// Build do Google Play (`--dart-define=STORE=play`): Play zabrania aktualizacji spoza Play,
+/// więc tam nie ma „Sprawdź aktualizację" — wersję zmienia sklep. Build z GitHuba bez zmian.
+const bool kPlayStore = String.fromEnvironment('STORE') == 'play';
+
 /// Self-update APK: manifest z BE (wersja + changelog PL/EN + URL APK z GitHub Releases).
 /// Dialog pokazuje skumulowane notki wszystkich wersji nowszych niż zainstalowana;
 /// „Pobierz" otwiera bezpośredni link do APK — Android po pobraniu proponuje instalację.

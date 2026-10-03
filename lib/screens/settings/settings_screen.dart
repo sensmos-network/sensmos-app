@@ -68,15 +68,17 @@ class SettingsScreen extends StatelessWidget {
               sub: tr('błędy i zdarzenia aplikacji'),
               builder: (_) => const LogsScreen(),
             ),
-            const Divider(color: AppTheme.border, height: 1),
-            ListTile(
-              leading: const Icon(Icons.system_update_alt, color: AppTheme.teal),
-              title: Text(tr('Sprawdź aktualizację'),
-                  style: const TextStyle(color: AppTheme.text)),
-              subtitle: Text(tr('nowa wersja i lista zmian'),
-                  style: const TextStyle(color: AppTheme.muted, fontSize: 12)),
-              onTap: () => checkForUpdate(context),
-            ),
+            if (!kPlayStore) ...[
+              const Divider(color: AppTheme.border, height: 1),
+              ListTile(
+                leading: const Icon(Icons.system_update_alt, color: AppTheme.teal),
+                title: Text(tr('Sprawdź aktualizację'),
+                    style: const TextStyle(color: AppTheme.text)),
+                subtitle: Text(tr('nowa wersja i lista zmian'),
+                    style: const TextStyle(color: AppTheme.muted, fontSize: 12)),
+                onTap: () => checkForUpdate(context),
+              ),
+            ],
             const Divider(color: AppTheme.border, height: 1),
             ListTile(
               leading: const Icon(Icons.info_outline, color: AppTheme.muted),
