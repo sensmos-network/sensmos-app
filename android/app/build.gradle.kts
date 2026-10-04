@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     // START: FlutterFire Configuration
@@ -28,11 +30,24 @@ android {
         versionName = flutter.versionName
     }
 
+    // Google Play odrzuca klucz debug: build dla Play podpisuje kluczem przesyłania z pliku wskazanego
+    // w SENSMOS_UPLOAD_KEY (key.properties). Bez zmiennej — klucz debug, jak APK z GitHuba (21:9E).
+    val uploadKey = System.getenv("SENSMOS_UPLOAD_KEY")?.let { file(it) }?.takeIf { it.exists() }
+    signingConfigs {
+        if (uploadKey != null) {
+            val p = Properties().apply { uploadKey.inputStream().use { load(it) } }
+            create("upload") {
+                storeFile = file(p.getProperty("storeFile"))
+                storePassword = p.getProperty("storePassword")
+                keyAlias = p.getProperty("keyAlias")
+                keyPassword = p.getProperty("keyPassword")
+            }
+        }
+    }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName(if (uploadKey != null) "upload" else "debug")
         }
     }
 }
