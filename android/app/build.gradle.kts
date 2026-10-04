@@ -52,6 +52,17 @@ android {
     }
 }
 
+// Skaner QR (mobile_scanner 5.x) ciągnie ML Kit 17.2.0 i CameraX 1.3.3 z bibliotekami .so wyrównanymi do 4 KB;
+// Google Play wymaga stron 16 KB (Android 15+). Tylko w :app — CameraX 1.6 wymaga compileSdk 36, a wtyczka ma niższy.
+configurations.all {
+    resolutionStrategy {
+        force("com.google.mlkit:barcode-scanning:17.3.0")
+        force("androidx.camera:camera-core:1.6.1")
+        force("androidx.camera:camera-camera2:1.6.1")
+        force("androidx.camera:camera-lifecycle:1.6.1")
+    }
+}
+
 kotlin {
     compilerOptions {
         jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
