@@ -125,6 +125,14 @@ const Map<String, String> _enMap = {
   "Podaj kwotę": "Enter an amount",
   "Za mało POL na gas — dopłać POL, aby wysłać":
       "Not enough POL for gas — top up POL to send",
+  "Poprzednia transakcja jeszcze czeka w sieci — spróbuj za kilka minut.":
+      "Your previous transaction is still waiting in the network — try again in a few minutes.",
+  "Za mało POL na opłatę sieci.":
+      "Not enough POL to pay the network fee.",
+  "Opłaty w sieci Polygon właśnie skoczyły — spróbuj ponownie za chwilę.":
+      "Polygon network fees just spiked — try again in a moment.",
+  "Sieć nie potwierdziła transakcji w 90 s — sprawdź saldo za kilka minut.":
+      "The network did not confirm the transaction within 90 s — check your balance in a few minutes.",
   "Wysyłanie…": "Sending…",
   "Wysłano %s %s": "Sent %s %s",
   "Transakcja odrzucona przez kontrakt": "Transaction reverted",
@@ -1576,6 +1584,14 @@ const Map<String, String> _deMap = {
   "Podaj kwotę": "Betrag eingeben",
   "Za mało POL na gas — dopłać POL, aby wysłać":
       "Nicht genug POL für Gas — POL aufladen, um zu senden",
+  "Poprzednia transakcja jeszcze czeka w sieci — spróbuj za kilka minut.":
+      "Deine vorherige Transaktion wartet noch im Netzwerk — versuche es in ein paar Minuten erneut.",
+  "Za mało POL na opłatę sieci.":
+      "Nicht genug POL für die Netzwerkgebühr.",
+  "Opłaty w sieci Polygon właśnie skoczyły — spróbuj ponownie za chwilę.":
+      "Die Gebühren im Polygon-Netzwerk sind gerade gestiegen — versuche es gleich noch einmal.",
+  "Sieć nie potwierdziła transakcji w 90 s — sprawdź saldo za kilka minut.":
+      "Das Netzwerk hat die Transaktion nicht innerhalb von 90 s bestätigt — prüfe dein Guthaben in ein paar Minuten.",
   "Wysyłanie…": "Senden…",
   "Wysłano %s %s": "%s %s gesendet",
   "Transakcja odrzucona przez kontrakt": "Transaktion zurückgewiesen",

@@ -228,6 +228,23 @@ class _WalletScreenState extends State<WalletScreen> {
   double _d(dynamic v) =>
       v == null ? 0 : (v is num ? v.toDouble() : double.tryParse('$v') ?? 0);
 
+  // RPC zwraca surowe „-32000 …" — zamień na zdanie, z którym user wie, co zrobić.
+  String _txError(Object e) {
+    final s = e.toString().toLowerCase();
+    if (e is PendingTxException || s.contains('nonce too low') ||
+        s.contains('already known') || s.contains('replacement transaction')) {
+      return tr('Poprzednia transakcja jeszcze czeka w sieci — spróbuj za kilka minut.');
+    }
+    if (s.contains('insufficient funds')) return tr('Za mało POL na opłatę sieci.');
+    if (s.contains('underpriced') || s.contains('base fee') || s.contains('fee cap')) {
+      return tr('Opłaty w sieci Polygon właśnie skoczyły — spróbuj ponownie za chwilę.');
+    }
+    if (s.contains('timeout')) {
+      return tr('Sieć nie potwierdziła transakcji w 90 s — sprawdź saldo za kilka minut.');
+    }
+    return tr('Błąd: %s', [e]);
+  }
+
   void _snack(String msg, {bool error = false}) {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -282,7 +299,7 @@ class _WalletScreenState extends State<WalletScreen> {
         if (mounted) setState(() => _depositPending = 0);
       }
     } catch (e) {
-      _snack(tr('Błąd: %s', [e]), error: true);
+      _snack(_txError(e), error: true);
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -299,6 +316,8 @@ class _WalletScreenState extends State<WalletScreen> {
 
     setState(() => _busy = true);
     try {
+      // claim-intent zamraża kwotę na BE — bez sensu, gdy tx i tak nie wyjdzie zza wiszącej poprzedniej.
+      if (await _eth.hasPendingTx(addr)) throw const PendingTxException();
       http.Response res;
       bool viaIntent = false;
       try {
@@ -349,7 +368,7 @@ class _WalletScreenState extends State<WalletScreen> {
       await _load();
       if (ok) _settleClaim(addr, claimedBefore);   // BEZ await — inaczej scrim wisiałby minutę
     } catch (e) {
-      _snack(tr('Błąd: %s', [e]), error: true);
+      _snack(_txError(e), error: true);
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -398,7 +417,7 @@ class _WalletScreenState extends State<WalletScreen> {
       _snack(ok ? tr('Wysłano %s %s', [amountStr, asset]) : tr('Transakcja odrzucona przez kontrakt'), error: !ok);
       await _load();
     } catch (e) {
-      _snack(tr('Błąd: %s', [e]), error: true);
+      _snack(_txError(e), error: true);
     } finally {
       if (mounted) setState(() => _busy = false);
     }

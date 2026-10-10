@@ -83,20 +83,48 @@ class EthService {
   /// Natywny przelew POL (gaz Polygon) na dowolny adres.
   Future<String> sendNative(String pkHex, String to, BigInt amountWei) async {
     final cred = EthPrivateKey.fromHex(pkHex);
+    await _ensureNoPending(cred.address);
+    final (tip, maxFee) = await _fees();
     return _client.sendTransaction(
       cred,
       Transaction(
           to: EthereumAddress.fromHex(to.trim()),
           value: EtherAmount.inWei(amountWei),
-          gasPrice: await _gasPrice()),
+          maxPriorityFeePerGas: tip,
+          maxFeePerGas: maxFee),
       chainId: _chainId,
     );
   }
 
-  // Cena gazu z RPC + 20% bezpiecznika — na Polygonie auto-estimate bywa zaniżony i tx utyka.
-  Future<EtherAmount> _gasPrice() async {
-    final gp = await _client.getGasPrice();
-    return EtherAmount.inWei(gp.getInWei * BigInt.from(120) ~/ BigInt.from(100));
+  // Base fee na Polygonie potrafi skoczyć kilkukrotnie w kilka minut. Dawne legacy „gasPrice
+  // z RPC +20%" zostawało pod nim, tx wisiała, a każda kolejna próba z tym samym nonce
+  // kończyła się „RPC -32000". EIP-1559: limit 2× base + napiwek przetrwa podwojenie base fee,
+  // a płaci się tylko faktyczny base + napiwek. Polygon odrzuca napiwek < 25 gwei.
+  static final BigInt _minTip = BigInt.from(30) * BigInt.from(10).pow(9);
+
+  Future<(EtherAmount, EtherAmount)> _fees() async {
+    final block = await _client.getBlockInformation(isContainFullObj: false);
+    final base = block.baseFeePerGas?.getInWei ?? BigInt.zero;
+    var tip = _minTip;
+    try {
+      final t = hexToInt(await _client.makeRPCCall<String>('eth_maxPriorityFeePerGas'));
+      if (t > tip) tip = t;
+    } catch (_) {}
+    return (EtherAmount.inWei(tip), EtherAmount.inWei(base * BigInt.two + tip));
+  }
+
+  /// Czy z adresu czeka w sieci niepotwierdzona transakcja. Wysyłka obok niej trafia na ten sam
+  /// nonce albo staje za nią w kolejce — w obu przypadkach user widzi tylko błąd RPC.
+  Future<bool> hasPendingTx(String addr) => _hasPending(EthereumAddress.fromHex(addr));
+
+  Future<bool> _hasPending(EthereumAddress a) async {
+    final latest = await _client.getTransactionCount(a, atBlock: const BlockNum.current());
+    final pending = await _client.getTransactionCount(a, atBlock: const BlockNum.pending());
+    return pending > latest;
+  }
+
+  Future<void> _ensureNoPending(EthereumAddress a) async {
+    if (await _hasPending(a)) throw const PendingTxException();
   }
 
   /// Walidacja adresu odbiorcy (checksum/format) bez rzucania w UI.
@@ -112,11 +140,13 @@ class EthService {
   Future<String> _send(String pkHex, DeployedContract c,
       ContractFunction fn, List<dynamic> params) async {
     final cred = EthPrivateKey.fromHex(pkHex);
+    await _ensureNoPending(cred.address);
+    final (tip, maxFee) = await _fees();
     return _client.sendTransaction(
       cred,
       Transaction.callContract(
           contract: c, function: fn, parameters: params,
-          gasPrice: await _gasPrice()),
+          maxPriorityFeePerGas: tip, maxFeePerGas: maxFee),
       chainId: _chainId,
     );
   }
@@ -162,3 +192,10 @@ const _rpAbi = '''
    "outputs":[]}
 ]
 ''';
+
+/// Z adresu czeka w sieci niepotwierdzona transakcja — nowej nie wysyłamy, dopóki tamta nie zejdzie.
+class PendingTxException implements Exception {
+  const PendingTxException();
+  @override
+  String toString() => 'pending transaction';
+}
