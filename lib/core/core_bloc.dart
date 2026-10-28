@@ -53,7 +53,8 @@ class CoreBloc extends Bloc<CoreEvent, CoreState> {
 
   Future<void> _onNodeRemoved(NodeRemoved e, Emitter<CoreState> emit) async {
     await nodeService.removeNode(e.deviceId);
+    final hasWallet = await walletService.exists();
     emit(state.copyWith(
-        phase: nodeService.nodes.isEmpty ? AppPhase.welcome : AppPhase.ready));
+        phase: (nodeService.nodes.isEmpty && !hasWallet) ? AppPhase.welcome : AppPhase.ready));
   }
 }

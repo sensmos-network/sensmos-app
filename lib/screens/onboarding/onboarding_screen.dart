@@ -33,6 +33,10 @@ class OnboardingScreen extends StatelessWidget {
     final messenger = ScaffoldMessenger.of(context);
     final bloc = context.read<CoreBloc>();
     try {
+      if (await ws.exists()) {
+        bloc.add(WalletImported());
+        return;
+      }
       final w = await ws.create();
       messenger.showSnackBar(SnackBar(
           duration: const Duration(seconds: 8),
