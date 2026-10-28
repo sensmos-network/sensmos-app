@@ -42,7 +42,7 @@ dependencies:
 
   # Kryptografia plikow i klient Store — WSPOLNE z klientem na komputer.
   sensmos_store:
-    path: ../SHARED/sensmos_store
+    path: ../wspolne/sensmos_store
 
   # Store: wybór pliku z telefonu (strumień, bez ładowania do RAM) i zapis pobranego (SAF)
   file_picker: ^10.3.3

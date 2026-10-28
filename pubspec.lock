@@ -864,7 +864,7 @@ packages:
   sensmos_store:
     dependency: "direct main"
     description:
-      path: "../SHARED/sensmos_store"
+      path: "../wspolne/sensmos_store"
       relative: true
     source: path
     version: "1.0.0"
