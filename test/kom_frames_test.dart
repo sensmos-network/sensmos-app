@@ -4,9 +4,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sensmos_app/services/kom_chat.dart';
 import 'package:sensmos_app/services/kom_frames.dart';
 
-/// Ramki apki = ramki komunikatora i serwera: wektory z BE/test/ldev_fixture.json (tools/ldev_fixture.js).
+/// Ramki apki = ramki komunikatora i serwera: wektory z kontrakt/protokol/wektory/ldev-e004.json (backend/tools/ldev_fixture.js).
 void main() {
-  final v = jsonDecode(File('../backend/test/ldev_fixture.json').readAsStringSync()) as Map<String, dynamic>;
+  final v = jsonDecode(File('${Platform.environment['SENSMOS_WEKTORY'] ?? '../kontrakt/protokol/wektory'}/ldev-e004.json').readAsStringSync()) as Map<String, dynamic>;
   final bePub = komUnhex(v['be_pub']);
   final nonce = komUnhex('0001020304050607');
 

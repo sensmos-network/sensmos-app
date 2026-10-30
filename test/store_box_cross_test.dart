@@ -11,12 +11,12 @@ import 'package:sensmos_store/sensmos_store.dart';
 /// dwa razy, w dwóch językach. Rozjazd o jeden bajt nie objawia się przy zapisie, tylko przy
 /// próbie odczytania pliku sprzed pół roku, gdy jest już za późno.
 ///
-/// Próbkę wytwarza `BE/tools/box_fixture.js`. Po KAŻDEJ zmianie w `store_box.js` albo
+/// Próbkę wytwarza `backend/tools/box_fixture.js`. Po KAŻDEJ zmianie w `store_box.js` albo
 /// `store_crypto.dart` wygeneruj ją na nowo i puść ten test.
 void main() {
-  final f = File('test/box_fixture.json');
+  final f = File('${Platform.environment['SENSMOS_WEKTORY'] ?? '../kontrakt/protokol/wektory'}/store-box.json');
   if (!f.existsSync()) {
-    test('próbka z BE', () => fail('brak test/box_fixture.json — uruchom: node BE/tools/box_fixture.js'));
+    test('próbka z BE', () => fail('brak kontrakt/protokol/wektory/store-box.json — uruchom: node backend/tools/box_fixture.js'));
     return;
   }
   final fx = jsonDecode(f.readAsStringSync()) as Map<String, dynamic>;
