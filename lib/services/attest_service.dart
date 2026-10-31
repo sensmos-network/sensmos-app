@@ -43,7 +43,7 @@ class TrustEvidence {
 class AttestService {
   static const _kToken = 'sensmos_app_token';
 
-  /// GPS telefonu do ceremonii v2. null = brak lokalizacji (node bez pozycji, GPS do dogrania).
+  /// Kratka pozycji telefonu do ceremonii v2. null = brak lokalizacji (node bez pozycji, GPS do dogrania).
   /// Odrzuca pozycję podrobioną (mock provider) i każdą z emulatora — tam GPS wpisuje się ręcznie.
   static Future<({String lat, String lon})?> ceremonyGps() async {
     if (!await Geolocator.isLocationServiceEnabled()) return null;
@@ -62,8 +62,14 @@ class AttestService {
       Log.w('attest', 'podrobiona lokalizacja — GPS pominięty w ceremonii');
       return null;
     }
-    return (lat: pos.latitude.toStringAsFixed(6), lon: pos.longitude.toStringAsFixed(6));
+    return (lat: kratka(pos.latitude), lon: kratka(pos.longitude));
   }
+
+  /// Środek kratki 0,05° (ok. 5 km). Dokładne miejsce nie wychodzi z telefonu: pozycję noda
+  /// potwierdza serwer z dowodów sieci (RTT, LoRa, WiFi, IP), nie z GPS (plan przebudowy 2.2).
+  static const kratkaDeg = 0.05;
+  static String kratka(double v) =>
+      ((v / kratkaDeg).floor() * kratkaDeg + kratkaDeg / 2).toStringAsFixed(6);
 
   /// Token instalacji aplikacji (do rate-limitów; docelowo Play Integrity)
   Future<String> appToken() async {
