@@ -301,20 +301,9 @@ class _SetupScreenState extends State<SetupScreen> {
       String? gpsLat, gpsLon;
       try {
         setState(() => _status = tr('Pobieram pozycję GPS...'));
-        if (await Geolocator.isLocationServiceEnabled()) {
-          var perm = await Geolocator.checkPermission();
-          if (perm == LocationPermission.denied) {
-            perm = await Geolocator.requestPermission();
-          }
-          if (perm != LocationPermission.denied &&
-              perm != LocationPermission.deniedForever) {
-            final pos = await Geolocator.getCurrentPosition(
-                    desiredAccuracy: LocationAccuracy.high)
-                .timeout(const Duration(seconds: 12));
-            gpsLat = pos.latitude.toStringAsFixed(6);
-            gpsLon = pos.longitude.toStringAsFixed(6);
-          }
-        }
+        final gps = await AttestService.ceremonyGps();
+        gpsLat = gps?.lat;
+        gpsLon = gps?.lon;
       } catch (_) { /* brak GPS → node niebieski, GPS dograsz później */ }
 
       setState(() => _status = tr('Łączę z WiFi przez node...'));

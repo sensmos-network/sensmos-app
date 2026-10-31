@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import '../../theme.dart';
 import '../../core/core_bloc.dart';
@@ -168,17 +167,9 @@ class _TrustScreenState extends State<TrustScreen> {
     // GPS telefonu (jesteś przy nodzie) → ceremonia v2 = lokalizacja + trust naraz. Best-effort.
     String? gpsLat, gpsLon;
     try {
-      if (await Geolocator.isLocationServiceEnabled()) {
-        var perm = await Geolocator.checkPermission();
-        if (perm == LocationPermission.denied) perm = await Geolocator.requestPermission();
-        if (perm != LocationPermission.denied && perm != LocationPermission.deniedForever) {
-          final pos = await Geolocator.getCurrentPosition(
-                  desiredAccuracy: LocationAccuracy.high)
-              .timeout(const Duration(seconds: 12));
-          gpsLat = pos.latitude.toStringAsFixed(6);
-          gpsLon = pos.longitude.toStringAsFixed(6);
-        }
-      }
+      final gps = await AttestService.ceremonyGps();
+      gpsLat = gps?.lat;
+      gpsLon = gps?.lon;
     } catch (_) { /* brak GPS → sam trust, bez lokalizacji */ }
 
     setState(() { _phase = _Phase.restarting; _error = null;

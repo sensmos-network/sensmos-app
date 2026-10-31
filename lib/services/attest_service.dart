@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../config.dart';
@@ -40,6 +42,28 @@ class TrustEvidence {
 /// krzyżowa weryfikacja na BE → devices.trusted.
 class AttestService {
   static const _kToken = 'sensmos_app_token';
+
+  /// GPS telefonu do ceremonii v2. null = brak lokalizacji (node bez pozycji, GPS do dogrania).
+  /// Odrzuca pozycję podrobioną (mock provider) i każdą z emulatora — tam GPS wpisuje się ręcznie.
+  static Future<({String lat, String lon})?> ceremonyGps() async {
+    if (!await Geolocator.isLocationServiceEnabled()) return null;
+    var perm = await Geolocator.checkPermission();
+    if (perm == LocationPermission.denied) perm = await Geolocator.requestPermission();
+    if (perm == LocationPermission.denied || perm == LocationPermission.deniedForever) return null;
+    try {
+      if (await const MethodChannel('sensmos/device').invokeMethod<bool>('isEmulator') == true) {
+        Log.w('attest', 'emulator — GPS pominięty w ceremonii');
+        return null;
+      }
+    } catch (_) {}
+    final pos = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .timeout(const Duration(seconds: 12));
+    if (pos.isMocked) {
+      Log.w('attest', 'podrobiona lokalizacja — GPS pominięty w ceremonii');
+      return null;
+    }
+    return (lat: pos.latitude.toStringAsFixed(6), lon: pos.longitude.toStringAsFixed(6));
+  }
 
   /// Token instalacji aplikacji (do rate-limitów; docelowo Play Integrity)
   Future<String> appToken() async {

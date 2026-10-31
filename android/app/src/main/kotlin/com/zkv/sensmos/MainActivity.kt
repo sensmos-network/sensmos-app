@@ -47,7 +47,19 @@ class MainActivity : FlutterActivity() {
                 }
             }
         }
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "sensmos/device").setMethodCallHandler { call, result ->
+            if (call.method == "isEmulator") result.success(isEmulator()) else result.notImplemented()
+        }
     }
+
+    // Emulator pozwala wpisać dowolną pozycję GPS — ceremonia lokalizacji nie może jej przyjąć.
+    private fun isEmulator(): Boolean =
+        Build.FINGERPRINT.startsWith("generic") || Build.FINGERPRINT.startsWith("unknown") ||
+        Build.FINGERPRINT.contains("emulator") || Build.FINGERPRINT.contains("sdk_gphone") ||
+        Build.MODEL.contains("Emulator") || Build.MODEL.contains("Android SDK built for") ||
+        Build.HARDWARE.contains("goldfish") || Build.HARDWARE.contains("ranchu") ||
+        Build.PRODUCT.startsWith("sdk") || Build.PRODUCT.contains("emulator") ||
+        Build.MANUFACTURER.contains("Genymotion")
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
