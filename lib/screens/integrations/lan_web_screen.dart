@@ -138,9 +138,15 @@ class _LanWebScreenState extends State<LanWebScreen> {
       }
       req.response.add(resp.body);
     } catch (e) {
+      final target = '${widget.panel.host}:${widget.panel.port}';
+      final msg = '$e'.contains('zamknięty')
+          ? tr('Urządzenie %s zamknęło połączenie bez odpowiedzi. Sprawdź adres IP i port oraz czy urządzenie działa po zwykłym HTTP (HTTPS przez tunel nie działa).', [target])
+          : tr('Nie udało się połączyć z %s przez tunel.', [target]);
       req.response.statusCode = 502;
-      req.response.headers.contentType = ContentType.text;
-      req.response.write('tunnel error: $e');
+      req.response.headers.contentType = ContentType.html;
+      req.response.write('<html><body style="font-family:sans-serif;padding:16px;background:#fff;color:#111">'
+          '<p>${const HtmlEscape().convert(msg)}</p>'
+          '<p style="color:#666;font-size:12px">${const HtmlEscape().convert('$e')}</p></body></html>');
     }
     try { await req.response.close(); } catch (_) {}
   }

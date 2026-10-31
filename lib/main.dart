@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -27,6 +29,11 @@ Future<void> _fcmBackground(RemoteMessage message) async {}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Android 7.0 nie ma ISRG Root X1 (Let's Encrypt) w magazynie systemu — bez tego brak połączenia z serwerem.
+  try {
+    final pem = await rootBundle.load('assets/certs/isrg_root_x1.pem');
+    SecurityContext.defaultContext.setTrustedCertificatesBytes(pem.buffer.asUint8List());
+  } catch (_) {}
   await Config.initVersion();   // wersja z pakietu — updater i ekran Ustawień czytają ją stąd
   await L10n.init();
   await Log.load();

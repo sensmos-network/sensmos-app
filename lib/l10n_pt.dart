@@ -799,6 +799,8 @@ const Map<String, String> ptMap = {
   // ── 1.5.43: plugin Panel LAN ─────────────────────────────────
   "Panel LAN": "Painel LAN",
   "HTTP w LAN": "HTTP na LAN",
+  "Urządzenie %s zamknęło połączenie bez odpowiedzi. Sprawdź adres IP i port oraz czy urządzenie działa po zwykłym HTTP (HTTPS przez tunel nie działa).": "O dispositivo %s fechou a conexão sem responder. Verifique o IP e a porta, e se o dispositivo usa HTTP simples (HTTPS não funciona pelo túnel).",
+  "Nie udało się połączyć z %s przez tunel.": "Não foi possível conectar a %s pelo túnel.",
   "Dodaj panel": "Adicionar painel",
   "Edytuj panel": "Editar painel",
   "Nazwa": "Nome",

@@ -1,7 +1,7 @@
 name: sensmos_app
 description: SENSMOS — sieć inteligentnych czujników
 publish_to: 'none'
-version: 1.5.96+133
+version: 1.5.97+134
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -84,3 +84,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/certs/isrg_root_x1.pem

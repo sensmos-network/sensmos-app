@@ -1029,6 +1029,8 @@ const Map<String, String> _enMap = {
   // ── 1.5.43: plugin Panel LAN ─────────────────────────────────
   "Panel LAN": "LAN panel",
   "HTTP w LAN": "HTTP on LAN",
+  "Urządzenie %s zamknęło połączenie bez odpowiedzi. Sprawdź adres IP i port oraz czy urządzenie działa po zwykłym HTTP (HTTPS przez tunel nie działa).": "The device %s closed the connection without answering. Check the IP address and port, and that the device serves plain HTTP (HTTPS does not work through the tunnel).",
+  "Nie udało się połączyć z %s przez tunel.": "Could not connect to %s through the tunnel.",
   "Dodaj panel": "Add panel",
   "Edytuj panel": "Edit panel",
   "Nazwa": "Name",
@@ -2502,6 +2504,8 @@ const Map<String, String> _deMap = {
   // ── 1.5.43: plugin Panel LAN ─────────────────────────────────
   "Panel LAN": "LAN-Panel",
   "HTTP w LAN": "HTTP im LAN",
+  "Urządzenie %s zamknęło połączenie bez odpowiedzi. Sprawdź adres IP i port oraz czy urządzenie działa po zwykłym HTTP (HTTPS przez tunel nie działa).": "Das Gerät %s hat die Verbindung ohne Antwort geschlossen. Prüfe IP-Adresse und Port und ob das Gerät normales HTTP spricht (HTTPS funktioniert nicht über den Tunnel).",
+  "Nie udało się połączyć z %s przez tunel.": "Verbindung zu %s über den Tunnel fehlgeschlagen.",
   "Dodaj panel": "Panel hinzufügen",
   "Edytuj panel": "Panel bearbeiten",
   "Nazwa": "Name",
