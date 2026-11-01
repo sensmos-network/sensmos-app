@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import '../../theme.dart';
@@ -45,6 +46,7 @@ class _WalletScreenState extends State<WalletScreen> {
   bool _keysOpen = false;
   bool _pwProtected = false;   // portfel zabezpieczony hasłem
   bool _unlocked = false;      // sesja odblokowana (klucz w RAM)
+  bool _keySaved = true;       // user widział klucz prywatny w „Zapisz kopię zapasową”
   final _unlockCtrl = TextEditingController();
   String? _address;
 
@@ -75,7 +77,12 @@ class _WalletScreenState extends State<WalletScreen> {
     super.initState();
     _address = context.read<CoreBloc>().state.wallet?.address;
     _load();
+    SharedPreferences.getInstance().then((p) {
+      if (mounted) setState(() => _keySaved = p.getBool(_kKeySaved) ?? false);
+    });
   }
+
+  static const _kKeySaved = 'wallet_key_saved';
 
   @override
   void dispose() {
@@ -89,6 +96,7 @@ class _WalletScreenState extends State<WalletScreen> {
       setState(() => _loading = false);
       return;
     }
+    _rewFuture = null;
     setState(() => _loading = true);
     _pwProtected = await _wallet.isPasswordProtected();
     _unlocked = await _wallet.isUnlocked();
@@ -607,6 +615,10 @@ class _WalletScreenState extends State<WalletScreen> {
                     padding: const EdgeInsets.all(16),
                     children: [
                       _addressCard(state.wallet?.address ?? '—'),
+                      if (!_keySaved) ...[
+                        const SizedBox(height: 16),
+                        _backupWarning(),
+                      ],
                       const SizedBox(height: 16),
                       _settlingWrap(_balanceCard()),
                       if (kDepositEnabled) ...[
@@ -615,6 +627,8 @@ class _WalletScreenState extends State<WalletScreen> {
                       ],
                       const SizedBox(height: 16),
                       _settlingWrap(_onchainCard()),
+                      const SizedBox(height: 16),
+                      _rewardsSection(state.wallet?.address),
                       const SizedBox(height: 16),
                       _expensesSection(state.wallet?.address),
                       const SizedBox(height: 16),
@@ -718,6 +732,104 @@ class _WalletScreenState extends State<WalletScreen> {
                     );
                   }).toList(),
                 );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<Map<String, dynamic>?>? _rewFuture;
+  Future<Map<String, dynamic>?> _fetchRewards(String addr) async {
+    try {
+      final res = await http
+          .get(Uri.parse('${Config.beUrl}/v1/wallet/$addr/rewards'))
+          .timeout(const Duration(seconds: 8));
+      if (res.statusCode != 200) return null;
+      return jsonDecode(res.body) as Map<String, dynamic>;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Widget _rewardRow(String label, String sub, double node, double services) {
+    const mono = TextStyle(color: AppTheme.teal, fontSize: 12, fontFamily: 'monospace');
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(14, 0, 14, 10),
+      child: Row(children: [
+        Expanded(
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(label, style: const TextStyle(color: AppTheme.text, fontSize: 12)),
+            Text(sub, style: const TextStyle(color: AppTheme.muted, fontSize: 10)),
+          ]),
+        ),
+        Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
+          Text('+${(node + services).toStringAsFixed(3)} GALU', style: mono),
+          Text(tr('nody %s · usługi %s', [node.toStringAsFixed(3), services.toStringAsFixed(3)]),
+              style: const TextStyle(color: AppTheme.muted, fontSize: 10)),
+        ]),
+      ]),
+    );
+  }
+
+  Widget _rewardsSection(String? addr) {
+    if (addr == null) return const SizedBox.shrink();
+    _rewFuture ??= _fetchRewards(addr);
+    return Container(
+      decoration: BoxDecoration(
+        color: AppTheme.card,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppTheme.border),
+      ),
+      child: Theme(
+        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+        child: ExpansionTile(
+          tilePadding: const EdgeInsets.symmetric(horizontal: 14),
+          title: Text(tr('Nagrody portfela'),
+              style: const TextStyle(
+                  color: AppTheme.text, fontSize: 14, fontWeight: FontWeight.w600)),
+          subtitle: Text(tr('za nody i za usługi — per miesiąc i per epoka'),
+              style: const TextStyle(color: AppTheme.muted, fontSize: 11)),
+          children: [
+            FutureBuilder<Map<String, dynamic>?>(
+              future: _rewFuture,
+              builder: (ctx, snap) {
+                if (snap.connectionState != ConnectionState.done) {
+                  return const Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Center(child: CircularProgressIndicator(strokeWidth: 2)));
+                }
+                final j = snap.data;
+                final months = (j?['months'] as List?) ?? const [];
+                final epochs = (j?['epochs'] as List?) ?? const [];
+                if (epochs.isEmpty) {
+                  return Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Text(tr('Brak nagród — node zarabia od pierwszej pełnej epoki online.'),
+                        style: const TextStyle(color: AppTheme.muted, fontSize: 12)),
+                  );
+                }
+                Widget head(String t) => Padding(
+                      padding: const EdgeInsets.fromLTRB(14, 4, 14, 8),
+                      child: Text(t,
+                          style: const TextStyle(
+                              color: AppTheme.muted, fontSize: 11, letterSpacing: 0.8)),
+                    );
+                return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  head(tr('MIESIĄCE')),
+                  for (final m in months.take(6))
+                    _rewardRow((m['month'] ?? '').toString(), '', _d(m['node']), _d(m['services'])),
+                  head(tr('EPOKI')),
+                  for (final e in epochs.take(30))
+                    _rewardRow(
+                        tr('Epoka %s', [e['epoch']]),
+                        e['at'] == null
+                            ? tr('w toku')
+                            : (e['at'] as String).substring(0, 10),
+                        _d(e['node']),
+                        _d(e['services'])),
+                ]);
               },
             ),
           ],
@@ -1120,11 +1232,35 @@ class _WalletScreenState extends State<WalletScreen> {
         ]),
       );
 
+  Widget _backupWarning() => Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+            color: AppTheme.amber.withValues(alpha: 0.1),
+            border: Border.all(color: AppTheme.amber.withValues(alpha: 0.5)),
+            borderRadius: BorderRadius.circular(10)),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(tr('Zapisz klucz prywatny portfela'),
+              style: const TextStyle(color: AppTheme.amber, fontWeight: FontWeight.w600)),
+          const SizedBox(height: 6),
+          Text(
+              tr('Kopia zapasowa to klucz prywatny Twojego portfela. Bez niej usunięcie '
+                  'aplikacji, reset albo utrata telefonu może oznaczać utratę GALU.'),
+              style: const TextStyle(color: AppTheme.text, fontSize: 12)),
+          Align(
+            alignment: Alignment.centerRight,
+            child: TextButton(
+                onPressed: _busy ? null : _exportKey,
+                child: Text(tr('Zapisz kopię zapasową'),
+                    style: const TextStyle(color: AppTheme.amber))),
+          ),
+        ]),
+      );
+
   Widget _exportTile() => ListTile(
         leading: const Icon(Icons.save_outlined, color: AppTheme.amber),
         title: Text(tr('Zapisz kopię zapasową'),
             style: const TextStyle(color: AppTheme.text)),
-        subtitle: Text(tr('klucz do zapisania offline — na wypadek utraty telefonu i noda'),
+        subtitle: Text(tr('to klucz prywatny portfela — zapisz go offline na wypadek utraty telefonu i noda'),
             style: const TextStyle(color: AppTheme.muted, fontSize: 12)),
         trailing: const Icon(Icons.chevron_right, color: AppTheme.muted),
         onTap: _busy ? null : _exportKey,
@@ -1312,6 +1448,8 @@ class _WalletScreenState extends State<WalletScreen> {
     // bajtem 00 (klucz z najwyższym bitem = 1, ~50% przypadków) albo <64 (wiodące
     // zero) — MetaMask wymaga dokładnie 64. Obetnij nadmiar / dopełnij zerami.
     final k = pk.length > 64 ? pk.substring(pk.length - 64) : pk.padLeft(64, '0');
+    SharedPreferences.getInstance().then((p) => p.setBool(_kKeySaved, true));
+    if (!_keySaved) setState(() => _keySaved = true);
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(

@@ -1125,8 +1125,19 @@ class _NodesScreenState extends State<NodesScreen> {
               // za każdym razem, gdy jest w domu, a nie dopiero gdy tunel odmówi z wakacji.
               if (_paired[id] != true && (_kinds[id]?.isNotEmpty ?? false)) Padding(
                 padding: const EdgeInsets.only(top: 6),
-                child: Text(tr('Node niesparowany — tunel nie ruszy. Sparuj, będąc w jego sieci WiFi.'),
-                    style: const TextStyle(color: AppTheme.amber, fontSize: 11)),
+                child: Row(children: [
+                  Expanded(child: Text(tr('Node niesparowany — tunel nie ruszy. Sparuj, będąc w jego sieci WiFi.'),
+                      style: const TextStyle(color: AppTheme.amber, fontSize: 11))),
+                  TextButton(
+                    onPressed: () async {
+                      final acc = await ensurePaired(context, id);
+                      if (!mounted) return;
+                      setState(() => _paired[id] = acc.ok);
+                      _loadKinds(id);
+                    },
+                    child: Text(tr('Sparuj'), style: const TextStyle(color: AppTheme.amber)),
+                  ),
+                ]),
               ),
               const SizedBox(height: 14),
               // Dwie ROZNE operacje, wiec dwa osobne przyciski obok siebie:

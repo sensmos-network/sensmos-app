@@ -189,9 +189,12 @@ const Map<String, String> _enMap = {
   "Kopia zapasowa i odzysk": "Backup and recovery",
   "zapisz klucz offline albo odzyskaj portfel":
       "save the key offline or recover the wallet",
-  "Zapisz kopię zapasową": "Save a backup",
-  "klucz do zapisania offline — na wypadek utraty telefonu i noda":
-      "a key to store offline — in case you lose your phone and node",
+  "Zapisz kopię zapasową": "Save a backup (private key)",
+  "to klucz prywatny portfela — zapisz go offline na wypadek utraty telefonu i noda":
+      "this is your wallet's private key — store it offline in case you lose your phone and node",
+  "Zapisz klucz prywatny portfela": "Save your wallet's private key",
+  "Kopia zapasowa to klucz prywatny Twojego portfela. Bez niej usunięcie aplikacji, reset albo utrata telefonu może oznaczać utratę GALU.":
+      "The backup is your wallet's private key. Without it, uninstalling the app, a reset or losing your phone can mean losing your GALU.",
   "Odzyskaj portfel z kopii": "Recover wallet from backup",
   "wpisz zapisany klucz — tylko jeśli sam go stworzyłeś":
       "enter a saved key — only if you created it yourself",
@@ -952,6 +955,14 @@ const Map<String, String> _enMap = {
   "Pusto — ramki i komendy odebrane przez LoRa pojawią się tutaj.":
       "Empty — frames and commands received over LoRa will appear here.",
   "Wydatki usług": "Service expenses",
+  "Nagrody portfela": "Wallet rewards",
+  "za nody i za usługi — per miesiąc i per epoka": "for nodes and services — per month and per epoch",
+  "nody %s · usługi %s": "nodes %s · services %s",
+  "Brak nagród — node zarabia od pierwszej pełnej epoki online.": "No rewards yet — a node earns from its first full epoch online.",
+  "MIESIĄCE": "MONTHS",
+  "EPOKI": "EPOCHS",
+  "Epoka %s": "Epoch %s",
+  "w toku": "in progress",
   "ryczałty dobowe — ostatnie 30 dni": "daily flat fees — last 30 days",
   "Brak naliczeń — płatne funkcje nie były używane.":
       "No charges — paid features were not used.",
@@ -1651,9 +1662,12 @@ const Map<String, String> _deMap = {
   "Kopia zapasowa i odzysk": "Backup und Wiederherstellung",
   "zapisz klucz offline albo odzyskaj portfel":
       "Schlüssel offline speichern oder Wallet wiederherstellen",
-  "Zapisz kopię zapasową": "Backup speichern",
-  "klucz do zapisania offline — na wypadek utraty telefonu i noda":
-      "ein Schlüssel zum Offline-Speichern — falls du Telefon und Node verlierst",
+  "Zapisz kopię zapasową": "Backup speichern (privater Schlüssel)",
+  "to klucz prywatny portfela — zapisz go offline na wypadek utraty telefonu i noda":
+      "das ist der private Schlüssel deines Wallets — bewahre ihn offline auf, falls du Telefon und Node verlierst",
+  "Zapisz klucz prywatny portfela": "Privaten Schlüssel des Wallets sichern",
+  "Kopia zapasowa to klucz prywatny Twojego portfela. Bez niej usunięcie aplikacji, reset albo utrata telefonu może oznaczać utratę GALU.":
+      "Das Backup ist der private Schlüssel deines Wallets. Ohne ihn kann das Deinstallieren der App, ein Reset oder der Verlust des Telefons den Verlust deiner GALU bedeuten.",
   "Odzyskaj portfel z kopii": "Wallet aus Backup wiederherstellen",
   "wpisz zapisany klucz — tylko jeśli sam go stworzyłeś":
       "gespeicherten Schlüssel eingeben — nur wenn du ihn selbst erstellt hast",
@@ -2427,6 +2441,14 @@ const Map<String, String> _deMap = {
   "Pusto — ramki i komendy odebrane przez LoRa pojawią się tutaj.":
       "Leer — über LoRa empfangene Frames und Befehle erscheinen hier.",
   "Wydatki usług": "Dienst-Ausgaben",
+  "Nagrody portfela": "Wallet-Belohnungen",
+  "za nody i za usługi — per miesiąc i per epoka": "für Nodes und Dienste — pro Monat und pro Epoche",
+  "nody %s · usługi %s": "Nodes %s · Dienste %s",
+  "Brak nagród — node zarabia od pierwszej pełnej epoki online.": "Noch keine Belohnungen — ein Node verdient ab seiner ersten vollen Epoche online.",
+  "MIESIĄCE": "MONATE",
+  "EPOKI": "EPOCHEN",
+  "Epoka %s": "Epoche %s",
+  "w toku": "läuft",
   "ryczałty dobowe — ostatnie 30 dni": "Tagespauschalen — letzte 30 Tage",
   "Brak naliczeń — płatne funkcje nie były używane.":
       "Keine Abbuchungen — bezahlte Funktionen wurden nicht genutzt.",
