@@ -40,22 +40,29 @@ class PushService {
         if (w != null) registerToBackend(w);   // rotacja tokenu → cicha re-rejestracja
       });
       // Foreground: system nie pokaże banera — rysujemy własny (emergency na bursztynowo).
-      FirebaseMessaging.onMessage.listen((msg) {
-        final n = msg.notification;
-        if (n == null) return;
-        final emerg = msg.data['type'] == 'lora_emerg';
-        messengerKey.currentState?.showSnackBar(SnackBar(
-          behavior: SnackBarBehavior.floating,
-          duration: Duration(seconds: emerg ? 8 : 5),
-          backgroundColor: emerg ? Colors.amber.shade800 : null,
-          content: Text('${n.title ?? ''}${n.body?.isNotEmpty == true ? '\n${n.body}' : ''}',
-              maxLines: 4, overflow: TextOverflow.ellipsis),
-        ));
-      });
+      FirebaseMessaging.onMessage.listen((msg) => _show(msg, tapped: false));
+      // Tapnięcie w powiadomienie (apka w tle albo zamknięta): pokaż pełną treść, bo system
+      // ucina ją do dwóch linii, a przy „nod ucichł" to właśnie w ogonie są kroki naprawy.
+      FirebaseMessaging.onMessageOpenedApp.listen((msg) => _show(msg, tapped: true));
+      FirebaseMessaging.instance.getInitialMessage().then((msg) { if (msg != null) _show(msg, tapped: true); });
     } catch (_) {
       _token = null;
     }
     return _token;
+  }
+
+  void _show(RemoteMessage msg, {required bool tapped}) {
+    final n = msg.notification;
+    if (n == null) return;
+    final emerg = msg.data['type'] == 'lora_emerg';
+    final body = n.body ?? '';
+    messengerKey.currentState?.showSnackBar(SnackBar(
+      behavior: SnackBarBehavior.floating,
+      duration: Duration(seconds: tapped ? 12 : (emerg ? 8 : 5)),
+      backgroundColor: emerg ? Colors.amber.shade800 : null,
+      content: Text('${n.title ?? ''}${body.isNotEmpty ? '\n$body' : ''}',
+          maxLines: tapped ? 8 : 4, overflow: TextOverflow.ellipsis),
+    ));
   }
 
   /// Czemu ostatnia rejestracja padła: 'no_fcm' | 'locked' | 'net' (null = poszło).
