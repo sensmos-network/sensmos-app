@@ -9,6 +9,7 @@ import 'devices_screen.dart';
 import 'nodes_location_screen.dart';
 import 'logs_screen.dart';
 import 'update_check.dart';
+import 'tester_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -67,6 +68,14 @@ class SettingsScreen extends StatelessWidget {
               title: tr('Logi'),
               sub: tr('błędy i zdarzenia aplikacji'),
               builder: (_) => const LogsScreen(),
+            ),
+            const Divider(color: AppTheme.border, height: 1),
+            _tile(
+              context,
+              icon: Icons.science_outlined,
+              title: tr('Program testów'),
+              sub: tr('testuj nowe wersje, wysyłaj raporty, zbieraj punkty'),
+              builder: (_) => const TesterScreen(),
             ),
             if (!kPlayStore) ...[
               const Divider(color: AppTheme.border, height: 1),
