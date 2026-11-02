@@ -37,23 +37,10 @@ class ApiService {
       _get('/v1/map/layer/$entityId');
 
   /// Ranking miast
-  Future<List<dynamic>> leaderboardCities() async {
-    final j = await _get('/v1/leaderboard/cities');
-    return j['cities'] ?? [];
-  }
 
   /// Ranking nodów
-  Future<List<dynamic>> leaderboardNodes({String sort = 'earned'}) async {
-    final j = await _get('/v1/leaderboard/nodes?sort=$sort');
-    return j['nodes'] ?? [];
-  }
 
   /// Ranking regionów
-  Future<List<dynamic>> leaderboardRegions() async {
-    final j = await _get('/v1/leaderboard/regions');
-    return j['regions'] ?? [];
-  }
 
   /// Globalne statystyki
-  Future<Map<String, dynamic>> stats() => _get('/v1/leaderboard/stats');
 }

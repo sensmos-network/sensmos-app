@@ -9,7 +9,7 @@ import '../../l10n.dart';
 import '../../core/core_bloc.dart';
 import '../../services/wallet_service.dart';
 
-/// Brama LoRaWAN (Crankk, SenseCAP…) na portfel — jak Store, bez noda. Warunek: w forwarderze
+/// Brama LoRaWAN (RAK, Dragino, SenseCAP…) na portfel — jak Store, bez noda. Warunek: w forwarderze
 /// bramy dopisany `sensmos.com:1700` i brama TERAZ do nas śle. Ten sam ekran zmienia nazwę
 /// i pozycję już sparowanej bramy (BE rozpoznaje ją po EUI i portfelu).
 class GatewayScreen extends StatefulWidget {
@@ -168,7 +168,7 @@ class _GatewayScreenState extends State<GatewayScreen> {
               border: Border.all(color: AppTheme.border),
             ),
             child: Text(
-              tr('W panelu bramy (np. Crankk → Forwards To) dopisz serwer sensmos.com:1700. '
+              tr('W panelu bramy (packet forwarder → dodatkowy serwer) dopisz serwer sensmos.com:1700. '
                  'Gdy brama zacznie do nas wysyłać, wpisz tu jej EUI. Brama słyszy nody Sensmos, '
                  'nadaje beacon i zarabia jak node.'),
               style: const TextStyle(color: AppTheme.muted, fontSize: 13, height: 1.4),

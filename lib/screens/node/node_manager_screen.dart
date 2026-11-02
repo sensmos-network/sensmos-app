@@ -153,7 +153,7 @@ class _NodeManagerScreenState extends State<NodeManagerScreen> {
         onPressed: () => Navigator.push(context,
             MaterialPageRoute(builder: (_) => const GatewayScreen())),
         icon: const Icon(Icons.cell_tower, size: 18),
-        label: Text(tr('Dodaj bramę LoRaWAN (np. Crankk)')),
+        label: Text(tr('Dodaj bramę LoRaWAN (np. RAK, Dragino)')),
         style: OutlinedButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 14)),
       ),
       if (_error != null) ...[const SizedBox(height: 12), _errorBox(_error!)],
