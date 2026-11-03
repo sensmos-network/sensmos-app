@@ -28,6 +28,7 @@ import '../node/emergency_screen.dart';
 import '../terminal/terminal_screen.dart';
 import '../terminal/terminal_hosts_screen.dart';
 import '../integrations/ha_panel_screen.dart';
+import '../../util/fw_gate.dart';
 import '../integrations/link_report_screen.dart';
 import '../integrations/lan_panels_screen.dart';
 import '../integrations/store_screen.dart';
@@ -693,16 +694,6 @@ class _NodesScreenState extends State<NodesScreen> {
     });
   }
 
-  // RemoteTerminal (on-demand tunel + PIN gate) jest dopiero od FW > 0.70 — na starszych ukryj wejście.
-  bool _fwGt(dynamic fw, double min) {
-    // Wersja bywa z sufiksem gałęzi ('0.80-lora6', '0.80-fsk3') — double.tryParse zwracał wtedy
-    // null i node z LoRy wyglądał na starszy niż 0.70, więc integracje były dla niego zablokowane
-    // mimo firmware 0.80. Bierzemy sam prefiks major.minor.
-    final m = RegExp(r'^\d+\.\d+').firstMatch(fw?.toString() ?? '');
-    final v = m == null ? null : double.tryParse(m.group(0)!);
-    return v != null && v > min;
-  }
-
   Future<void> _loadKinds(String id) async {
     final k = await IntegrationStore.enabledKinds(id);
     final p = await PairingService().hasAccess(id);
@@ -712,7 +703,7 @@ class _NodesScreenState extends State<NodesScreen> {
   // Rząd integracji: podpięte (tap → otwórz, long-press → odepnij) + „Dodaj".
   Widget _integrationsRow(String id, String name, Map<String, dynamic>? be, bool wsOnline) {
     final enabled = _kinds[id] ?? const <String>{};
-    final fwOk = _fwGt(be?['firmware'], 0.70);
+    final fwOk = tunnelCapable(be?['firmware']);
     final hasWallet = context.read<CoreBloc>().state.wallet != null;
     // Pluginy tunelowe wymagają żywego WS i FW>0.70; chmurowe (Raport łącza) tylko
     // portfela — działają też, gdy node właśnie leży (to wtedy raport jest najciekawszy).
@@ -756,7 +747,7 @@ class _NodesScreenState extends State<NodesScreen> {
   }
 
   Future<void> _addIntegration(String id, String name, Map<String, dynamic>? be) async {
-    final fwOk = _fwGt(be?['firmware'], 0.70);
+    final fwOk = tunnelCapable(be?['firmware']);
     final paired = _paired[id] == true;
     final enabled = _kinds[id] ?? const <String>{};
     final addable = IntegrationKind.values.where((k) => !enabled.contains(k.id)).toList();
