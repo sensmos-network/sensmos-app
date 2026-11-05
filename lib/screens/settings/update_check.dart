@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../config.dart';
 import '../../l10n.dart';
@@ -18,7 +19,16 @@ Future<void> checkForUpdate(BuildContext context) async {
     final res = await http
         .get(Uri.parse(Config.updateManifestUrl))
         .timeout(const Duration(seconds: 8));
-    final m = jsonDecode(res.body) as Map<String, dynamic>;
+    var m = jsonDecode(res.body) as Map<String, dynamic>;
+    // kanał beta (program testów): tester w trybie testera dostaje manifest.beta, gdy jest nowszy od stabilnej
+    final beta = m['beta'];
+    final tester = (await SharedPreferences.getInstance()).getBool('tester_mode') ?? false;
+    final isBeta = tester && beta is Map<String, dynamic> &&
+        _cmpVer((beta['version'] ?? '') as String, (m['version'] ?? '') as String) > 0;
+    if (isBeta) {
+      m = {...m, 'version': beta['version'], 'url': beta['url'],
+           'notes': {...(m['notes'] as Map<String, dynamic>? ?? {}), ...(beta['notes'] as Map<String, dynamic>? ?? {})}};
+    }
     final latest = (m['version'] ?? '') as String;
     final url = (m['url'] ?? '') as String;
     if (!context.mounted) return;
@@ -41,7 +51,7 @@ Future<void> checkForUpdate(BuildContext context) async {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppTheme.card,
-        title: Text(tr('Dostępna aktualizacja %s', [latest]),
+        title: Text(isBeta ? tr('Dostępna wersja beta %s', [latest]) : tr('Dostępna aktualizacja %s', [latest]),
             style: const TextStyle(color: AppTheme.text, fontSize: 17)),
         content: SingleChildScrollView(
           child: Column(

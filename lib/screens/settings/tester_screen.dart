@@ -161,7 +161,7 @@ class _TesterScreenState extends State<TesterScreen> {
               title: Text(tr('Mam Home Assistant'), style: const TextStyle(color: AppTheme.text))),
           SwitchListTile(value: _mode, contentPadding: EdgeInsets.zero,
               title: Text(tr('Tryb testera'), style: const TextStyle(color: AppTheme.text)),
-              subtitle: Text(tr('więcej logów, raporty oznaczone scenariuszem'), style: const TextStyle(color: AppTheme.muted, fontSize: 12)),
+              subtitle: Text(tr('więcej logów, raporty oznaczone scenariuszem, wersje beta apki w „Sprawdź aktualizację”'), style: const TextStyle(color: AppTheme.muted, fontSize: 12)),
               onChanged: (v) async { setState(() => _mode = v); (await SharedPreferences.getInstance()).setBool(_kMode, v); }),
           const SizedBox(height: 8),
           SizedBox(width: double.infinity, child: FilledButton(
