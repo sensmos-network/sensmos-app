@@ -3,7 +3,7 @@
 # które apka ≥1.6.2 czyta tylko w trybie testera. Wersja beta = kolejny numer (np. 1.6.3), bez "-beta".
 #   .\wydaj-beta.ps1 -Version 1.6.3 -Notes "Co nowego, po angielsku"
 # Najpierw: wersja w pubspec.yaml = $Version i flutter build apk --release.
-param([Parameter(Mandatory)][string]$Version, [Parameter(Mandatory)][string]$Notes)
+param([Parameter(Mandatory)][string]$Version, [Parameter(Mandatory)][string]$Notes, [switch]$SkipDeploy)
 $ErrorActionPreference = 'Stop'
 $apk = 'E:\_DF\SENSMOS\aplikacja\build\app\outputs\flutter-apk\app-release.apk'
 if (-not (Select-String -Path E:\_DF\SENSMOS\aplikacja\pubspec.yaml -Pattern "^version: $([regex]::Escape($Version))\+" -Quiet)) { throw "pubspec.yaml nie ma wersji $Version" }
@@ -22,6 +22,7 @@ Set-Location E:\_DF\SENSMOS\backend
 git add public/app/manifest.json
 git commit -q -m "manifest apki: beta $Version"
 
+if ($SkipDeploy) { Write-Host "3/3 deploy pominięty: manifest pójdzie z dziennym deploy.ps1" -ForegroundColor Yellow; return }
 Write-Host "3/3 deploy BE bez restartu (tylko pliki public/)" -ForegroundColor Cyan
 & E:\_DF\SENSMOS\backend\deploy.ps1 -NoRestart
 "beta w manifeście: " + (Invoke-RestMethod https://sensmos.com/app/manifest.json).beta.version

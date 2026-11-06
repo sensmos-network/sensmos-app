@@ -125,6 +125,37 @@ class _TesterScreenState extends State<TesterScreen> {
     if (mounted) setState(() => _busy = false);
   }
 
+  // Logi noda (FW ≥ 1.12): serwer pyta nod przez WS, nod odsyła ostatnie linie z pamięci → paczka diag.
+  Future<void> _sendNodeLogs() async {
+    final nodes = context.read<NodeService>().nodes.where((n) => n.id.isNotEmpty).toList();
+    if (nodes.isEmpty) { _snack(tr('Brak nodów w aplikacji'), error: true); return; }
+    final node = nodes.length == 1 ? nodes.first : await showDialog<SavedNode>(
+      context: context,
+      builder: (ctx) => SimpleDialog(
+        backgroundColor: AppTheme.card,
+        title: Text(tr('Wybierz nod'), style: const TextStyle(color: AppTheme.text, fontSize: 17)),
+        children: [for (final n in nodes) SimpleDialogOption(
+          onPressed: () => Navigator.pop(ctx, n),
+          child: Text('${n.label}  ${n.id.substring(0, n.id.length < 8 ? n.id.length : 8)}…', style: const TextStyle(color: AppTheme.text)))],
+      ));
+    if (node == null) return;
+    setState(() { _busy = true; _status = tr('Pytam nod o logi…'); });
+    final a = await _auth('node-logs');
+    if (a != null) {
+      try {
+        final res = await http.post(Uri.parse('${Config.beUrl}/v1/diag/node-logs'),
+            headers: {'Content-Type': 'application/json'}, body: jsonEncode({...a, 'device_id': node.id})).timeout(const Duration(seconds: 25));
+        final j = jsonDecode(res.body) as Map<String, dynamic>;
+        if (!mounted) return;
+        setState(() => _status = res.statusCode == 200
+            ? tr('Logi noda wysłane (paczka #%s, %s linii)', [j['id'], (j['lines'] as List?)?.length ?? 0])
+            : res.statusCode == 404 ? tr('To nie jest nod z Twojego portfela')
+            : tr('Nod nie odpowiedział: logi wymagają firmware 1.12 lub nowszego i noda online'));
+      } catch (_) { if (mounted) setState(() => _status = tr('Brak połączenia z serwerem')); }
+    } else if (mounted) { setState(() => _status = null); }
+    if (mounted) setState(() => _busy = false);
+  }
+
   void _snack(String m, {bool error = false}) {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(m), backgroundColor: error ? Colors.red.shade800 : null));
@@ -190,6 +221,11 @@ class _TesterScreenState extends State<TesterScreen> {
               style: FilledButton.styleFrom(backgroundColor: AppTheme.teal, foregroundColor: Colors.black),
               onPressed: _busy ? null : () => _send(null), child: Text(tr('Wyślij')))),
           ]),
+          const SizedBox(height: 8),
+          SizedBox(width: double.infinity, child: OutlinedButton.icon(
+            onPressed: _busy ? null : _sendNodeLogs,
+            icon: const Icon(Icons.receipt_long, size: 18),
+            label: Text(tr('Wyślij logi noda')))),
           if (_status != null) Padding(padding: const EdgeInsets.only(top: 8), child: Text(_status!, style: const TextStyle(color: AppTheme.teal, fontSize: 12))),
           Padding(padding: const EdgeInsets.only(top: 8), child: Text(tr('Wysłane raporty: %s', [_packages]), style: const TextStyle(color: AppTheme.muted, fontSize: 12))),
         ]))),
