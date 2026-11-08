@@ -18,7 +18,9 @@ import '../../l10n.dart';
 /// BE weryfikuje krzyżowo i oznacza node jako zaufany.
 class TrustScreen extends StatefulWidget {
   final SavedNode node;
-  const TrustScreen({super.key, required this.node});
+  /// Aktualny PIN (ekran konfiguracji trzyma zmieniony PIN osobno, SavedNode go nie dostaje).
+  final String? pin;
+  const TrustScreen({super.key, required this.node, this.pin});
 
   @override
   State<TrustScreen> createState() => _TrustScreenState();
@@ -103,7 +105,7 @@ class _TrustScreenState extends State<TrustScreen> {
           .post(Uri.parse('http://${widget.node.ip}/config'),
               headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ${widget.node.pin}',
+                'Authorization': 'Bearer ${widget.pin ?? widget.node.pin}',
               },
               body: jsonEncode({'fuzz': on}))
           .timeout(const Duration(seconds: 6));
@@ -125,7 +127,7 @@ class _TrustScreenState extends State<TrustScreen> {
           .post(Uri.parse('http://${widget.node.ip}/config'),
               headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ${widget.node.pin}',
+                'Authorization': 'Bearer ${widget.pin ?? widget.node.pin}',
               },
               body: jsonEncode({'location_mode': on ? 'ghost' : 'public'}))
           .timeout(const Duration(seconds: 6));
@@ -169,7 +171,7 @@ class _TrustScreenState extends State<TrustScreen> {
       final seed = seedResp?['seed'] as String?;
       if (seed == null) throw tr('Serwer nie wydał ziarna ceremonii');
       final hr = await http.post(Uri.parse('http://${widget.node.ip}/attest'),
-          headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ${widget.node.pin}'},
+          headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ${widget.pin ?? widget.node.pin}'},
           body: jsonEncode({'seed': seed, 'gps_lat': gps.lat, 'gps_lon': gps.lon})).timeout(const Duration(seconds: 6));
       if (hr.statusCode == 404) throw tr('Ten Hub jest za stary — zaktualizuj go do 0.1.2 lub nowszego');
       if (hr.statusCode != 200) throw tr('Hub odmówił podpisu (%s)', [hr.statusCode]);
@@ -206,6 +208,10 @@ class _TrustScreenState extends State<TrustScreen> {
       return;
     }
     if (_fw == null) await _loadGhost();   // rodzaj urządzenia (Hub czy ESP32) bierzemy z /info
+    if (_fw == null) {
+      setState(() { _phase = _Phase.error; _error = tr('Nie widzę urządzenia w sieci. Połącz telefon z tą samą siecią Wi-Fi co nod i spróbuj ponownie.'); });
+      return;
+    }
     if (_isHub) return _runHubCeremony(owner, wallet);
 
     // GPS telefonu (jesteś przy nodzie) → ceremonia v2 = lokalizacja + trust naraz. Best-effort.
@@ -223,7 +229,7 @@ class _TrustScreenState extends State<TrustScreen> {
     try {
       await http.post(
         Uri.parse('http://${widget.node.ip}/node/ble_mode'),
-        headers: {'Authorization': 'Bearer ${widget.node.pin}'},
+        headers: {'Authorization': 'Bearer ${widget.pin ?? widget.node.pin}'},
       ).timeout(const Duration(seconds: 6));
     } catch (e) {
       setState(() { _phase = _Phase.error;

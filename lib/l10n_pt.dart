@@ -751,6 +751,7 @@ const Map<String, String> ptMap = {
   "Mam Sensmos Hub (Docker)": "Tenho o Sensmos Hub (Docker)",
   "Mam Home Assistant": "Tenho Home Assistant",
   "Tryb testera": "Modo testador",
+  "Nie widzę urządzenia w sieci. Połącz telefon z tą samą siecią Wi-Fi co nod i spróbuj ponownie.": "Não encontro o dispositivo na rede. Conecte o telefone ao mesmo Wi-Fi que o node e tente de novo.",
   "Mam Home Assistanta — nod bez płytki": "Tenho Home Assistant — um node sem placa",
   "Sensmos Hub w Home Assistant": "Sensmos Hub no Home Assistant",
   "Dodatek zamienia komputer z Twoim Home Assistantem w noda: bez płytki, mierzy łącze i otwiera tunel do HA. W dodatku wpisz adres portfela jako owner.": "O add-on transforma o computador do seu Home Assistant em um node: sem placa, mede sua conexão e abre o túnel para o HA. Informe o endereço da carteira como owner no add-on.",

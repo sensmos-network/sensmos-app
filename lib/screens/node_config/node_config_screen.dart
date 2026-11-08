@@ -172,7 +172,7 @@ class _NodeConfigScreenState extends State<NodeConfigScreen> {
             sub: tr('ceremonia BLE + GPS — ustawia pozycję i potwierdza urządzenie'),
             onTap: () => Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => TrustScreen(node: node)),
+              MaterialPageRoute(builder: (_) => TrustScreen(node: node, pin: pin)),
             ),
           ),
           _tile(
