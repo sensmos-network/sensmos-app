@@ -35,7 +35,7 @@ class _HubSensorsScreenState extends State<HubSensorsScreen> {
     setState(() { _loading = true; _error = null; });
     try {
       final r = await http.get(Uri.parse('http://${widget.node.ip}/sensors'), headers: _h).timeout(const Duration(seconds: 8));
-      if (r.statusCode == 404) throw tr('Ten Hub jest za stary — zaktualizuj go do 0.1.2-beta2 lub nowszego');
+      if (r.statusCode == 404) throw tr('Ten Hub jest za stary — zaktualizuj go do 0.2.0-beta1 lub nowszego');
       if (r.statusCode != 200) throw tr('Hub odpowiedział %s', [r.statusCode]);
       final j = jsonDecode(r.body) as Map<String, dynamic>;
       final list = ((j['sensors'] as List?) ?? []).cast<Map<String, dynamic>>();
@@ -111,7 +111,7 @@ class _HubSensorsScreenState extends State<HubSensorsScreen> {
                   child: Text(tr('Zapisz wybór (%s udostępnionych)', [_shared.length])),
                 ),
               const SizedBox(height: 8),
-              Text(tr('Udostępnione odczyty Hub wysyła do sieci co 5 minut, tak jak nod ESP32 (od Huba 0.1.2-beta2). Reszta czujników nie opuszcza domu.'),
+              Text(tr('Udostępnione odczyty Hub wysyła do sieci co 5 minut, tak jak nod ESP32 (od Huba 0.2.0-beta1). Reszta czujników nie opuszcza domu.'),
                   style: const TextStyle(color: AppTheme.muted, fontSize: 12)),
             ]),
     );
