@@ -763,7 +763,7 @@ const Map<String, String> ptMap = {
   "Home Assistant: %s": "Home Assistant: %s",
   "Home Assistant nie zgłasza żadnych czujników z wartością.": "O Home Assistant não informa nenhum sensor com valor.",
   "Zapisz wybór (%s udostępnionych)": "Salvar escolha (%s compartilhados)",
-  "Na razie Hub tylko zapamiętuje wybór. Wysyłka udostępnionych odczytów do sieci przyjdzie w następnej wersji.": "Por enquanto o hub só guarda a escolha. O envio das leituras compartilhadas para a rede vem na próxima versão.",
+  "Udostępnione odczyty Hub wysyła do sieci co 5 minut, tak jak nod ESP32 (od Huba 0.1.2-beta2). Reszta czujników nie opuszcza domu.": "O hub envia as leituras compartilhadas para a rede a cada 5 minutos, como um node ESP32 (a partir do hub 0.1.2-beta2). Os outros sensores não saem da sua casa.",
   "Pytam Huba o podpis w sieci domowej…": "Pedindo a assinatura do hub na rede de casa…",
   "Włącz lokalizację telefonu — Hub dostaje pozycję z telefonu": "Ative a localização do telefone — o hub recebe a posição do telefone",
   "Serwer nie wydał ziarna ceremonii": "O servidor não emitiu a semente da cerimônia",

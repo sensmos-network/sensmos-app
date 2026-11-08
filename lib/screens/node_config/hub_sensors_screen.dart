@@ -111,7 +111,7 @@ class _HubSensorsScreenState extends State<HubSensorsScreen> {
                   child: Text(tr('Zapisz wybór (%s udostępnionych)', [_shared.length])),
                 ),
               const SizedBox(height: 8),
-              Text(tr('Na razie Hub tylko zapamiętuje wybór. Wysyłka udostępnionych odczytów do sieci przyjdzie w następnej wersji.'),
+              Text(tr('Udostępnione odczyty Hub wysyła do sieci co 5 minut, tak jak nod ESP32 (od Huba 0.1.2-beta2). Reszta czujników nie opuszcza domu.'),
                   style: const TextStyle(color: AppTheme.muted, fontSize: 12)),
             ]),
     );
