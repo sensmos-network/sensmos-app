@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:ui' show FontFeature;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import '../../theme.dart';
@@ -1659,6 +1660,31 @@ class _NodesScreenState extends State<NodesScreen> {
     return _buildEmptyChoice();
   }
 
+  // Droga bez płytki: dodatek Sensmos Hub w Home Assistancie. Link my.home-assistant.io otwiera HA użytkownika
+  // z prośbą o dodanie repozytorium; w dodatku trzeba wpisać adres portfela, więc dajemy go do skopiowania.
+  static const _haAddonUrl = 'https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fsensmos-network%2Fsensmos-hub';
+  void _addHubSheet() {
+    final addr = context.read<CoreBloc>().state.wallet?.address;
+    showModalBottomSheet(context: context, backgroundColor: AppTheme.card, builder: (ctx) => Padding(
+      padding: const EdgeInsets.all(20),
+      child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text(tr('Sensmos Hub w Home Assistant'), style: const TextStyle(color: AppTheme.text, fontSize: 17, fontWeight: FontWeight.w600)),
+        const SizedBox(height: 8),
+        Text(tr('Dodatek zamienia komputer z Twoim Home Assistantem w noda: bez płytki, mierzy łącze i otwiera tunel do HA. W dodatku wpisz adres portfela jako owner.'),
+            style: const TextStyle(color: AppTheme.muted, fontSize: 13, height: 1.35)),
+        const SizedBox(height: 16),
+        if (addr != null) OutlinedButton.icon(
+          onPressed: () { Clipboard.setData(ClipboardData(text: addr)); ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(tr('Skopiowano adres portfela')))); },
+          icon: const Icon(Icons.copy, size: 18), label: Text(tr('Kopiuj adres portfela'))),
+        const SizedBox(height: 8),
+        SizedBox(width: double.infinity, child: FilledButton.icon(
+          style: FilledButton.styleFrom(backgroundColor: AppTheme.teal, foregroundColor: AppTheme.bg),
+          onPressed: () { Navigator.pop(ctx); launchUrl(Uri.parse(_haAddonUrl), mode: LaunchMode.externalApplication); },
+          icon: const Icon(Icons.open_in_new, size: 18), label: Text(tr('Otwórz w Home Assistant')))),
+      ]),
+    ));
+  }
+
   Widget _buildEmptyChoice() => ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -1675,6 +1701,12 @@ class _NodesScreenState extends State<NodesScreen> {
             icon: const Icon(Icons.add),
             label: Text(tr('Dodaj node')),
             style: FilledButton.styleFrom(backgroundColor: AppTheme.teal, foregroundColor: AppTheme.bg),
+          )),
+          const SizedBox(height: 8),
+          Center(child: TextButton.icon(
+            onPressed: _addHubSheet,
+            icon: const Icon(Icons.home_outlined, size: 18),
+            label: Text(tr('Mam Home Assistanta — nod bez płytki')),
           )),
           if (!StoreCardPref.hidden.value &&
               context.read<CoreBloc>().state.wallet != null) ...[
