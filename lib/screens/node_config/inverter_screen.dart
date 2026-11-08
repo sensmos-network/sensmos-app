@@ -102,7 +102,7 @@ class _InverterScreenState extends State<InverterScreen> {
               if (_error != null) Card(child: Padding(padding: const EdgeInsets.all(16),
                   child: Text(_error!, style: const TextStyle(color: AppTheme.red, fontSize: 13)))),
               if (_error == null) ...[
-                DropdownButtonFormField<String>(
+                DropdownButtonFormField<String>(key: ValueKey(_model),
                   initialValue: _models.contains(_model) ? _model : null, dropdownColor: AppTheme.card, decoration: _dec(tr('Model falownika')),
                   items: _models.map((m) => DropdownMenuItem(value: m, child: Text(_label(m), style: const TextStyle(color: AppTheme.text)))).toList(),
                   onChanged: (v) => setState(() => _model = v)),
