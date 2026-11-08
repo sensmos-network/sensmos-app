@@ -19,7 +19,7 @@ import 'mqtt_screen.dart';
 import 'change_pin_screen.dart';
 import 'lora_screen.dart';
 import 'hub_sensors_screen.dart';
-import 'inverter_screen.dart';
+import 'modbus_screen.dart';
 import 'installer_share_screen.dart';
 
 class NodeConfigScreen extends StatefulWidget {
@@ -158,14 +158,14 @@ class _NodeConfigScreenState extends State<NodeConfigScreen> {
                   builder: (_) => ScriptsScreen(ip: node.ip, pin: pin)),
             ),
           ),
-          if (_fwAtLeast(1, 13))   // falownik po RS485 od FW 1.13
+          if (_fwAtLeast(1, 13))   // Modbus RS485 od FW 1.13
             _tile(
-              icon: Icons.solar_power_outlined,
-              title: tr('Falownik PV'),
-              sub: tr('odczyt falownika przez RS485 (Modbus), lokalnie i w HA'),
+              icon: Icons.settings_input_component_outlined,
+              title: 'Modbus RS485',
+              sub: tr('most Modbus TCP dla HA i odczyt dowolnych rejestrów (falownik, licznik, pompa ciepła)'),
               onTap: () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => InverterScreen(node: node, pin: pin)),
+                MaterialPageRoute(builder: (_) => ModbusScreen(node: node, pin: pin)),
               ),
             ),
           _tile(
