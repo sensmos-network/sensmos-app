@@ -18,6 +18,7 @@ import 'service_screen.dart';
 import 'mqtt_screen.dart';
 import 'change_pin_screen.dart';
 import 'lora_screen.dart';
+import 'hub_sensors_screen.dart';
 
 class NodeConfigScreen extends StatefulWidget {
   final SavedNode node;
@@ -155,6 +156,16 @@ class _NodeConfigScreenState extends State<NodeConfigScreen> {
                   builder: (_) => ScriptsScreen(ip: node.ip, pin: pin)),
             ),
           ),
+          if ((_fw ?? '').toLowerCase().startsWith('hub-'))
+            _tile(
+              icon: Icons.sensors,
+              title: tr('Czujniki Huba'),
+              sub: tr('czujniki z Home Assistanta i wybór, które udostępnić'),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => HubSensorsScreen(node: node, pin: pin)),
+              ),
+            ),
           _tile(
             icon: Icons.location_on_outlined,
             title: tr('Lokalizacja i weryfikacja'),
