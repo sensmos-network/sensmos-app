@@ -156,6 +156,48 @@ class _TrustScreenState extends State<TrustScreen> {
     ));
   }
 
+  bool get _isHub => (_fw ?? '').toLowerCase().startsWith('hub-');
+
+  // Hub (bez Bluetooth): ceremonia w sieci domowej. Hub podpisuje atest z seedem z BE i pozycją telefonu
+  // (POST /attest z PIN-em), portfel podpisuje ten sam ciąg, BE wymaga tego samego IP telefonu i Huba.
+  Future<void> _runHubCeremony(String owner, WalletService wallet) async {
+    setState(() { _phase = _Phase.ceremony; _error = null; _status = tr('Pytam Huba o podpis w sieci domowej…'); });
+    try {
+      final gps = await AttestService.ceremonyGps();
+      if (gps == null) throw tr('Włącz lokalizację telefonu — Hub dostaje pozycję z telefonu');
+      final seedResp = await _attest.fetchSeed(widget.node.id, owner);
+      final seed = seedResp?['seed'] as String?;
+      if (seed == null) throw tr('Serwer nie wydał ziarna ceremonii');
+      final hr = await http.post(Uri.parse('http://${widget.node.ip}/attest'),
+          headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ${widget.node.pin}'},
+          body: jsonEncode({'seed': seed, 'gps_lat': gps.lat, 'gps_lon': gps.lon})).timeout(const Duration(seconds: 6));
+      if (hr.statusCode == 404) throw tr('Ten Hub jest za stary — zaktualizuj go do 0.1.2 lub nowszego');
+      if (hr.statusCode != 200) throw tr('Hub odmówił podpisu (%s)', [hr.statusCode]);
+      final hj = jsonDecode(hr.body) as Map<String, dynamic>;
+      final attest = hj['attest'] as String;
+      if (!attest.contains('"device_id":"${widget.node.id}"') || !attest.contains('"owner":"${owner.toLowerCase()}"') || !attest.contains('"seed":"$seed"')) {
+        throw tr('Hub podpisał nie ten atest');
+      }
+      if (!mounted) return;
+      setState(() { _phase = _Phase.submitting; _status = tr('Weryfikacja w sieci…'); });
+      final sigWallet = await wallet.signMessage(attest);
+      final res = await http.post(Uri.parse('${Config.beUrl}/v1/attest/hub'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({'device_id': widget.node.id, 'owner': owner, 'seed': seed, 'gps_lat': gps.lat, 'gps_lon': gps.lon,
+                            'sig_hub': hj['sig'], 'sig_wallet': sigWallet, 'fuzz': _fuzz})).timeout(const Duration(seconds: 12));
+      final j = jsonDecode(res.body) as Map<String, dynamic>;
+      if (res.statusCode != 200) {
+        throw j['error'] == 'not_same_network'
+            ? tr('Telefon musi być w tej samej sieci Wi-Fi co Hub (wyłącz dane komórkowe i VPN)')
+            : tr('Serwer odrzucił potwierdzenie: %s', [j['error'] ?? res.statusCode]);
+      }
+      if (!mounted) return;
+      setState(() { _phase = _Phase.done; _trusted = true; _located = j['located'] == true; });
+    } catch (e) {
+      if (mounted) setState(() { _phase = _Phase.error; _error = '$e'; });
+    }
+  }
+
   Future<void> _runCeremony() async {
     final owner = context.read<CoreBloc>().state.wallet?.address;
     final wallet = context.read<WalletService>();
@@ -163,6 +205,8 @@ class _TrustScreenState extends State<TrustScreen> {
       setState(() { _phase = _Phase.error; _error = tr('Brak portfela'); });
       return;
     }
+    if (_fw == null) await _loadGhost();   // rodzaj urządzenia (Hub czy ESP32) bierzemy z /info
+    if (_isHub) return _runHubCeremony(owner, wallet);
 
     // GPS telefonu (jesteś przy nodzie) → ceremonia v2 = lokalizacja + trust naraz. Best-effort.
     String? gpsLat, gpsLon;
@@ -488,12 +532,19 @@ class _TrustScreenState extends State<TrustScreen> {
                       fontSize: 11,
                       letterSpacing: 0.8)),
               const SizedBox(height: 8),
+              if (_isHub) ...[
+                _step('1', tr('Telefon musi być w tej samej sieci Wi-Fi co Hub.')),
+                _step('2', tr('Hub podpisuje jednorazowe wyzwanie swoim kluczem, Ty podpisujesz portfelem.')),
+                _step('3', tr('Sieć sprawdza oba podpisy i to, że telefon i Hub łączą się z internetem z tego samego adresu.')),
+                _step('4', tr('Potwierdzony Hub zarabia GALU z połową wagi noda ESP32.')),
+              ] else ...[
               _step('1', tr('Node restartuje się w tryb Bluetooth (zostaw go włączony).')),
               _step('2', tr('Telefon łączy się i wykonuje szybkie rundy challenge — '
                   'dowód, że urządzenie jest fizycznie obok.')),
               _step('3', tr('Node podpisuje atest swoim kluczem, Ty podpisujesz portfelem.')),
               _step('4', tr('Sieć weryfikuje oba podpisy i oznacza node jako zaufany. '
                   'Node sam wraca do WiFi.')),
+              ],
             ],
           ),
         ),
