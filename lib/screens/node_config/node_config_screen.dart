@@ -19,6 +19,7 @@ import 'mqtt_screen.dart';
 import 'change_pin_screen.dart';
 import 'lora_screen.dart';
 import 'hub_sensors_screen.dart';
+import 'inverter_screen.dart';
 
 class NodeConfigScreen extends StatefulWidget {
   final SavedNode node;
@@ -156,6 +157,16 @@ class _NodeConfigScreenState extends State<NodeConfigScreen> {
                   builder: (_) => ScriptsScreen(ip: node.ip, pin: pin)),
             ),
           ),
+          if (!(_fw ?? '').toLowerCase().startsWith('hub-'))
+            _tile(
+              icon: Icons.solar_power_outlined,
+              title: tr('Falownik PV'),
+              sub: tr('odczyt falownika przez RS485 (Modbus), lokalnie i w HA'),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => InverterScreen(node: node, pin: pin)),
+              ),
+            ),
           if ((_fw ?? '').toLowerCase().startsWith('hub-'))
             _tile(
               icon: Icons.sensors,
