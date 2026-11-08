@@ -20,6 +20,7 @@ import 'change_pin_screen.dart';
 import 'lora_screen.dart';
 import 'hub_sensors_screen.dart';
 import 'inverter_screen.dart';
+import 'installer_share_screen.dart';
 
 class NodeConfigScreen extends StatefulWidget {
   final SavedNode node;
@@ -167,6 +168,15 @@ class _NodeConfigScreenState extends State<NodeConfigScreen> {
                 MaterialPageRoute(builder: (_) => InverterScreen(node: node, pin: pin)),
               ),
             ),
+          _tile(
+            icon: Icons.engineering_outlined,
+            title: tr('Udostępnij instalatorowi'),
+            sub: tr('instalator PV widzi produkcję, baterię i alarmy (tylko podgląd)'),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => InstallerShareScreen(node: node)),
+            ),
+          ),
           if ((_fw ?? '').toLowerCase().startsWith('hub-'))
             _tile(
               icon: Icons.sensors,
