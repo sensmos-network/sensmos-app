@@ -158,7 +158,7 @@ class _NodeConfigScreenState extends State<NodeConfigScreen> {
                   builder: (_) => ScriptsScreen(ip: node.ip, pin: pin)),
             ),
           ),
-          if (!(_fw ?? '').toLowerCase().startsWith('hub-'))
+          if (_fwAtLeast(1, 13))   // falownik po RS485 od FW 1.13
             _tile(
               icon: Icons.solar_power_outlined,
               title: tr('Falownik PV'),
@@ -296,6 +296,14 @@ class _NodeConfigScreenState extends State<NodeConfigScreen> {
     if (ok != true || !mounted) return;
     context.read<CoreBloc>().add(NodeRemoved(node.id));
     Navigator.of(context).popUntil((r) => r.isFirst);
+  }
+
+  // FW ESP32 ≥ major.minor (np. '1.13', '1.13-lora2'); Hub (hub-*) i nieznana wersja = false.
+  bool _fwAtLeast(int major, int minor) {
+    final m = RegExp(r'^(d+).(d+)').firstMatch((_fw ?? '').trim());
+    if (m == null) return false;
+    final a = int.parse(m.group(1)!), b = int.parse(m.group(2)!);
+    return a > major || (a == major && b >= minor);
   }
 
   Widget _tile({
