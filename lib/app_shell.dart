@@ -11,6 +11,8 @@ import 'l10n.dart';
 import 'core/core_bloc.dart';
 import 'services/push_service.dart';
 import 'services/wallet_service.dart';
+import 'services/idea_service.dart';
+import 'widgets/idea_sheet.dart';
 import 'util/owner_token_gate.dart';
 import 'screens/nodes/nodes_screen.dart';
 import 'screens/kom/kom_screen.dart';
@@ -76,6 +78,13 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
     try {
       _fcmSub = FirebaseMessaging.onMessage.listen((_) => _fetchInbox());
     } catch (_) {}
+    // „Czego brakuje?": po 3 dniach używania, potem raz na 30 dni, z opóźnieniem,
+    // żeby nie wchodzić w drogę ekranom startowym.
+    Future.delayed(const Duration(seconds: 25), () async {
+      if (!mounted || !await IdeaService.shouldPrompt() || !mounted) return;
+      if (ModalRoute.of(context)?.isCurrent != true) return;   // ktoś jest w innym ekranie
+      await showIdeaSheet(context, auto: true);
+    });
   }
 
   @override

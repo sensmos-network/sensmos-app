@@ -10,6 +10,7 @@ import 'nodes_location_screen.dart';
 import 'logs_screen.dart';
 import 'update_check.dart';
 import 'tester_screen.dart';
+import '../../widgets/idea_sheet.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -76,6 +77,15 @@ class SettingsScreen extends StatelessWidget {
               title: tr('Program testów'),
               sub: tr('testuj nowe wersje, wysyłaj raporty, zbieraj punkty'),
               builder: (_) => const TesterScreen(),
+            ),
+            const Divider(color: AppTheme.border, height: 1),
+            ListTile(
+              leading: const Icon(Icons.lightbulb_outline, color: AppTheme.teal),
+              title: Text(tr('Zgłoś pomysł'), style: const TextStyle(color: AppTheme.text)),
+              subtitle: Text(tr('czego brakuje w Sensmosie, trafia na roadmapę'),
+                  style: const TextStyle(color: AppTheme.muted, fontSize: 12)),
+              trailing: const Icon(Icons.chevron_right, color: AppTheme.muted),
+              onTap: () => showIdeaSheet(context),
             ),
             if (!kPlayStore) ...[
               const Divider(color: AppTheme.border, height: 1),
