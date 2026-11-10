@@ -111,14 +111,22 @@ class _TesterScreenState extends State<TesterScreen> {
     };
   }
 
+  // „Nie działa” bez opisu nic nie mówi: serwer (od 11.11) takie odrzuca, apka pyta wcześniej.
+  static final _emptyNote = RegExp(r"^[\s\W]*(nie\s*dzia(ł|l)a|does\s*not\s*work|doesn'?t\s*work|not\s*working|broken|funktioniert\s*nicht|n(ã|a)o\s*funciona|fail(ed)?|error|b(łą|la)d|bug|test|x+|\.+)?[\s\W]*$", caseSensitive: false);
+  static bool noteTooThin(String n) { final t = n.replaceAll(RegExp(r'\s+'), ' ').trim(); return t.length < 10 || _emptyNote.hasMatch(t); }
+
   Future<void> _send(String? result) async {
+    if (result == 'fail' && noteTooThin(_note.text)) {
+      _snack(tr('Opisz, co zrobiłeś i co się stało (min. 10 znaków). Wersje i logi dołączą się same.'), error: true);
+      return;
+    }
     setState(() => _busy = true);
     final a = await _auth('diag');
     if (a != null) {
       final j = await _post('', {...a, 'package': _package(), if (result != null) 'result': result,
         if (_note.text.trim().isNotEmpty) 'note': _note.text.trim()});
       if (j != null) {
-        setState(() { _packages++; _status = tr('Raport #%s wysłany', [j['id']]); });
+        setState(() { _packages++; _status = tr('Raport #%s wysłany', [j['id']]) + (j['logs'] != null ? ' ${tr('Logi noda dołączają się automatycznie.')}' : ''); });
         _note.clear();
       }
     }
@@ -210,7 +218,7 @@ class _TesterScreenState extends State<TesterScreen> {
           TextField(controller: _scenario, style: const TextStyle(color: AppTheme.text), decoration: _dec(tr('Scenariusz (id, opcjonalnie)')),
               onChanged: (v) async => (await SharedPreferences.getInstance()).setString(_kScenario, v.trim())),
           const SizedBox(height: 10),
-          TextField(controller: _note, maxLines: 3, maxLength: 500, style: const TextStyle(color: AppTheme.text), decoration: _dec(tr('Co się stało (opcjonalnie)'))),
+          TextField(controller: _note, maxLines: 3, maxLength: 500, style: const TextStyle(color: AppTheme.text), decoration: _dec(tr('Co się stało (wymagane przy „Nie działa”)'))),
           const SizedBox(height: 8),
           Row(children: [
             Expanded(child: OutlinedButton(onPressed: _busy ? null : () => _send('ok'), child: Text(tr('Działa')))),
