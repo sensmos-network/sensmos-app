@@ -9,6 +9,7 @@ import '../../theme.dart';
 import '../../services/node_service.dart';
 import '../../services/owner_token_service.dart';
 import '../../services/wallet_service.dart';
+import '../../widgets/beta_inverter_note.dart';
 
 /// Udostępnienie noda instalatorowi PV (panel sensmos.com/installer): instalator po adresie portfela widzi
 /// produkcję, baterię, sieć i alarmy tej instalacji. Tylko odczyt, odwołanie w każdej chwili.
@@ -103,6 +104,7 @@ class _InstallerShareScreenState extends State<InstallerShareScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(tr('Udostępnij instalatorowi'))),
       body: ListView(padding: const EdgeInsets.all(16), children: [
+        const BetaInverterNote(),
         Text(tr('Twój instalator PV zobaczy na sensmos.com/installer produkcję, baterię, sieć i alarmy tego noda. Tylko podgląd, bez sterowania. Możesz odebrać dostęp w każdej chwili.'),
             style: const TextStyle(color: AppTheme.muted, fontSize: 13, height: 1.35)),
         if (widget.inviteAddress != null && _addr.text.trim().toLowerCase() == widget.inviteAddress) ...[

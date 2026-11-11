@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import '../../theme.dart';
 import '../../l10n.dart';
 import '../../services/node_service.dart';
+import '../../widgets/beta_inverter_note.dart';
 
 /// Uniwersalny Modbus RTU (RS485) — GET/POST /node/modbus na nodzie, w LAN za PIN-em.
 /// Most Modbus TCP (port 502) dla HA/Node-RED + własna lista rejestrów odpytywana przez nod (encje own.mb_*).
@@ -179,6 +180,7 @@ class _ModbusScreenState extends State<ModbusScreen> {
               ? ListView(padding: const EdgeInsets.all(16), children: [Card(child: Padding(padding: const EdgeInsets.all(16),
                   child: Text(_error!, style: const TextStyle(color: AppTheme.red, fontSize: 13))))])
               : ListView(padding: const EdgeInsets.all(16), children: [
+                  const BetaInverterNote(),
                   _muted(tr('Podłącz moduł RS485 (np. MAX485) do urządzenia (falownik, licznik, pompa ciepła, rekuperator…) i do pinów ESP32. Wszystko działa w Twojej sieci, bez chmury.')),
                   _h2(tr('Połączenie RS485')),
                   Row(children: [_num(_rx, 'RX'), const SizedBox(width: 8), _num(_tx, 'TX'), const SizedBox(width: 8), _num(_de, 'DE/RE')]),
