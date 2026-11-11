@@ -35,16 +35,17 @@ flutter build apk --release      # release APK
 
 ## Download
 
-Latest Android APK: **[releases/latest](https://github.com/Galusz/sensmos-app/releases/latest)** (installed outside Google Play).
+Latest Android APK: **[releases/latest](https://github.com/sensmos-network/sensmos-app/releases/latest)** (installed outside Google Play).
 
 ## Part of the Sensmos project
 
 | | |
 |---|---|
 | 🌐 Website | https://sensmos.com |
-| 🔌 Firmware | https://github.com/Galusz/sensmos-firmware |
-| 🏠 Home Assistant | https://github.com/Galusz/sensmos-homeassistant |
-| 📜 Protocol | https://github.com/Galusz/sensmos-protocol |
+| 🔌 Firmware | https://github.com/sensmos-network/sensmos-firmware |
+| 🏠 Home Assistant | https://github.com/sensmos-network/sensmos-homeassistant |
+| 🧩 Hub (node in Docker / HA add-on) | https://github.com/sensmos-network/sensmos-hub |
+| 📜 Protocol | https://github.com/sensmos-network/sensmos-protocol |
 | 💬 Discord | https://discord.gg/ukea386Kqx |
 
 GALU runs on Polygon. © 2026 Sensmos.
