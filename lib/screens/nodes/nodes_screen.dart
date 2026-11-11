@@ -109,7 +109,9 @@ class _NodesScreenState extends State<NodesScreen> {
     final kind = DeepLinkService.kindOf(link);
     if (kind == null || kind == 'app') return;
     if (kind == 'installer') { await _handleInstallerInvite(link); return; }
-    final want = kind == 'ha' ? IntegrationKind.homeAssistant : IntegrationKind.terminal;
+    final which = DeepLinkService.integrationOf(kind);
+    if (which == null) return;   // nieznany rodzaj linku: nic nie otwieramy
+    final want = which == 'ha' ? IntegrationKind.homeAssistant : IntegrationKind.terminal;
 
     // Zimny start: widget budzi apkę i deep link przychodzi ZANIM NodeService wczyta nody.
     // Bez tego czekania pierwsze stuknięcie zawsze kończyło się „żaden node nie ma pluginu".
@@ -185,6 +187,19 @@ class _NodesScreenState extends State<NodesScreen> {
     );
     if (picked == null || !mounted) return;
     if (pinning) {
+      // Podpięcie pluginu z linku zmienia konfigurację noda: tylko po potwierdzeniu.
+      final ok = await showDialog<bool>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text(tr(want.labelKey)),
+          content: Text(tr('Podpiąć ten plugin do noda %s?', [_nodeName(picked)])),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(tr('Anuluj'))),
+            FilledButton(onPressed: () => Navigator.pop(ctx, true), child: Text(tr('Podepnij'))),
+          ],
+        ),
+      );
+      if (ok != true || !mounted) return;
       await IntegrationStore.setKind(picked.id, want.id, true);
       await _loadKinds(picked.id);
       if (!mounted) return;

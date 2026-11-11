@@ -31,6 +31,10 @@ class DeepLinkService {
     return u.queryParameters['kind'] ?? 'app';
   }
 
+  /// Skrót do integracji: 'ha' albo 'term'; każdy inny rodzaj (także przyszłe) jest ignorowany,
+  /// zamiast jak dawniej otwierać terminal.
+  static String? integrationOf(String kind) => (kind == 'ha' || kind == 'term') ? kind : null;
+
   /// Zaproszenie z panelu instalatora: `sensmos://open?kind=installer&grant=0x…&name=…`.
   /// Zwraca (adres, nazwa) albo null, gdy adres nie jest poprawnym adresem portfela.
   static ({String address, String name})? installerInvite(String link) {

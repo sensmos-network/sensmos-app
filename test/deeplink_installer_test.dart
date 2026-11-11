@@ -26,4 +26,11 @@ void main() {
     expect(i.name.runes.length, 40);
     expect(i.name.endsWith('😀'), isTrue);
   });
+  test('rodzaj skrótu: tylko ha i term otwierają integrację, nieznany rodzaj jest ignorowany', () {
+    expect(DeepLinkService.integrationOf('ha'), 'ha');
+    expect(DeepLinkService.integrationOf('term'), 'term');
+    for (final k in ['installer', 'x', '', 'app', 'terminal']) {
+      expect(DeepLinkService.integrationOf(k), isNull, reason: k);
+    }
+  });
 }

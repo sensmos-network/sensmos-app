@@ -800,6 +800,8 @@ const Map<String, String> ptMap = {
   "instalator PV widzi produkcję, baterię i alarmy (tylko podgląd)": "seu instalador FV vê produção, bateria e alarmes (só visualização)",
   "Podaj adres portfela instalatora (0x…)": "Informe o endereço da carteira do instalador (0x…)",
   "Udostępniono instalatorowi": "Compartilhado com o instalador",
+  "Podpiąć ten plugin do noda %s?": "Anexar este plugin ao node %s?",
+  "Podepnij": "Anexar",
   "Zaproszenie od: %s. Sprawdź, czy to Twój instalator i czy adres zgadza się z tym, który Ci podał.": "Convite de: %s. Confira se é o seu instalador e se o endereço confere com o que ele te passou.",
   "instalator bez nazwy": "instalador sem nome",
   "Najpierw dodaj noda, potem otwórz zaproszenie ponownie.": "Adicione um node primeiro e depois abra o convite de novo.",
