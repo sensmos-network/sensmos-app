@@ -19,4 +19,11 @@ void main() {
     expect(i?.name.contains('\n'), isFalse);
     expect(i?.name.length, 40);
   });
+  test('nazwa: znaki kierunku pisma i zerowej szerokości usunięte, emoji nie rozcięte', () {
+    final raw = '${'A' * 39}😀‮ikswolak​';
+    final i = DeepLinkService.installerInvite('sensmos://open?kind=installer&grant=$a&name=${Uri.encodeComponent(raw)}');
+    expect(RegExp('[‪-‮⁦-⁩​-‏]').hasMatch(i!.name), isFalse);
+    expect(i.name.runes.length, 40);
+    expect(i.name.endsWith('😀'), isTrue);
+  });
 }

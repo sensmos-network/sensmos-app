@@ -32,7 +32,10 @@ class _InstallerShareScreenState extends State<InstallerShareScreen> {
   @override
   void initState() {
     super.initState();
-    if (widget.inviteAddress != null) _addr.text = widget.inviteAddress!;
+    if (widget.inviteAddress != null) {
+      _addr.text = widget.inviteAddress!;
+      _addr.addListener(() { if (mounted) setState(() {}); });   // ramka zaproszenia tylko dla adresu z linku
+    }
     _load();
   }
 
@@ -102,14 +105,14 @@ class _InstallerShareScreenState extends State<InstallerShareScreen> {
       body: ListView(padding: const EdgeInsets.all(16), children: [
         Text(tr('Twój instalator PV zobaczy na sensmos.com/installer produkcję, baterię, sieć i alarmy tego noda. Tylko podgląd, bez sterowania. Możesz odebrać dostęp w każdej chwili.'),
             style: const TextStyle(color: AppTheme.muted, fontSize: 13, height: 1.35)),
-        if (widget.inviteAddress != null) ...[
+        if (widget.inviteAddress != null && _addr.text.trim().toLowerCase() == widget.inviteAddress) ...[
           const SizedBox(height: 12),
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(border: Border.all(color: AppTheme.teal), borderRadius: BorderRadius.circular(8)),
             child: Text(
-              tr('Zaproszenie od: %s. Sprawdź, czy to Twój instalator i czy adres zgadza się z tym, który Ci podał.',
-                  [(widget.inviteName ?? '').isNotEmpty ? widget.inviteName! : tr('instalator bez nazwy')]),
+              '${tr('Zaproszenie od: %s. Sprawdź, czy to Twój instalator i czy adres zgadza się z tym, który Ci podał.',
+                  [(widget.inviteName ?? '').isNotEmpty ? widget.inviteName! : tr('instalator bez nazwy')])}\n${widget.inviteAddress}',
               style: const TextStyle(color: AppTheme.text, fontSize: 13, height: 1.35)),
           ),
         ],

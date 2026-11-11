@@ -38,7 +38,10 @@ class DeepLinkService {
     if (u == null || u.scheme != 'sensmos' || u.queryParameters['kind'] != 'installer') return null;
     final a = (u.queryParameters['grant'] ?? '').trim().toLowerCase();
     if (!RegExp(r'^0x[0-9a-f]{40}$').hasMatch(a)) return null;
-    final n = (u.queryParameters['name'] ?? '').replaceAll(RegExp(r'[\x00-\x1f\x7f]'), ' ').trim();
-    return (address: a, name: n.length > 40 ? n.substring(0, 40) : n);
+    final n = (u.queryParameters['name'] ?? '')
+        .replaceAll(RegExp(r'[\x00-\x1f\x7f\u200b-\u200f\u202a-\u202e\u2066-\u2069\ufeff]'), '')
+        .trim();
+    final r = n.runes.toList();   // cięcie po znakach, nie po jednostkach UTF-16 (emoji)
+    return (address: a, name: String.fromCharCodes(r.length > 40 ? r.sublist(0, 40) : r));
   }
 }
