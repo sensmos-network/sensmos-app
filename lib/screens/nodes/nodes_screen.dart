@@ -18,6 +18,7 @@ import '../../services/node_service.dart';
 import '../../services/ble_service.dart';
 import '../../log.dart';
 import '../node_config/node_config_screen.dart';
+import '../node_config/installer_share_screen.dart';
 import '../node_config/trust_screen.dart';
 import '../node_config/service_screen.dart';
 import '../../config.dart';
@@ -107,6 +108,7 @@ class _NodesScreenState extends State<NodesScreen> {
   Future<void> _handleLink(String link) async {
     final kind = DeepLinkService.kindOf(link);
     if (kind == null || kind == 'app') return;
+    if (kind == 'installer') { await _handleInstallerInvite(link); return; }
     final want = kind == 'ha' ? IntegrationKind.homeAssistant : IntegrationKind.terminal;
 
     // Zimny start: widget budzi apkę i deep link przychodzi ZANIM NodeService wczyta nody.
@@ -188,6 +190,47 @@ class _NodesScreenState extends State<NodesScreen> {
       if (!mounted) return;
     }
     _openIntegration(want, picked.id, _nodeName(picked));
+  }
+
+  /// Zaproszenie z panelu instalatora: wybór noda i ekran „Udostępnij instalatorowi” z wpisanym adresem.
+  /// Udostępnienie dalej wymaga kliknięcia i podpisu właściciela.
+  Future<void> _handleInstallerInvite(String link) async {
+    final inv = DeepLinkService.installerInvite(link);
+    if (inv == null) return;
+    var nodes = context.read<NodeService>().nodes;
+    for (var i = 0; i < 20 && nodes.isEmpty; i++) {
+      await Future.delayed(const Duration(milliseconds: 300));
+      if (!mounted) return;
+      nodes = context.read<NodeService>().nodes;
+    }
+    if (!mounted) return;
+    if (nodes.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(tr('Najpierw dodaj noda, potem otwórz zaproszenie ponownie.'))));
+      return;
+    }
+    final picked = nodes.length == 1 ? nodes.first : await showModalBottomSheet<SavedNode>(
+      context: context,
+      backgroundColor: AppTheme.card,
+      builder: (ctx) => SafeArea(
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(14, 14, 14, 8),
+            child: Text(tr('Który nod udostępnić instalatorowi?'), style: const TextStyle(color: AppTheme.text, fontSize: 15)),
+          ),
+          for (final n in nodes)
+            ListTile(
+              leading: const Icon(Icons.solar_power_outlined, color: AppTheme.teal),
+              title: Text(_nodeName(n), style: const TextStyle(color: AppTheme.text)),
+              subtitle: Text('id ${n.id.length >= 8 ? n.id.substring(0, 8) : n.id}',
+                  style: const TextStyle(color: AppTheme.muted, fontSize: 11)),
+              onTap: () => Navigator.pop(ctx, n),
+            ),
+        ]),
+      ),
+    );
+    if (picked == null || !mounted) return;
+    Navigator.push(context, MaterialPageRoute(builder: (_) =>
+        InstallerShareScreen(node: picked, inviteAddress: inv.address, inviteName: inv.name)));
   }
 
   @override

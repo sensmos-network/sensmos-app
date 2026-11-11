@@ -30,4 +30,15 @@ class DeepLinkService {
     if (u == null || u.scheme != 'sensmos') return null;
     return u.queryParameters['kind'] ?? 'app';
   }
+
+  /// Zaproszenie z panelu instalatora: `sensmos://open?kind=installer&grant=0x…&name=…`.
+  /// Zwraca (adres, nazwa) albo null, gdy adres nie jest poprawnym adresem portfela.
+  static ({String address, String name})? installerInvite(String link) {
+    final u = Uri.tryParse(link);
+    if (u == null || u.scheme != 'sensmos' || u.queryParameters['kind'] != 'installer') return null;
+    final a = (u.queryParameters['grant'] ?? '').trim().toLowerCase();
+    if (!RegExp(r'^0x[0-9a-f]{40}$').hasMatch(a)) return null;
+    final n = (u.queryParameters['name'] ?? '').replaceAll(RegExp(r'[\x00-\x1f\x7f]'), ' ').trim();
+    return (address: a, name: n.length > 40 ? n.substring(0, 40) : n);
+  }
 }

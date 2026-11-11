@@ -14,7 +14,10 @@ import '../../services/wallet_service.dart';
 /// produkcję, baterię, sieć i alarmy tej instalacji. Tylko odczyt, odwołanie w każdej chwili.
 class InstallerShareScreen extends StatefulWidget {
   final SavedNode node;
-  const InstallerShareScreen({super.key, required this.node});
+  /// Z zaproszenia (link z panelu instalatora): adres wpisany w pole, nazwa firmy do pokazania.
+  /// Nic nie jest udostępniane samo — właściciel i tak klika „Udostępnij” i podpisuje.
+  final String? inviteAddress, inviteName;
+  const InstallerShareScreen({super.key, required this.node, this.inviteAddress, this.inviteName});
 
   @override
   State<InstallerShareScreen> createState() => _InstallerShareScreenState();
@@ -27,7 +30,11 @@ class _InstallerShareScreenState extends State<InstallerShareScreen> {
   WalletService get _wallet => context.read<WalletService>();
 
   @override
-  void initState() { super.initState(); _load(); }
+  void initState() {
+    super.initState();
+    if (widget.inviteAddress != null) _addr.text = widget.inviteAddress!;
+    _load();
+  }
 
   Future<Map<String, dynamic>?> _auth(String action) async {
     final owner = (await _wallet.load())?.address;
@@ -95,6 +102,17 @@ class _InstallerShareScreenState extends State<InstallerShareScreen> {
       body: ListView(padding: const EdgeInsets.all(16), children: [
         Text(tr('Twój instalator PV zobaczy na sensmos.com/installer produkcję, baterię, sieć i alarmy tego noda. Tylko podgląd, bez sterowania. Możesz odebrać dostęp w każdej chwili.'),
             style: const TextStyle(color: AppTheme.muted, fontSize: 13, height: 1.35)),
+        if (widget.inviteAddress != null) ...[
+          const SizedBox(height: 12),
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(border: Border.all(color: AppTheme.teal), borderRadius: BorderRadius.circular(8)),
+            child: Text(
+              tr('Zaproszenie od: %s. Sprawdź, czy to Twój instalator i czy adres zgadza się z tym, który Ci podał.',
+                  [(widget.inviteName ?? '').isNotEmpty ? widget.inviteName! : tr('instalator bez nazwy')]),
+              style: const TextStyle(color: AppTheme.text, fontSize: 13, height: 1.35)),
+          ),
+        ],
         const SizedBox(height: 16),
         TextField(controller: _addr, style: const TextStyle(color: AppTheme.text), decoration: _dec(tr('Adres portfela instalatora (0x…)')).copyWith(
             suffixIcon: IconButton(icon: const Icon(Icons.paste, size: 18), onPressed: () async {
