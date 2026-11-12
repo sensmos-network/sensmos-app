@@ -14,6 +14,8 @@ Copy-Item $apk "$tmp\sensmos.apk" -Force
 
 Write-Host "1/3 GitHub prerelease v$Version" -ForegroundColor Cyan
 gh release create "v$Version" --repo sensmos-network/sensmos-app --title "$Version (beta)" --prerelease -F "$tmp\notes.md" "$tmp\sensmos.apk"
+# Bez prerelease manifest wskazywalby nieistniejacy APK (404 u testerow): stop, manifest nietkniety.
+if ($LASTEXITCODE) { throw "gh release create v$Version nie przeszedl (kod $LASTEXITCODE): manifest NIE zmieniony" }
 
 Write-Host "2/3 manifest: beta = $Version" -ForegroundColor Cyan
 $env:BETA_VER = $Version; $env:BETA_NOTES = $Notes
