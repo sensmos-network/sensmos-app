@@ -332,6 +332,14 @@ class _NodeManagerScreenState extends State<NodeManagerScreen> {
         return;
       }
       if (!mounted) return;
+      // Hub bez właściciela (dodatek z pustym polem owner, od 0.2.0-beta4): przypisujemy go do portfela
+      // z telefonu, po LAN i za PIN-em, zamiast kazać przepisywać adres 0x… do Home Assistanta.
+      final err = await _claimHubIfFree(ip, pin);
+      if (err != null) {
+        if (mounted) setState(() { _busy = false; _status = ''; _error = err; });
+        return;
+      }
+      if (!mounted) return;
       final ns        = context.read<NodeService>();
       final bloc      = context.read<CoreBloc>();
       final navigator = Navigator.of(context);
@@ -342,6 +350,35 @@ class _NodeManagerScreenState extends State<NodeManagerScreen> {
       navigator.popUntil((r) => r.isFirst);
     } catch (e) {
       if (mounted) setState(() { _busy = false; _error = tr('Błąd: %s', [e]); });
+    }
+  }
+
+  /// null = nic do zrobienia albo przypisano; tekst = błąd do pokazania.
+  Future<String?> _claimHubIfFree(String ip, String pin) async {
+    Map<String, dynamic> info;
+    try {
+      final res = await http.get(Uri.parse('http://$ip/info')).timeout(const Duration(seconds: 5));
+      info = jsonDecode(res.body) as Map<String, dynamic>;
+    } catch (_) {
+      return null;   // /info sprawdziliśmy już wyżej; tu brak odpowiedzi nie blokuje dodania
+    }
+    if (info['hub'] != true || info['owner_set'] != false) return null;
+    if (!mounted) return null;
+    final owner = context.read<CoreBloc>().state.wallet?.address;
+    if (owner == null || owner.isEmpty) return tr('Ten Hub nie ma jeszcze właściciela. Najpierw utwórz portfel w apce, potem dodaj Huba.');
+    setState(() => _status = tr('Przypisuję Huba do portfela...'));
+    try {
+      final r = await http.post(Uri.parse('http://$ip/node/owner'),
+          headers: {'Authorization': 'Bearer $pin', 'Content-Type': 'application/json'},
+          body: jsonEncode({'owner': owner})).timeout(const Duration(seconds: 15));
+      if (r.statusCode == 200) return null;
+      if (r.statusCode == 403) return tr('Zły PIN');
+      if (r.statusCode == 409) return tr('Ten Hub jest już przypisany do innego portfela.');
+      String msg = '${r.statusCode}';
+      try { msg = (jsonDecode(r.body) as Map<String, dynamic>)['error']?.toString() ?? msg; } catch (_) {}
+      return tr('Hub nie mógł się zarejestrować: %s', [msg]);
+    } catch (_) {
+      return tr('Brak odpowiedzi z %s.', [ip]);
     }
   }
 

@@ -1728,9 +1728,13 @@ class _NodesScreenState extends State<NodesScreen> {
       child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text(tr('Sensmos Hub w Home Assistant'), style: const TextStyle(color: AppTheme.text, fontSize: 17, fontWeight: FontWeight.w600)),
         const SizedBox(height: 8),
-        Text(tr('Dodatek zamienia komputer z Twoim Home Assistantem w noda: bez płytki, mierzy łącze i otwiera tunel do HA. W dodatku wpisz adres portfela jako owner.'),
+        Text(tr('Dodatek zamienia komputer z Twoim Home Assistantem w noda: bez płytki, mierzy łącze i otwiera tunel do HA. Pole owner możesz zostawić puste (dodatek od 0.2.0-beta4): uruchom dodatek, wróć tu i wybierz „Znajdź Huba w sieci”, a PIN pokaże Home Assistant w powiadomieniu. Starszy dodatek: wklej adres portfela jako owner.'),
             style: const TextStyle(color: AppTheme.muted, fontSize: 13, height: 1.35)),
         const SizedBox(height: 16),
+        SizedBox(width: double.infinity, child: OutlinedButton.icon(
+          onPressed: () { Navigator.pop(ctx); Navigator.push(context, MaterialPageRoute(builder: (_) => const NodeManagerScreen(existingOnly: true))); },
+          icon: const Icon(Icons.search, size: 18), label: Text(tr('Znajdź Huba w sieci')))),
+        const SizedBox(height: 8),
         if (addr != null) OutlinedButton.icon(
           onPressed: () { Clipboard.setData(ClipboardData(text: addr)); ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(tr('Skopiowano adres portfela')))); },
           icon: const Icon(Icons.copy, size: 18), label: Text(tr('Kopiuj adres portfela'))),
