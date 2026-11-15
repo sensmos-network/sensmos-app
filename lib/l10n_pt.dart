@@ -1,6 +1,10 @@
 // pt-BR (Português do Brasil). PIERWSZY PRZELOT tłumaczenia — do przejrzenia przez native speakera.
 // Klucz = polski oryginał (MUSI zgadzać się z _enMap w l10n.dart). %s i {{...}} zachowane.
 const Map<String, String> ptMap = {
+  "Odbierz na sensmos.com/my": "Resgatar em sensmos.com/my",
+  "GALU NA POLYGONIE": "GALU NA POLYGON",
+  "Odbiór przydziału i przelewy GALU są w panelu sensmos.com/my, przez MetaMask. Żeby MetaMask miał ten sam adres, dodaj do niego klucz z „Zapisz kopię zapasową” poniżej.": "O resgate da atribuição e as transferências de GALU estão no painel sensmos.com/my, através do MetaMask. Para o MetaMask ter o mesmo endereço, adicione a chave de “Salvar backup (chave privada)” abaixo.",
+  "Otwórz sensmos.com/my": "Abrir sensmos.com/my",
   "Zerwane połączenie — wracam tam, gdzie skończyło": "A conexão caiu — retomando de onde parou",
   // ── Store: wybór liczby kopii + odparowanie (1.5.74) ──
   "Ile kopii": "Quantas cópias",

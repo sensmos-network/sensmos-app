@@ -19,6 +19,7 @@ import 'screens/kom/kom_screen.dart';
 import 'services/node_service.dart';
 import 'screens/wallet/wallet_screen.dart';
 import 'screens/settings/settings_screen.dart';
+import 'screens/settings/update_check.dart' show kPlayStore;
 
 class AppShell extends StatefulWidget {
   const AppShell({super.key});
@@ -288,7 +289,7 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
         ? (Icons.sensors_outlined, Icons.sensors, 'Nody')
         : (Icons.home_outlined, Icons.home, 'Start'),
     (Icons.forum_outlined, Icons.forum, 'Komunikator'),
-    (Icons.account_balance_wallet_outlined, Icons.account_balance_wallet, 'Portfel'),
+    (Icons.account_balance_wallet_outlined, Icons.account_balance_wallet, kPlayStore ? 'Konto' : 'Portfel'),
     (Icons.settings_outlined, Icons.settings, 'Ustawienia'),
   ];
 

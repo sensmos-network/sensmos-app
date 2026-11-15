@@ -76,6 +76,10 @@ String tr(String pl, [List<Object?> args = const []]) {
 
 /// Nadpisania angielskie. Brak wpisu → pokazujemy klucz (PL).
 const Map<String, String> _enMap = {
+  "Odbierz na sensmos.com/my": "Claim on sensmos.com/my",
+  "GALU NA POLYGONIE": "GALU ON POLYGON",
+  "Odbiór przydziału i przelewy GALU są w panelu sensmos.com/my, przez MetaMask. Żeby MetaMask miał ten sam adres, dodaj do niego klucz z „Zapisz kopię zapasową” poniżej.": "Claiming your allocation and GALU transfers are in the sensmos.com/my panel, through MetaMask. To give MetaMask the same address, add the key from “Save a backup (private key)” below.",
+  "Otwórz sensmos.com/my": "Open sensmos.com/my",
   "Zerwane połączenie — wracam tam, gdzie skończyło":
       "Connection dropped — carrying on where it stopped",
   // ── Store: wybór liczby kopii + odparowanie (1.5.74) ──
@@ -1746,6 +1750,10 @@ const Map<String, String> _enMap = {
 
 /// Nadpisania niemieckie. Brak wpisu → fallback EN → klucz (PL).
 const Map<String, String> _deMap = {
+  "Odbierz na sensmos.com/my": "Auf sensmos.com/my einlösen",
+  "GALU NA POLYGONIE": "GALU AUF POLYGON",
+  "Odbiór przydziału i przelewy GALU są w panelu sensmos.com/my, przez MetaMask. Żeby MetaMask miał ten sam adres, dodaj do niego klucz z „Zapisz kopię zapasową” poniżej.": "Einlösen der Zuteilung und GALU-Überweisungen findest du im Panel sensmos.com/my, über MetaMask. Damit MetaMask dieselbe Adresse hat, füge dort den Schlüssel aus „Backup speichern (privater Schlüssel)“ unten hinzu.",
+  "Otwórz sensmos.com/my": "sensmos.com/my öffnen",
   "Zerwane połączenie — wracam tam, gdzie skończyło":
       "Verbindung abgerissen — es geht weiter, wo es aufhörte",
   // ── Store: wybór liczby kopii + odparowanie (1.5.74) ──

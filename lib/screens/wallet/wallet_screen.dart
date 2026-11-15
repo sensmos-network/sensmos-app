@@ -6,7 +6,9 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../theme.dart';
+import '../settings/update_check.dart' show kPlayStore;
 import '../../app_shell.dart';
 import '../../config.dart';
 import '../../l10n.dart';
@@ -596,7 +598,8 @@ class _WalletScreenState extends State<WalletScreen> {
       },
       child: Scaffold(
       appBar: AppBar(
-        title: Text(tr('Portfel')),
+        // Wersja z Google Play: ten sam klucz właściciela, bez przelewów i odbioru (te są w /my przez MetaMask).
+        title: Text(tr(kPlayStore ? 'Konto' : 'Portfel')),
         actions: [
           IconButton(
               icon: const Icon(Icons.refresh),
@@ -621,12 +624,12 @@ class _WalletScreenState extends State<WalletScreen> {
                       ],
                       const SizedBox(height: 16),
                       _settlingWrap(_balanceCard()),
-                      if (kDepositEnabled) ...[
+                      if (kDepositEnabled && !kPlayStore) ...[
                         const SizedBox(height: 16),
                         _actions(),
                       ],
                       const SizedBox(height: 16),
-                      _settlingWrap(_onchainCard()),
+                      kPlayStore ? _webCard(state.wallet?.address) : _settlingWrap(_onchainCard()),
                       const SizedBox(height: 16),
                       _rewardsSection(state.wallet?.address),
                       const SizedBox(height: 16),
@@ -1079,13 +1082,15 @@ class _WalletScreenState extends State<WalletScreen> {
                       backgroundColor: AppTheme.teal,
                       padding: const EdgeInsets.symmetric(vertical: 14)),
                   // Bez POL claim i tak padnie na gazie z błędem RPC — szary przycisk mówi to wcześniej.
-                  onPressed: (_busy || _lowGas) ? null : _claim,
-                  icon: const Icon(Icons.download, color: Colors.black, size: 18),
-                  label: Text(tr('Odbierz (Claim)'),
+                  onPressed: kPlayStore
+                      ? () => _openMy(_address)
+                      : (_busy || _lowGas) ? null : _claim,
+                  icon: Icon(kPlayStore ? Icons.open_in_new : Icons.download, color: Colors.black, size: 18),
+                  label: Text(tr(kPlayStore ? 'Odbierz na sensmos.com/my' : 'Odbierz (Claim)'),
                       style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w600)),
                 ),
               ),
-              if (_lowGas) ...[
+              if (_lowGas && !kPlayStore) ...[
                 const SizedBox(height: 6),
                 Text(tr('Odbiór wymaga POL na gaz — patrz portfel on-chain poniżej.'),
                     style: const TextStyle(color: AppTheme.amber, fontSize: 12)),
@@ -1139,6 +1144,39 @@ class _WalletScreenState extends State<WalletScreen> {
             tr('Przenosi GALU z portfela on-chain do Sensmos — na opłacanie usług (Store, LoRa).'),
             style: const TextStyle(color: AppTheme.muted, fontSize: 12)),
       ]);
+
+  // Wersja z Google Play: przelewy i odbiór przydziału robi się w panelu web przez MetaMask.
+  void _openMy(String? addr) => launchUrl(
+      Uri.parse('https://sensmos.com/my/${addr == null ? '' : '?a=${addr.toLowerCase()}'}'),
+      mode: LaunchMode.externalApplication);
+
+  Widget _webCard(String? addr) => Card(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(tr('GALU NA POLYGONIE'),
+                  style: const TextStyle(
+                      color: AppTheme.muted, fontSize: 11, letterSpacing: 0.8)),
+              const SizedBox(height: 6),
+              Text(
+                  tr('Odbiór przydziału i przelewy GALU są w panelu sensmos.com/my, przez MetaMask. '
+                     'Żeby MetaMask miał ten sam adres, dodaj do niego klucz z „Zapisz kopię zapasową” poniżej.'),
+                  style: const TextStyle(color: AppTheme.muted, fontSize: 12)),
+              const SizedBox(height: 12),
+              OutlinedButton.icon(
+                style: OutlinedButton.styleFrom(
+                    foregroundColor: AppTheme.teal,
+                    side: const BorderSide(color: AppTheme.teal)),
+                onPressed: () => _openMy(addr),
+                icon: const Icon(Icons.open_in_new, size: 18),
+                label: Text(tr('Otwórz sensmos.com/my')),
+              ),
+            ],
+          ),
+        ),
+      );
 
   Widget _onchainCard() => Card(
         child: Padding(
