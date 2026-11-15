@@ -1,10 +1,14 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
+import '../../config.dart';
 import '../../theme.dart';
 import '../../l10n.dart';
 import '../../services/node_service.dart';
+import '../../services/owner_token_service.dart';
+import '../../services/wallet_service.dart';
 import 'lora_emerg_screen.dart';
 
 /// LoRa — jeden ekran wszystkich ustawień radia noda (standaryzacja 2026-09-01):
@@ -33,6 +37,10 @@ class _LoraScreenState extends State<LoraScreen> {
   bool _sendAes = true;
   String? _sendResult;
   Map<String, dynamic>? _inbox;
+  // Tryb odbioru z serwera (GET/POST /v1/nodes/:id/lora_role): 'point' = stale na kanale domowym,
+  // 'scan' = rotacja kanałów (czujniki słyszane tylko część godziny). null = brak planu/offline.
+  String? _role;
+  bool _roleBusy = false;
 
   Map<String, String> get _auth => {'Authorization': 'Bearer ${widget.pin}'};
   Uri _u(String path) => Uri.parse('http://${widget.node.ip}$path');
@@ -66,8 +74,62 @@ class _LoraScreenState extends State<LoraScreen> {
         _open = j['open'] == true;
       }
       await _loadInbox();
+      await _loadRole();
     } catch (_) {}
     if (mounted) setState(() => _loading = false);
+  }
+
+  Future<void> _loadRole() async {
+    try {
+      final owner = (await context.read<WalletService>().load())?.address;
+      if (owner == null) return;
+      final r = await http.get(Uri.parse(
+              '${Config.beUrl}/v1/nodes/${widget.node.id}/lora_role?owner=${owner.toLowerCase()}'))
+          .timeout(const Duration(seconds: 8));
+      if (r.statusCode == 200) {
+        final j = jsonDecode(r.body) as Map<String, dynamic>;
+        _role = j['has_plan'] == true ? j['role'] as String? : null;
+      }
+    } catch (_) {}
+  }
+
+  Future<void> _setRole(bool point) async {
+    final role = point ? 'point' : 'scan';
+    final wallet = context.read<WalletService>();
+    setState(() => _roleBusy = true);
+    String? err;
+    try {
+      final owner = (await wallet.load())?.address;
+      if (owner == null) throw tr('Brak portfela');
+      final body = <String, dynamic>{'role': role};
+      final tok = await OwnerTokenService().cached(owner);
+      if (tok != null) {
+        body['owner_token'] = tok;
+      } else {
+        if (!await wallet.isUnlocked()) throw tr('Odblokuj portfel, aby podpisać');
+        final ts = (DateTime.now().millisecondsSinceEpoch / 1000).round();
+        body['owner'] = owner;
+        body['ts'] = ts;
+        body['sig'] = await wallet.signMessage('sensmos:lorarole:${widget.node.id}:$role:$ts');
+      }
+      final r = await http.post(Uri.parse('${Config.beUrl}/v1/nodes/${widget.node.id}/lora_role'),
+              headers: {'Content-Type': 'application/json'}, body: jsonEncode(body))
+          .timeout(const Duration(seconds: 12));
+      if (r.statusCode == 200) {
+        _role = role;
+      } else if (r.statusCode == 409) {
+        err = tr('Node jest offline — spróbuj, gdy wróci do sieci');
+      } else {
+        try { err = '${(jsonDecode(r.body) as Map)['error'] ?? r.statusCode}'; } catch (_) { err = '${r.statusCode}'; }
+      }
+    } catch (e) {
+      err = '$e';
+    }
+    if (!mounted) return;
+    setState(() => _roleBusy = false);
+    if (err != null) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(err)));
+    }
   }
 
   Future<void> _loadInbox() async {
@@ -268,6 +330,24 @@ class _LoraScreenState extends State<LoraScreen> {
                         ]),
                         Text(tr('Uwaga: jawną ramkę może nadać każdy, kto zna adres noda.'),
                             style: const TextStyle(color: AppTheme.muted, fontSize: 11)),
+                        if (_role != null) ...[
+                          const Divider(color: AppTheme.border, height: 18),
+                          Row(children: [
+                            Expanded(
+                              child: Text(tr('Słuchaj czujników stale (tryb Punkt)'),
+                                  style: const TextStyle(color: AppTheme.text, fontSize: 13)),
+                            ),
+                            Switch(
+                              value: _role == 'point',
+                              onChanged: _roleBusy ? null : (v) => _setRole(v),
+                            ),
+                          ]),
+                          Text(
+                              _role == 'point'
+                                  ? tr('Node stoi na kanale domowym i słyszy czujniki oraz komunikator cały czas.')
+                                  : tr('Skaner zmienia kanał co 10 min, więc czujniki słyszy tylko przez część godziny. Włącz, jeśli ten node odbiera Twoje czujniki.'),
+                              style: const TextStyle(color: AppTheme.muted, fontSize: 11)),
+                        ],
                       ],
                     ),
                     // ── Wyślij ──

@@ -946,6 +946,10 @@ const Map<String, String> _enMap = {
       "Accept plain frames (no encryption)",
   "Uwaga: jawną ramkę może nadać każdy, kto zna adres noda.":
       "Note: anyone who knows the node address can send a plain frame.",
+  "Słuchaj czujników stale (tryb Punkt)": "Listen to sensors all the time (Point mode)",
+  "Node stoi na kanale domowym i słyszy czujniki oraz komunikator cały czas.": "The node stays on the home channel and hears sensors and the messenger all the time.",
+  "Skaner zmienia kanał co 10 min, więc czujniki słyszy tylko przez część godziny. Włącz, jeśli ten node odbiera Twoje czujniki.": "A scanner switches channel every 10 min, so it hears sensors only part of each hour. Turn this on if this node receives your sensors.",
+  "Node jest offline — spróbuj, gdy wróci do sieci": "The node is offline. Try again when it is back online.",
   "Wyślij ramkę": "Send a frame",
   "adresat (id8)": "recipient (id8)",
   "treść (do 128 B)": "payload (up to 128 B)",
@@ -2579,6 +2583,10 @@ const Map<String, String> _deMap = {
   "Przyjmuj ramki jawne (bez szyfrowania)": "Unverschlüsselte Frames annehmen",
   "Uwaga: jawną ramkę może nadać każdy, kto zna adres noda.":
       "Hinweis: einen unverschlüsselten Frame kann jeder senden, der die Node-Adresse kennt.",
+  "Słuchaj czujników stale (tryb Punkt)": "Sensoren ständig empfangen (Punkt-Modus)",
+  "Node stoi na kanale domowym i słyszy czujniki oraz komunikator cały czas.": "Die Node bleibt auf dem Heimkanal und hört Sensoren und den Messenger ständig.",
+  "Skaner zmienia kanał co 10 min, więc czujniki słyszy tylko przez część godziny. Włącz, jeśli ten node odbiera Twoje czujniki.": "Ein Scanner wechselt alle 10 Min. den Kanal und hört Sensoren daher nur einen Teil jeder Stunde. Schalte das ein, wenn diese Node deine Sensoren empfängt.",
+  "Node jest offline — spróbuj, gdy wróci do sieci": "Die Node ist offline. Versuche es erneut, wenn sie wieder online ist.",
   "Wyślij ramkę": "Frame senden",
   "adresat (id8)": "Empfänger (id8)",
   "treść (do 128 B)": "Inhalt (bis 128 B)",
