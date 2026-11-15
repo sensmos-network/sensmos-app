@@ -9,6 +9,7 @@ import '../../l10n.dart';
 import '../../services/node_service.dart';
 import '../../services/owner_token_service.dart';
 import '../../services/wallet_service.dart';
+import 'lora_add_sensor_screen.dart';
 import 'lora_emerg_screen.dart';
 
 /// LoRa — jeden ekran wszystkich ustawień radia noda (standaryzacja 2026-09-01):
@@ -77,6 +78,16 @@ class _LoraScreenState extends State<LoraScreen> {
       await _loadRole();
     } catch (_) {}
     if (mounted) setState(() => _loading = false);
+  }
+
+  Future<void> _addSensor() async {
+    final frames = ((_inbox?['frames'] as Map<String, dynamic>?)?['items'] as List?) ?? const [];
+    final used = <int>{for (final f in frames) if (f is Map && f['sub'] is int) f['sub'] as int};
+    await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => LoraAddSensorScreen(node: widget.node, pin: widget.pin, keySet: _keySet, usedSubs: used)));
+    if (mounted) _load();
   }
 
   Future<void> _loadRole() async {
@@ -283,6 +294,14 @@ class _LoraScreenState extends State<LoraScreen> {
                         Text(
                             tr('Fraza-klucz zostaje TYLKO na nodzie — tę samą wpisz w swoje czujniki. Serwer przekazuje ramki na ślepo.'),
                             style: const TextStyle(color: AppTheme.muted, fontSize: 12)),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: TextButton.icon(
+                            onPressed: _busy ? null : _addSensor,
+                            icon: const Icon(Icons.add_circle_outline, size: 16),
+                            label: Text(tr('Dodaj czujnik LoRa')),
+                          ),
+                        ),
                         const SizedBox(height: 10),
                         Row(children: [
                           Expanded(
