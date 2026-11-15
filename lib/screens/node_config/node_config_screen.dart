@@ -18,6 +18,7 @@ import 'service_screen.dart';
 import 'mqtt_screen.dart';
 import 'change_pin_screen.dart';
 import 'lora_screen.dart';
+import 'area_alert_screen.dart';
 import 'hub_sensors_screen.dart';
 import 'modbus_screen.dart';
 import 'installer_share_screen.dart';
@@ -223,6 +224,15 @@ class _NodeConfigScreenState extends State<NodeConfigScreen> {
                     builder: (_) => LoraScreen(node: node, pin: pin)),
               ),
             ),
+          _tile(
+            icon: Icons.water_outlined,
+            title: tr('Alert sąsiedzki: woda'),
+            sub: tr('powiadomienie, gdy woda rośnie u sąsiadów w pobliżu'),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => AreaAlertScreen(node: node)),
+            ),
+          ),
           // Zdalny dostęp — JEDNO centralne miejsce. Klucz da się zapisać w nodzie wyłącznie
           // po LAN, więc user musi się o tym dowiedzieć TERAZ, gdy jest w domu, a nie dopiero
           // przy próbie użycia terminala czy panelu HA z wakacji, gdzie nie ma jak tego zrobić.
