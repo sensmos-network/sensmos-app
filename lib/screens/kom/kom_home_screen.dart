@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import '../../theme.dart';
 import '../../l10n.dart';
 import '../../services/kom_ble.dart';
+import 'kom_range_screen.dart';
 
 /// „Dom bez internetu” (komunikator 0.17-kom): wiadomość radiem prosto do noda w domu, bez serwera.
 /// Nod (najlepiej w trybie Punkt) wkłada ją do skrzynki LoRa, a Home Assistant czyta ją w sieci domowej
@@ -153,6 +154,14 @@ class _KomHomeScreenState extends State<KomHomeScreen> {
             ),
             if (_sent != null)
               Padding(padding: const EdgeInsets.only(top: 8), child: Text(_sent!, style: const TextStyle(color: AppTheme.teal, fontSize: 12))),
+            const SizedBox(height: 12),
+            Card(child: ListTile(
+              leading: const Icon(Icons.radar, color: AppTheme.teal),
+              title: Text(tr('Test zasięgu do domu'), style: const TextStyle(color: AppTheme.text)),
+              subtitle: Text(tr('Mapa miejsc, z których dom Cię słyszy'), style: const TextStyle(color: AppTheme.muted, fontSize: 12)),
+              trailing: const Icon(Icons.chevron_right, color: AppTheme.muted),
+              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => KomRangeScreen(kom: widget.kom))),
+            )),
             const SizedBox(height: 16),
             for (final m in _box)
               Padding(
