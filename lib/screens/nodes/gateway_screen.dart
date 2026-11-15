@@ -69,12 +69,12 @@ class _GatewayScreenState extends State<GatewayScreen> {
       final km = r.split(':').last;
       return approx
           ? tr('Wpisana pozycja jest za daleko od miejsca, z którego łączy się brama (%s). Przyjęliśmy przybliżoną pozycję z łącza.', [km])
-          : tr('Pozycja jest za daleko od miejsca, z którego łączy się brama (%s). Brama jest sparowana, ale bez pozycji nie zarabia.', [km]);
+          : tr('Pozycja jest za daleko od miejsca, z którego łączy się brama (%s). Brama jest sparowana, ale bez pozycji nie otrzymuje przydziału.', [km]);
     }
     if (r.startsWith('country_mismatch')) {
       return approx
           ? tr('Wpisana pozycja jest w innym kraju niż łącze bramy. Przyjęliśmy przybliżoną pozycję z łącza.')
-          : tr('Pozycja jest w innym kraju niż łącze bramy. Brama jest sparowana, ale bez pozycji nie zarabia.');
+          : tr('Pozycja jest w innym kraju niż łącze bramy. Brama jest sparowana, ale bez pozycji nie otrzymuje przydziału.');
     }
     return tr('Nie udało się ustawić pozycji (%s).', [r]);
   }
@@ -119,8 +119,8 @@ class _GatewayScreenState extends State<GatewayScreen> {
       // przybliżona z łącza: świeża z tej odpowiedzi albo stara, gdy GeoIP tym razem zawiódł
       final approx = j['approx'] == true || widget.existing?['geo_state'] == 'geoip';
       final why = j['located'] == true || (!hasPos && (keptOld || approx)) ? null
-          : !hasPos ? tr('Bez pozycji — brama nie zarabia. Ustaw pozycję.')
-          : keptOld ? tr('Nowa pozycja odrzucona — zostaje poprzednia, brama dalej zarabia.')
+          : !hasPos ? tr('Bez pozycji — brama nie otrzymuje przydziału. Ustaw pozycję.')
+          : keptOld ? tr('Nowa pozycja odrzucona — zostaje poprzednia, brama dalej otrzymuje przydział.')
           : _reason(j['reason']?.toString(), approx);
       final done = widget.existing != null ? tr('Zapisano') : tr('Brama sparowana');
       if (why != null) {
@@ -170,7 +170,7 @@ class _GatewayScreenState extends State<GatewayScreen> {
             child: Text(
               tr('W panelu bramy (packet forwarder → dodatkowy serwer) dopisz serwer sensmos.com:1700. '
                  'Gdy brama zacznie do nas wysyłać, wpisz tu jej EUI. Brama słyszy nody Sensmos, '
-                 'nadaje beacon i zarabia jak node.'),
+                 'nadaje beacon i otrzymuje przydział jak node.'),
               style: const TextStyle(color: AppTheme.muted, fontSize: 13, height: 1.4),
             ),
           ),

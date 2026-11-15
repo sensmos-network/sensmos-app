@@ -105,15 +105,15 @@ const Map<String, String> _enMap = {
       "Your own label to recognise the node — e.g. Garage or Router.",
   // ── Portfel: hasło / wysyłka / QR / przebudowa salda (1.5.48) ──
   "W SENSMOS": "IN SENSMOS",
-  "Zarobione GALU — do odbioru na portfel on-chain albo do wykorzystania na usługi (Store, LoRa).":
-      "Earned GALU — claim to your on-chain wallet or spend on services (Store, LoRa).",
+  "Otrzymane GALU — do odbioru na portfel on-chain albo do wykorzystania na usługi (Store, LoRa).":
+      "GALU received — claim to your on-chain wallet or spend on services (Store, LoRa).",
   "Odbiór wymaga POL na gaz — patrz portfel on-chain poniżej.":
       "Claiming needs POL for gas — see the on-chain wallet below.",
   "Przenosi GALU z portfela on-chain do Sensmos — na opłacanie usług (Store, LoRa).":
       "Moves GALU from your on-chain wallet into Sensmos — to pay for services (Store, LoRa).",
   "Twoje własne środki na portfelu. Nie płacą za usługi — do tego służy Wpłata.":
       "Your own funds, on-chain. They don't pay for services — use Deposit for that.",
-  "Zarobione": "Earned",
+  "Otrzymane": "Received",
   "Wydane": "Spent",
   "PORTFEL ON-CHAIN (Polygon)": "ON-CHAIN WALLET (Polygon)",
   "Wyślij": "Send",
@@ -147,8 +147,8 @@ const Map<String, String> _enMap = {
   "Wysyłasz %s %s": "You're sending %s %s",
   "na adres:": "to address:",
   "Tej operacji NIE można cofnąć.": "This operation CANNOT be undone.",
-  "Za mało POL — odbiór nagród (claim) wymaga gazu. Wpłać POL na adres portfela (QR na górze).":
-      "Not enough POL — claiming rewards needs gas. Send POL to your wallet address (QR at the top).",
+  "Za mało POL — odbiór przydziału (claim) wymaga gazu. Wpłać POL na adres portfela (QR na górze).":
+      "Not enough POL — claiming your allocation needs gas. Send POL to your wallet address (QR at the top).",
   "Zeskanuj adres (QR)": "Scan address (QR)",
   "Skieruj aparat na kod QR z adresem portfela":
       "Point the camera at a QR code with a wallet address",
@@ -339,10 +339,10 @@ const Map<String, String> _enMap = {
   "Wpłacanie…": "Depositing…",
   "Wpłacono %s GALU": "Deposited %s GALU",
   "Wpłata odrzucona przez kontrakt": "Deposit reverted",
-  "Brak nagród": "No rewards",
-  "Nagrody z epoki %s już odebrane": "Rewards for epoch %s already claimed",
-  "Odbieranie nagród…": "Claiming rewards…",
-  "Odebrano nagrody (epoka %s)": "Rewards claimed (epoch %s)",
+  "Brak przydziału": "No allocation",
+  "Przydział z epoki %s już odebrany": "Allocation for epoch %s already claimed",
+  "Odbieranie przydziału…": "Claiming your allocation…",
+  "Odebrano przydział (epoka %s)": "Allocation claimed (epoch %s)",
   "Odbiór odrzucony przez kontrakt": "Claim reverted",
   "Brak nodów — eksport wymaga PIN-u noda":
       "No nodes — export requires a node PIN",
@@ -354,7 +354,7 @@ const Map<String, String> _enMap = {
   "Do odebrania (claim)": "Claimable",
   "Wypłata w toku": "Claim in progress",
   "Wpłata w toku": "Deposit in progress",
-  "Zarobione (nagrody)": "Earned (rewards)",
+  "Otrzymane (przydziały)": "Received (allocations)",
   "Wpłacone (Twój kapitał)": "Deposited (your funds)",
   "Zdeponowane": "Deposited",
   "Odebrano": "Claimed",
@@ -365,8 +365,8 @@ const Map<String, String> _enMap = {
   "POL (gas)": "POL (gas)",
   "Za mało POL — transakcje (claim/deposit) wymagają gazu. Wpłać POL na adres portfela (QR powyżej).":
       "Not enough POL — transactions (claim/deposit) require gas. Send POL to your wallet address (QR above).",
-  "Za mało POL — odbiór nagród (claim) wymaga gazu. Wpłać POL na adres portfela (QR powyżej).":
-      "Not enough POL — claiming rewards requires gas. Send POL to your wallet address (QR above).",
+  "Za mało POL — odbiór przydziału (claim) wymaga gazu. Wpłać POL na adres portfela (QR powyżej).":
+      "Not enough POL — claiming your allocation requires gas. Send POL to your wallet address (QR above).",
   "Eksportuj klucz (MetaMask)": "Export key (MetaMask)",
   "wymaga PIN-u dowolnego Twojego noda":
       "requires the PIN of any of your nodes",
@@ -530,17 +530,17 @@ const Map<String, String> _enMap = {
   "Usuń node z listy": "Remove node from list",
   "Usuwa node tylko z tej apki": "Removes the node only from this app",
   "Usuń node z sieci (permanentnie)": "Delete node from network (permanent)",
-  "Kasuje node i wszystkie jego dane z SENSMOS. Możesz go później dodać ponownie (onboarding przez Bluetooth). Zarobione GALU zostają w Twoim portfelu.":
-      "Removes the node and all its data from SENSMOS. You can add it back later (Bluetooth onboarding). Earned GALU stays in your wallet.",
+  "Kasuje node i wszystkie jego dane z SENSMOS. Możesz go później dodać ponownie (onboarding przez Bluetooth). Otrzymane GALU zostają w Twoim portfelu.":
+      "Removes the node and all its data from SENSMOS. You can add it back later (Bluetooth onboarding). GALU received stays in your wallet.",
   "Usunąć node z sieci?": "Delete node from network?",
-  "Node %s i WSZYSTKIE jego dane zostaną trwale usunięte z SENSMOS. Możesz go później dodać ponownie (onboarding przez Bluetooth). Zarobione GALU pozostają w Twoim portfelu.":
-      "Node %s and ALL its data will be permanently removed from SENSMOS. You can add it back later (Bluetooth onboarding). Earned GALU stays in your wallet.",
+  "Node %s i WSZYSTKIE jego dane zostaną trwale usunięte z SENSMOS. Możesz go później dodać ponownie (onboarding przez Bluetooth). Otrzymane GALU pozostają w Twoim portfelu.":
+      "Node %s and ALL its data will be permanently removed from SENSMOS. You can add it back later (Bluetooth onboarding). GALU received stays in your wallet.",
   "Usuń permanentnie": "Delete permanently",
   "Node usunięty z sieci": "Node deleted from network",
   "Błąd usuwania: %s": "Delete error: %s",
   "Brak portfela": "No wallet",
-  "Importujesz INNY portfel (%s) niż obecny (%s).\n\nTwoje nody pozostaną przypisane do obecnego portfela, dopóki nie dodasz ich ponownie przez Bluetooth (to zmieni właściciela i wymaga ponownej weryfikacji — bez resetu urządzenia). Zarobione GALU zostają przy portfelu, który je zarobił.":
-      "You are importing a DIFFERENT wallet (%s) than the current one (%s).\n\nYour nodes stay assigned to the current wallet until you re-add them over Bluetooth (that changes the owner and requires re-verification — no device reset). Earned GALU stays with the wallet that earned it.",
+  "Importujesz INNY portfel (%s) niż obecny (%s).\n\nTwoje nody pozostaną przypisane do obecnego portfela, dopóki nie dodasz ich ponownie przez Bluetooth (to zmieni właściciela i wymaga ponownej weryfikacji — bez resetu urządzenia). Otrzymane GALU zostają przy portfelu, który je otrzymał.":
+      "You are importing a DIFFERENT wallet (%s) than the current one (%s).\n\nYour nodes stay assigned to the current wallet until you re-add them over Bluetooth (that changes the owner and requires re-verification — no device reset). GALU received stays with the wallet that received it.",
 
   "Moje nody w sieci": "My nodes in the network",
   "Wszystkie nody zarejestrowane na Twój portfel (wg SENSMOS)":
@@ -569,8 +569,8 @@ const Map<String, String> _enMap = {
   "import z klucza": "import from key",
   "Klucz portfela (zaawansowane)": "Wallet key (advanced)",
   "Usunąć z tej apki?": "Remove from this app?",
-  "Node zniknie tylko z tego telefonu — zostaje w sieci i dalej nalicza nagrody. Żeby usunąć go z sieci, użyj „Usuń z sieci”.":
-      "The node disappears only from this phone - it stays in the network and keeps earning. To remove it from the network, use Delete from network.",
+  "Node zniknie tylko z tego telefonu — zostaje w sieci i dalej otrzymuje przydział GALU. Żeby usunąć go z sieci, użyj „Usuń z sieci”.":
+      "The node disappears only from this phone - it stays in the network and keeps receiving GALU allocations. To remove it from the network, use Delete from network.",
   "Usuń z apki": "Remove from app",
   "import / eksport klucza prywatnego": "import / export private key",
   "Brak portfela w apce. Odzyskaj kopię zapisaną na tym nodzie.":
@@ -592,7 +592,7 @@ const Map<String, String> _enMap = {
       "Wallet imported — your nodes keep working",
   "Portfel zaimportowany: %s": "Wallet imported: %s",
   "Błąd importu: %s": "Import error: %s",
-  "Odebrano nagrody": "Rewards claimed",
+  "Odebrano przydział": "Allocation claimed",
   "Wszystko już odebrane": "Everything already claimed",
   "Usunąć \"%s\"?": "Delete \"%s\"?",
   "Usunąć akcję dla \"%s\"?": "Delete action for \"%s\"?",
@@ -788,16 +788,16 @@ const Map<String, String> _enMap = {
   "Wymaga firmware 0.25+ — zaktualizuj node.":
       "Requires firmware 0.25+ — update the node.",
   "Tryb prywatny (ghost)": "Private mode (ghost)",
-  "Ukryty z mapy, 0 nagród. Dane działają lokalnie; za subskrypcje płacisz.":
-      "Hidden from map, 0 rewards. Data works locally; you still pay for subscriptions.",
+  "Ukryty z mapy, przydział 0 GALU. Dane działają lokalnie; za subskrypcje płacisz.":
+      "Hidden from map, 0 GALU allocation. Data works locally; you still pay for subscriptions.",
   "Tryb prywatny włączony — node ukryty z mapy":
-      "Private mode on — node hidden from the map and rewards",
+      "Private mode on — node hidden from the map",
   "Tryb prywatny wyłączony": "Private mode off",
   "Pobieram pozycję GPS...": "Getting GPS position...",
-  "Zaraz poprosimy o lokalizację (GPS) — potwierdza, że node jest fizycznie tutaj. Bez niej node działa, ale zarabia znacznie mniej.":
-      "We'll ask for location (GPS) — it confirms the node is physically here. Without it the node works but earns much less.",
-  "Brak lokalizacji — node niewidoczny na mapie i nie nalicza nagród.":
-      "No location — node not shown on the map and earns no rewards.",
+  "Zaraz poprosimy o lokalizację (GPS) — potwierdza, że node jest fizycznie tutaj. Bez niej node działa, ale otrzymuje znacznie mniejszy przydział.":
+      "We'll ask for location (GPS) — it confirms the node is physically here. Without it the node works but receives a much smaller allocation.",
+  "Brak lokalizacji — node niewidoczny na mapie i nie otrzymuje przydziału.":
+      "No location — node not shown on the map and receives no allocation.",
   "Ustaw lokalizację": "Set location",
   "Połącz się z siecią noda, aby ustawić lokalizację.":
       "Connect to the node's network to set the location.",
@@ -844,12 +844,12 @@ const Map<String, String> _enMap = {
   "Rozmyj dokładną pozycję": "Blur the exact position",
   "Na mapie pokazujemy punkt przesunięty o 200-800 m. Wyłącz tylko, jeśli chcesz publikować dokładny adres.":
       "On the map we show a point shifted by 200-800 m. Turn this off only if you want to publish the exact address.",
-  "Node w ogóle nie pojawi się na mapie. Zarabia mniej, bo nie współtworzy publicznego pokrycia sieci.":
-      "The node will not appear on the map at all. It earns less because it does not contribute to the network's public coverage.",
-  "Tryb prywatny — node nie jest pokazywany na mapie i zarabia w obniżonej stawce, bo nie współtworzy publicznego pokrycia sieci.":
-      "Private mode — the node is not shown on the map and earns at a reduced rate, because it does not contribute to the network's public coverage.",
-  "Brak potwierdzonej lokalizacji GPS — ten node prawie nie zarabia. Podejdź do niego z telefonem i ustaw lokalizację.":
-      "No confirmed GPS location — this node earns almost nothing. Walk up to it with your phone and set the location.",
+  "Node w ogóle nie pojawi się na mapie. Otrzymuje mniejszy przydział, bo nie współtworzy publicznego pokrycia sieci.":
+      "The node will not appear on the map at all. It receives a smaller allocation because it does not contribute to the network's public coverage.",
+  "Tryb prywatny — node nie jest pokazywany na mapie i otrzymuje obniżony przydział, bo nie współtworzy publicznego pokrycia sieci.":
+      "Private mode — the node is not shown on the map and receives a reduced allocation, because it does not contribute to the network's public coverage.",
+  "Brak potwierdzonej lokalizacji GPS — ten node prawie nie otrzymuje przydziału. Podejdź do niego z telefonem i ustaw lokalizację.":
+      "No confirmed GPS location — this node receives almost no allocation. Walk up to it with your phone and set the location.",
   "Sprawdzam połączenie...": "Checking connection...",
   "Nie można zarejestrować noda — aplikacja nie ma połączenia z internetem. Telefon musi być online przez cały czas rejestracji. Połącz się z siecią i spróbuj ponownie.":
       "Cannot register the node — the app has no internet connection. Your phone must stay online for the whole registration. Connect to a network and try again.",
@@ -857,8 +857,8 @@ const Map<String, String> _enMap = {
       "Internet connection lost — the node could not be registered. Your phone must stay online for the whole registration.",
   "Serwer odrzucił rejestrację noda.":
       "The server rejected the node registration.",
-  "Node dodany, ale weryfikacja się nie powiodła — bez niej nie nalicza nagród. Powtórz ceremonię w ustawieniach noda (Zaufanie).":
-      "Node added, but verification failed — without it the node earns nothing. Repeat the ceremony in the node settings (Trust).",
+  "Node dodany, ale weryfikacja się nie powiodła — bez niej node nie otrzymuje przydziału. Powtórz ceremonię w ustawieniach noda (Zaufanie).":
+      "Node added, but verification failed — without it the node receives no allocation. Repeat the ceremony in the node settings (Trust).",
   // ── Panel HA: typy kafelków + akcje ──
   "Typ kafelka": "Tile type",
   "Wykres": "Chart",
@@ -872,8 +872,8 @@ const Map<String, String> _enMap = {
   "brak historii": "no history",
   "Gotowe": "Done",
   "OK": "OK",
-  "Nagrody naliczają się po ok. 4 godzinach online w danej dobie — zero na starcie jest normalne.":
-      "Rewards start after roughly 4 hours online within a day — zero at first is normal.",
+  "Przydział nalicza się po ok. 4 godzinach online w danej dobie — zero na starcie jest normalne.":
+      "Allocations start after roughly 4 hours online within a day — zero at first is normal.",
 
   // ── Parowanie noda (klucz w telefonie, kanał wyłącznie po LAN) ──
   "Zdalny dostęp": "Remote access",
@@ -1024,8 +1024,8 @@ const Map<String, String> _enMap = {
   "Nie teraz": "Not now",
   "Zgłoś pomysł": "Suggest an idea",
   "czego brakuje w Sensmosie, trafia na roadmapę": "what is missing in Sensmos, goes to the roadmap",
-  "testuj nowe wersje, wysyłaj raporty, zbieraj punkty": "test new versions, send reports, earn points",
-  "Testujesz nowe wersje apki, hubu i firmware według scenariuszy, a serwer zalicza je automatycznie. Nagrody w GALU z puli testów, co miesiąc według punktów. Bez maila: liczy się tylko portfel.": "You test new versions of the app, hub and firmware by scenarios and the server checks them automatically. Rewards in GALU from the test pool, every month by points. No e-mail: only your wallet counts.",
+  "testuj nowe wersje, wysyłaj raporty, zbieraj punkty": "test new versions, send reports, collect points",
+  "Testujesz nowe wersje apki, hubu i firmware według scenariuszy, a serwer zalicza je automatycznie. Przydział GALU z puli testów, co miesiąc według punktów. Bez maila: liczy się tylko portfel.": "You test new versions of the app, hub and firmware by scenarios and the server checks them automatically. GALU allocation from the test pool, every month by points. No e-mail: only your wallet counts.",
   "Jesteś w programie": "You are in the programme",
   "Zapis do programu": "Join the programme",
   "Nick (opcjonalny, widoczny w rankingu)": "Nick (optional, shown in the ranking)",
@@ -1129,7 +1129,7 @@ const Map<String, String> _enMap = {
   "Telefon musi być w tej samej sieci Wi-Fi co Hub.": "The phone must be on the same Wi-Fi as the hub.",
   "Hub podpisuje jednorazowe wyzwanie swoim kluczem, Ty podpisujesz portfelem.": "The hub signs a one-time challenge with its key, you sign with your wallet.",
   "Sieć sprawdza oba podpisy i to, że telefon i Hub łączą się z internetem z tego samego adresu.": "The network checks both signatures and that the phone and the hub reach the internet from the same address.",
-  "Potwierdzony Hub zarabia GALU z połową wagi noda ESP32.": "A confirmed hub earns GALU at half the weight of an ESP32 node.",
+  "Potwierdzony Hub otrzymuje GALU z połową wagi noda ESP32.": "A confirmed hub receives GALU at half the allocation weight of an ESP32 node.",
   "Brak nodów w aplikacji": "No nodes in the app",
   "Wybierz nod": "Pick a node",
   "Pytam nod o logi…": "Asking the node for its logs…",
@@ -1154,10 +1154,10 @@ const Map<String, String> _enMap = {
   "Wysłane raporty: %s": "Reports sent: %s",
   "Odblokuj portfel, aby podpisać": "Unlock the wallet to sign",
   "Brak połączenia z serwerem": "No connection to the server",
-  "Nagrody portfela": "Wallet rewards",
+  "Przydziały portfela": "Wallet allocations",
   "za nody i za usługi — per miesiąc i per epoka": "for nodes and services — per month and per epoch",
   "nody %s · usługi %s": "nodes %s · services %s",
-  "Brak nagród — node zarabia od pierwszej pełnej epoki online.": "No rewards yet — a node earns from its first full epoch online.",
+  "Brak przydziałów — node otrzymuje GALU od pierwszej pełnej epoki online.": "No allocations yet — a node receives GALU from its first full epoch online.",
   "MIESIĄCE": "MONTHS",
   "EPOKI": "EPOCHS",
   "Epoka %s": "Epoch %s",
@@ -1390,7 +1390,7 @@ const Map<String, String> _enMap = {
   "oferowane %s GB · zajęte %s GB": "offered %s GB · %s GB used",
   "kopii u Ciebie: %s · dowody 7 dni: %s ✓ %s ✗":
       "copies held: %s · proofs 7d: %s ✓ %s ✗",
-  "zarobek 7 dni: %s · łącznie: %s GALU": "earned 7d: %s · total: %s GALU",
+  "otrzymane 7 dni: %s · łącznie: %s GALU": "received 7d: %s · total: %s GALU",
   "Odłączyć %s?": "Detach %s?",
   "Token przystawki zostanie odebrany, agent natychmiast traci dostęp.":
       "The attachment's token is revoked; the agent loses access immediately.",
@@ -1509,8 +1509,8 @@ const Map<String, String> _enMap = {
   "Szukam…": "Looking…",
   "Paruję…": "Pairing…",
   "Włącz lokalizację w telefonie": "Turn on location on your phone",
-  "Pozycja jest za daleko od miejsca, z którego łączy się brama (%s). Brama jest sparowana, ale bez pozycji nie zarabia.": "The position is too far from where the gateway connects from (%s). The gateway is paired, but without a position it does not earn.",
-  "Pozycja jest w innym kraju niż łącze bramy. Brama jest sparowana, ale bez pozycji nie zarabia.": "The position is in a different country than the gateway's connection. The gateway is paired, but without a position it does not earn.",
+  "Pozycja jest za daleko od miejsca, z którego łączy się brama (%s). Brama jest sparowana, ale bez pozycji nie otrzymuje przydziału.": "The position is too far from where the gateway connects from (%s). The gateway is paired, but without a position it receives no allocation.",
+  "Pozycja jest w innym kraju niż łącze bramy. Brama jest sparowana, ale bez pozycji nie otrzymuje przydziału.": "The position is in a different country than the gateway's connection. The gateway is paired, but without a position it receives no allocation.",
   "Nie udało się ustawić pozycji (%s).": "Could not set the position (%s).",
   "EUI bramy to 16 znaków szesnastkowych": "The gateway EUI is 16 hexadecimal characters",
   "Podaj pozycję bramy": "Enter the gateway position",
@@ -1519,7 +1519,7 @@ const Map<String, String> _enMap = {
   "Brama sparowana": "Gateway paired",
   "Brama LoRaWAN": "LoRaWAN gateway",
   "Dodaj bramę LoRaWAN": "Add LoRaWAN gateway",
-  "W panelu bramy (packet forwarder → dodatkowy serwer) dopisz serwer sensmos.com:1700. Gdy brama zacznie do nas wysyłać, wpisz tu jej EUI. Brama słyszy nody Sensmos, nadaje beacon i zarabia jak node.": "In the gateway's panel (packet forwarder → additional server) add the server sensmos.com:1700. Once the gateway starts sending to us, enter its EUI here. The gateway hears Sensmos nodes, transmits a beacon and earns like a node.",
+  "W panelu bramy (packet forwarder → dodatkowy serwer) dopisz serwer sensmos.com:1700. Gdy brama zacznie do nas wysyłać, wpisz tu jej EUI. Brama słyszy nody Sensmos, nadaje beacon i otrzymuje przydział jak node.": "In the gateway's panel (packet forwarder → additional server) add the server sensmos.com:1700. Once the gateway starts sending to us, enter its EUI here. The gateway hears Sensmos nodes, transmits a beacon and receives an allocation like a node.",
   "EUI bramy": "Gateway EUI",
   "Nazwa (opcjonalnie)": "Name (optional)",
   "np. brama na dachu": "e.g. rooftop gateway",
@@ -1528,27 +1528,27 @@ const Map<String, String> _enMap = {
   "Jestem przy bramie — użyj pozycji telefonu": "I'm at the gateway — use the phone's position",
   "Pozycja musi zgadzać się z krajem i okolicą, z której łączy się brama.": "The position must match the country and area the gateway connects from.",
   "Sparuj z portfelem": "Pair with wallet",
-  "Bez pozycji — brama nie zarabia. Ustaw pozycję.": "No position — the gateway does not earn. Set the position.",
+  "Bez pozycji — brama nie otrzymuje przydziału. Ustaw pozycję.": "No position — the gateway receives no allocation. Set the position.",
   "Nazwa i pozycja": "Name and position",
   "Odepnij bramę": "Unpair gateway",
   "Dodaj bramę LoRaWAN (np. RAK, Dragino)": "Add LoRaWAN gateway (e.g. RAK, Dragino)",
-  "Nowa pozycja odrzucona — zostaje poprzednia, brama dalej zarabia.": "New position rejected — the previous one stays, the gateway keeps earning.",
+  "Nowa pozycja odrzucona — zostaje poprzednia, brama dalej otrzymuje przydział.": "New position rejected — the previous one stays, the gateway keeps receiving its allocation.",
   "Wpisana pozycja jest za daleko od miejsca, z którego łączy się brama (%s). Przyjęliśmy przybliżoną pozycję z łącza.": "The entered position is too far from where the gateway connects from (%s). We used an approximate position from its connection.",
   "Wpisana pozycja jest w innym kraju niż łącze bramy. Przyjęliśmy przybliżoną pozycję z łącza.": "The entered position is in a different country than the gateway's connection. We used an approximate position from its connection.",
   "Podaj obie współrzędne albo zostaw obie puste": "Enter both coordinates or leave both empty",
   "Pozycja jest opcjonalna — bez niej bierzemy przybliżoną z łącza bramy. Wpisana musi zgadzać się z krajem i okolicą łącza.": "The position is optional — without it we use an approximate one from the gateway's connection. An entered position must match the country and area of that connection.",
   "Pozycja: wpisana": "Position: entered",
   "Pozycja: przybliżona z łącza bramy": "Position: approximate, from the gateway's connection",
-  "Bez pozycji — brama nie zarabia.": "No position — the gateway does not earn.",
+  "Bez pozycji — brama nie otrzymuje przydziału.": "No position — the gateway receives no allocation.",
   "Słyszy nodów: %s · słyszą ją: %s (24 h)": "Hears nodes: %s · heard by: %s (24 h)",
   "Ramki Sensmos (24 h): %s": "Sensmos frames (24 h): %s",
   "Beacon: jeszcze nie nadany": "Beacon: not sent yet",
   "Beacon: przed chwilą": "Beacon: just now",
   "Beacon: %s temu": "Beacon: %s ago",
   "brama odrzuciła (%s)": "gateway rejected it (%s)",
-  "Zarobek: %s GALU": "Earned: %s GALU",
+  "Otrzymane: %s GALU": "Received: %s GALU",
   "Odpiąć bramę?": "Unpair this gateway?",
-  "Brama %s zniknie z Twojego portfela i przestanie zarabiać. Możesz ją później sparować ponownie po EUI. Zarobione GALU zostają w portfelu.": "Gateway %s will be removed from your wallet and stop earning. You can pair it again later by its EUI. GALU already earned stays in your wallet.",
+  "Brama %s zniknie z Twojego portfela i przestanie otrzymywać przydział. Możesz ją później sparować ponownie po EUI. Otrzymane GALU zostają w portfelu.": "Gateway %s will be removed from your wallet and stop receiving allocations. You can pair it again later by its EUI. GALU already received stays in your wallet.",
   "Brama odpięta": "Gateway unpaired",
   "Zapisano": "Saved",
   "Zegar telefonu odbiega o ponad godzinę — włącz automatyczny czas i spróbuj ponownie.": "Your phone's clock is off by more than an hour — turn on automatic time and try again.",
@@ -1776,15 +1776,15 @@ const Map<String, String> _deMap = {
       "Dein eigenes Label, um den Node leichter zu erkennen — z. B. Garage oder Router.",
   // ── Wallet: Passwort / Senden / QR / Saldo-Umbau (1.5.48) ──
   "W SENSMOS": "IN SENSMOS",
-  "Zarobione GALU — do odbioru na portfel on-chain albo do wykorzystania na usługi (Store, LoRa).":
-      "Verdiente GALU — auf die On-Chain-Wallet abholen oder für Dienste ausgeben (Store, LoRa).",
+  "Otrzymane GALU — do odbioru na portfel on-chain albo do wykorzystania na usługi (Store, LoRa).":
+      "Erhaltenes GALU — auf die On-Chain-Wallet abholen oder für Dienste ausgeben (Store, LoRa).",
   "Odbiór wymaga POL na gaz — patrz portfel on-chain poniżej.":
       "Abholen braucht POL für Gas — siehe On-Chain-Wallet unten.",
   "Przenosi GALU z portfela on-chain do Sensmos — na opłacanie usług (Store, LoRa).":
       "Überträgt GALU von der On-Chain-Wallet nach Sensmos — zum Bezahlen von Diensten (Store, LoRa).",
   "Twoje własne środki na portfelu. Nie płacą za usługi — do tego służy Wpłata.":
       "Dein eigenes Guthaben on-chain. Es bezahlt keine Dienste — dafür ist Einzahlen da.",
-  "Zarobione": "Verdient",
+  "Otrzymane": "Erhalten",
   "Wydane": "Ausgegeben",
   "PORTFEL ON-CHAIN (Polygon)": "ON-CHAIN-WALLET (Polygon)",
   "Wyślij": "Senden",
@@ -1820,8 +1820,8 @@ const Map<String, String> _deMap = {
   "na adres:": "an Adresse:",
   "Tej operacji NIE można cofnąć.":
       "Dieser Vorgang kann NICHT rückgängig gemacht werden.",
-  "Za mało POL — odbiór nagród (claim) wymaga gazu. Wpłać POL na adres portfela (QR na górze).":
-      "Nicht genug POL — das Abholen der Belohnungen (Claim) benötigt Gas. Sende POL an deine Wallet-Adresse (QR oben).",
+  "Za mało POL — odbiór przydziału (claim) wymaga gazu. Wpłać POL na adres portfela (QR na górze).":
+      "Nicht genug POL — das Einlösen der Zuteilung (Claim) benötigt Gas. Sende POL an deine Wallet-Adresse (QR oben).",
   "Zeskanuj adres (QR)": "Adresse scannen (QR)",
   "Skieruj aparat na kod QR z adresem portfela":
       "Richte die Kamera auf einen QR-Code mit einer Wallet-Adresse",
@@ -1921,12 +1921,12 @@ const Map<String, String> _deMap = {
   "Rozmyj dokładną pozycję": "Genaue Position unscharf machen",
   "Na mapie pokazujemy punkt przesunięty o 200-800 m. Wyłącz tylko, jeśli chcesz publikować dokładny adres.":
       "Auf der Karte zeigen wir einen um 200-800 m verschobenen Punkt. Schalte das nur aus, wenn du die genaue Adresse veröffentlichen willst.",
-  "Node w ogóle nie pojawi się na mapie. Zarabia mniej, bo nie współtworzy publicznego pokrycia sieci.":
-      "Der Node erscheint gar nicht auf der Karte. Er verdient weniger, weil er nicht zur öffentlichen Netzabdeckung beiträgt.",
-  "Tryb prywatny — node nie jest pokazywany na mapie i zarabia w obniżonej stawce, bo nie współtworzy publicznego pokrycia sieci.":
-      "Privater Modus — der Node wird nicht auf der Karte gezeigt und verdient zu einem reduzierten Satz, da er nicht zur öffentlichen Netzabdeckung beiträgt.",
-  "Brak potwierdzonej lokalizacji GPS — ten node prawie nie zarabia. Podejdź do niego z telefonem i ustaw lokalizację.":
-      "Kein bestätigter GPS-Standort — dieser Node verdient fast nichts. Geh mit dem Telefon zu ihm und setze den Standort.",
+  "Node w ogóle nie pojawi się na mapie. Otrzymuje mniejszy przydział, bo nie współtworzy publicznego pokrycia sieci.":
+      "Der Node erscheint gar nicht auf der Karte. Er erhält eine geringere Zuteilung, weil er nicht zur öffentlichen Netzabdeckung beiträgt.",
+  "Tryb prywatny — node nie jest pokazywany na mapie i otrzymuje obniżony przydział, bo nie współtworzy publicznego pokrycia sieci.":
+      "Privater Modus — der Node wird nicht auf der Karte gezeigt und erhält eine reduzierte Zuteilung, da er nicht zur öffentlichen Netzabdeckung beiträgt.",
+  "Brak potwierdzonej lokalizacji GPS — ten node prawie nie otrzymuje przydziału. Podejdź do niego z telefonem i ustaw lokalizację.":
+      "Kein bestätigter GPS-Standort — dieser Node erhält fast keine Zuteilung. Geh mit dem Telefon zu ihm und setze den Standort.",
   "Sprawdzam połączenie...": "Verbindung wird geprüft...",
   "Nie można zarejestrować noda — aplikacja nie ma połączenia z internetem. Telefon musi być online przez cały czas rejestracji. Połącz się z siecią i spróbuj ponownie.":
       "Node kann nicht registriert werden — die App hat keine Internetverbindung. Das Telefon muss während der gesamten Registrierung online sein. Verbinde dich mit einem Netzwerk und versuche es erneut.",
@@ -1934,10 +1934,10 @@ const Map<String, String> _deMap = {
       "Internetverbindung verloren — der Node konnte nicht registriert werden. Das Telefon muss während der gesamten Registrierung online sein.",
   "Serwer odrzucił rejestrację noda.":
       "Der Server hat die Node-Registrierung abgelehnt.",
-  "Node dodany, ale weryfikacja się nie powiodła — bez niej nie nalicza nagród. Powtórz ceremonię w ustawieniach noda (Zaufanie).":
-      "Node hinzugefügt, aber die Verifizierung schlug fehl — ohne sie gibt es keine Belohnungen. Wiederhole die Zeremonie in den Node-Einstellungen (Vertrauen).",
-  "Nagrody naliczają się po ok. 4 godzinach online w danej dobie — zero na starcie jest normalne.":
-      "Belohnungen beginnen nach etwa 4 Stunden online pro Tag — null am Anfang ist normal.",
+  "Node dodany, ale weryfikacja się nie powiodła — bez niej node nie otrzymuje przydziału. Powtórz ceremonię w ustawieniach noda (Zaufanie).":
+      "Node hinzugefügt, aber die Verifizierung schlug fehl — ohne sie gibt es keine Zuteilung. Wiederhole die Zeremonie in den Node-Einstellungen (Vertrauen).",
+  "Przydział nalicza się po ok. 4 godzinach online w danej dobie — zero na starcie jest normalne.":
+      "Zuteilungen beginnen nach etwa 4 Stunden online pro Tag — null am Anfang ist normal.",
   // ── RemoteTerminal / Panel (auto) ──
   "Łączę z relayem…": "Verbinde mit Relay…",
   "Brak portfela w apce": "Keine Wallet in der App",
@@ -2073,11 +2073,11 @@ const Map<String, String> _deMap = {
   "Wpłacanie…": "Einzahlung läuft…",
   "Wpłacono %s GALU": "%s GALU eingezahlt",
   "Wpłata odrzucona przez kontrakt": "Einzahlung zurückgesetzt (revert)",
-  "Brak nagród": "Keine Belohnungen",
-  "Nagrody z epoki %s już odebrane":
-      "Belohnungen für Epoche %s bereits abgeholt",
-  "Odbieranie nagród…": "Belohnungen werden abgeholt…",
-  "Odebrano nagrody (epoka %s)": "Belohnungen abgeholt (Epoche %s)",
+  "Brak przydziału": "Keine Zuteilung",
+  "Przydział z epoki %s już odebrany":
+      "Zuteilung für Epoche %s bereits eingelöst",
+  "Odbieranie przydziału…": "Zuteilung wird eingelöst…",
+  "Odebrano przydział (epoka %s)": "Zuteilung eingelöst (Epoche %s)",
   "Odbiór odrzucony przez kontrakt": "Claim zurückgesetzt (revert)",
   "Brak nodów — eksport wymaga PIN-u noda":
       "Keine Nodes — Export erfordert eine Node-PIN",
@@ -2089,7 +2089,7 @@ const Map<String, String> _deMap = {
   "Do odebrania (claim)": "Abholbar (Claim)",
   "Wypłata w toku": "Claim läuft",
   "Wpłata w toku": "Einzahlung läuft",
-  "Zarobione (nagrody)": "Verdient (Belohnungen)",
+  "Otrzymane (przydziały)": "Erhalten (Zuteilungen)",
   "Wpłacone (Twój kapitał)": "Eingezahlt (dein Kapital)",
   "Zdeponowane": "Eingezahlt",
   "Odebrano": "Abgeholt",
@@ -2100,8 +2100,8 @@ const Map<String, String> _deMap = {
   "POL (gas)": "POL (Gas)",
   "Za mało POL — transakcje (claim/deposit) wymagają gazu. Wpłać POL na adres portfela (QR powyżej).":
       "Zu wenig POL — Transaktionen (Claim/Deposit) brauchen Gas. Sende POL an deine Wallet-Adresse (QR oben).",
-  "Za mało POL — odbiór nagród (claim) wymaga gazu. Wpłać POL na adres portfela (QR powyżej).":
-      "Zu wenig POL — das Abholen der Belohnungen braucht Gas. Sende POL an deine Wallet-Adresse (QR oben).",
+  "Za mało POL — odbiór przydziału (claim) wymaga gazu. Wpłać POL na adres portfela (QR powyżej).":
+      "Zu wenig POL — das Einlösen der Zuteilung braucht Gas. Sende POL an deine Wallet-Adresse (QR oben).",
   "Eksportuj klucz (MetaMask)": "Schlüssel exportieren (MetaMask)",
   "wymaga PIN-u dowolnego Twojego noda":
       "erfordert die PIN eines beliebigen deiner Nodes",
@@ -2270,17 +2270,17 @@ const Map<String, String> _deMap = {
   "Usuwa node tylko z tej apki": "Entfernt den Node nur aus dieser App",
   "Usuń node z sieci (permanentnie)":
       "Node aus dem Netzwerk löschen (dauerhaft)",
-  "Kasuje node i wszystkie jego dane z SENSMOS. Możesz go później dodać ponownie (onboarding przez Bluetooth). Zarobione GALU zostają w Twoim portfelu.":
-      "Löscht den Node und alle seine Daten aus SENSMOS. Du kannst ihn später wieder hinzufügen (Bluetooth-Onboarding). Verdiente GALU bleiben in deinem Wallet.",
+  "Kasuje node i wszystkie jego dane z SENSMOS. Możesz go później dodać ponownie (onboarding przez Bluetooth). Otrzymane GALU zostają w Twoim portfelu.":
+      "Löscht den Node und alle seine Daten aus SENSMOS. Du kannst ihn später wieder hinzufügen (Bluetooth-Onboarding). Erhaltene GALU bleiben in deinem Wallet.",
   "Usunąć node z sieci?": "Node aus dem Netzwerk löschen?",
-  "Node %s i WSZYSTKIE jego dane zostaną trwale usunięte z SENSMOS. Możesz go później dodać ponownie (onboarding przez Bluetooth). Zarobione GALU pozostają w Twoim portfelu.":
-      "Node %s und ALLE seine Daten werden dauerhaft aus SENSMOS gelöscht. Du kannst ihn später wieder hinzufügen (Bluetooth-Onboarding). Verdiente GALU bleiben in deinem Wallet.",
+  "Node %s i WSZYSTKIE jego dane zostaną trwale usunięte z SENSMOS. Możesz go później dodać ponownie (onboarding przez Bluetooth). Otrzymane GALU pozostają w Twoim portfelu.":
+      "Node %s und ALLE seine Daten werden dauerhaft aus SENSMOS gelöscht. Du kannst ihn später wieder hinzufügen (Bluetooth-Onboarding). Erhaltene GALU bleiben in deinem Wallet.",
   "Usuń permanentnie": "Dauerhaft löschen",
   "Node usunięty z sieci": "Node aus dem Netzwerk gelöscht",
   "Błąd usuwania: %s": "Löschfehler: %s",
   "Brak portfela": "Kein Wallet",
-  "Importujesz INNY portfel (%s) niż obecny (%s).\n\nTwoje nody pozostaną przypisane do obecnego portfela, dopóki nie dodasz ich ponownie przez Bluetooth (to zmieni właściciela i wymaga ponownej weryfikacji — bez resetu urządzenia). Zarobione GALU zostają przy portfelu, który je zarobił.":
-      "Du importierst ein ANDERES Wallet (%s) als das aktuelle (%s).\n\nDeine Nodes bleiben dem aktuellen Wallet zugeordnet, bis du sie erneut über Bluetooth hinzufügst (das ändert den Besitzer und erfordert eine erneute Verifizierung — ohne Geräte-Reset). Verdiente GALU bleiben bei dem Wallet, das sie verdient hat.",
+  "Importujesz INNY portfel (%s) niż obecny (%s).\n\nTwoje nody pozostaną przypisane do obecnego portfela, dopóki nie dodasz ich ponownie przez Bluetooth (to zmieni właściciela i wymaga ponownej weryfikacji — bez resetu urządzenia). Otrzymane GALU zostają przy portfelu, który je otrzymał.":
+      "Du importierst ein ANDERES Wallet (%s) als das aktuelle (%s).\n\nDeine Nodes bleiben dem aktuellen Wallet zugeordnet, bis du sie erneut über Bluetooth hinzufügst (das ändert den Besitzer und erfordert eine erneute Verifizierung — ohne Geräte-Reset). Erhaltene GALU bleiben bei dem Wallet, das sie erhalten hat.",
 
   "Moje nody w sieci": "Meine Nodes im Netzwerk",
   "Wszystkie nody zarejestrowane na Twój portfel (wg SENSMOS)":
@@ -2310,8 +2310,8 @@ const Map<String, String> _deMap = {
   "import z klucza": "Import aus Schlüssel",
   "Klucz portfela (zaawansowane)": "Wallet-Schlüssel (fortgeschritten)",
   "Usunąć z tej apki?": "Aus dieser App entfernen?",
-  "Node zniknie tylko z tego telefonu — zostaje w sieci i dalej nalicza nagrody. Żeby usunąć go z sieci, użyj „Usuń z sieci”.":
-      "Der Node verschwindet nur von diesem Handy — er bleibt im Netzwerk und sammelt Belohnungen. Zum Entfernen aus dem Netzwerk nutze Aus dem Netzwerk löschen.",
+  "Node zniknie tylko z tego telefonu — zostaje w sieci i dalej otrzymuje przydział GALU. Żeby usunąć go z sieci, użyj „Usuń z sieci”.":
+      "Der Node verschwindet nur von diesem Handy — er bleibt im Netzwerk und erhält weiter GALU-Zuteilungen. Zum Entfernen aus dem Netzwerk nutze Aus dem Netzwerk löschen.",
   "Usuń z apki": "Aus der App entfernen",
   "import / eksport klucza prywatnego":
       "Import / Export des privaten Schlüssels",
@@ -2334,7 +2334,7 @@ const Map<String, String> _deMap = {
       "Wallet importiert — deine Nodes laufen weiter",
   "Portfel zaimportowany: %s": "Wallet importiert: %s",
   "Błąd importu: %s": "Importfehler: %s",
-  "Odebrano nagrody": "Belohnungen abgeholt",
+  "Odebrano przydział": "Zuteilung eingelöst",
   "Wszystko już odebrane": "Alles bereits abgeholt",
   "Usunąć \"%s\"?": "\"%s\" löschen?",
   "Usunąć akcję dla \"%s\"?": "Aktion für \"%s\" löschen?",
@@ -2531,16 +2531,16 @@ const Map<String, String> _deMap = {
   "Wymaga firmware 0.25+ — zaktualizuj node.":
       "Erfordert Firmware 0.25+ — aktualisiere den Node.",
   "Tryb prywatny (ghost)": "Privater Modus (Ghost)",
-  "Ukryty z mapy, 0 nagród. Dane działają lokalnie; za subskrypcje płacisz.":
-      "Von der Karte verborgen, 0 Belohnungen. Daten funktionieren lokal; Abos kosten weiterhin.",
+  "Ukryty z mapy, przydział 0 GALU. Dane działają lokalnie; za subskrypcje płacisz.":
+      "Von der Karte verborgen, 0 GALU-Zuteilung. Daten funktionieren lokal; Abos kosten weiterhin.",
   "Tryb prywatny włączony — node ukryty z mapy":
-      "Privater Modus an — Node von Karte und Belohnungen ausgeblendet",
+      "Privater Modus an — Node von der Karte ausgeblendet",
   "Tryb prywatny wyłączony": "Privater Modus aus",
   "Pobieram pozycję GPS...": "GPS-Position wird abgerufen...",
-  "Zaraz poprosimy o lokalizację (GPS) — potwierdza, że node jest fizycznie tutaj. Bez niej node działa, ale zarabia znacznie mniej.":
-      "Gleich fragen wir nach dem Standort (GPS) — er bestätigt, dass der Node physisch hier ist. Ohne ihn läuft der Node, verdient aber deutlich weniger.",
-  "Brak lokalizacji — node niewidoczny na mapie i nie nalicza nagród.":
-      "Kein Standort — Node nicht auf der Karte sichtbar und sammelt keine Belohnungen.",
+  "Zaraz poprosimy o lokalizację (GPS) — potwierdza, że node jest fizycznie tutaj. Bez niej node działa, ale otrzymuje znacznie mniejszy przydział.":
+      "Gleich fragen wir nach dem Standort (GPS) — er bestätigt, dass der Node physisch hier ist. Ohne ihn läuft der Node, erhält aber eine deutlich geringere Zuteilung.",
+  "Brak lokalizacji — node niewidoczny na mapie i nie otrzymuje przydziału.":
+      "Kein Standort — Node nicht auf der Karte sichtbar und erhält keine Zuteilung.",
   "Ustaw lokalizację": "Standort festlegen",
   "Połącz się z siecią noda, aby ustawić lokalizację.":
       "Verbinde dich mit dem Netzwerk des Nodes, um den Standort festzulegen.",
@@ -2710,7 +2710,7 @@ const Map<String, String> _deMap = {
   "Zgłoś pomysł": "Idee vorschlagen",
   "czego brakuje w Sensmosie, trafia na roadmapę": "was bei Sensmos fehlt, landet auf der Roadmap",
   "testuj nowe wersje, wysyłaj raporty, zbieraj punkty": "neue Versionen testen, Berichte senden, Punkte sammeln",
-  "Testujesz nowe wersje apki, hubu i firmware według scenariuszy, a serwer zalicza je automatycznie. Nagrody w GALU z puli testów, co miesiąc według punktów. Bez maila: liczy się tylko portfel.": "Du testest neue Versionen von App, Hub und Firmware nach Szenarien, der Server prüft sie automatisch. Belohnungen in GALU aus dem Testpool, monatlich nach Punkten. Keine E-Mail: nur dein Wallet zählt.",
+  "Testujesz nowe wersje apki, hubu i firmware według scenariuszy, a serwer zalicza je automatycznie. Przydział GALU z puli testów, co miesiąc według punktów. Bez maila: liczy się tylko portfel.": "Du testest neue Versionen von App, Hub und Firmware nach Szenarien, der Server prüft sie automatisch. GALU-Zuteilung aus dem Testpool, monatlich nach Punkten. Keine E-Mail: nur dein Wallet zählt.",
   "Jesteś w programie": "Du bist im Programm",
   "Zapis do programu": "Am Programm teilnehmen",
   "Nick (opcjonalny, widoczny w rankingu)": "Nick (optional, im Ranking sichtbar)",
@@ -2814,7 +2814,7 @@ const Map<String, String> _deMap = {
   "Telefon musi być w tej samej sieci Wi-Fi co Hub.": "Das Telefon muss im selben WLAN wie der Hub sein.",
   "Hub podpisuje jednorazowe wyzwanie swoim kluczem, Ty podpisujesz portfelem.": "Der Hub signiert eine einmalige Challenge mit seinem Schlüssel, du mit deinem Wallet.",
   "Sieć sprawdza oba podpisy i to, że telefon i Hub łączą się z internetem z tego samego adresu.": "Das Netz prüft beide Signaturen und dass Telefon und Hub über dieselbe Adresse ins Internet gehen.",
-  "Potwierdzony Hub zarabia GALU z połową wagi noda ESP32.": "Ein bestätigter Hub verdient GALU mit halbem Gewicht eines ESP32-Nodes.",
+  "Potwierdzony Hub otrzymuje GALU z połową wagi noda ESP32.": "Ein bestätigter Hub erhält GALU mit halbem Zuteilungsgewicht eines ESP32-Nodes.",
   "Brak nodów w aplikacji": "Keine Nodes in der App",
   "Wybierz nod": "Node wählen",
   "Pytam nod o logi…": "Frage den Node nach seinen Logs…",
@@ -2839,10 +2839,10 @@ const Map<String, String> _deMap = {
   "Wysłane raporty: %s": "Gesendete Berichte: %s",
   "Odblokuj portfel, aby podpisać": "Entsperre das Wallet zum Signieren",
   "Brak połączenia z serwerem": "Keine Verbindung zum Server",
-  "Nagrody portfela": "Wallet-Belohnungen",
+  "Przydziały portfela": "Wallet-Zuteilungen",
   "za nody i za usługi — per miesiąc i per epoka": "für Nodes und Dienste — pro Monat und pro Epoche",
   "nody %s · usługi %s": "Nodes %s · Dienste %s",
-  "Brak nagród — node zarabia od pierwszej pełnej epoki online.": "Noch keine Belohnungen — ein Node verdient ab seiner ersten vollen Epoche online.",
+  "Brak przydziałów — node otrzymuje GALU od pierwszej pełnej epoki online.": "Noch keine Zuteilungen — ein Node erhält GALU ab seiner ersten vollen Epoche online.",
   "MIESIĄCE": "MONATE",
   "EPOKI": "EPOCHEN",
   "Epoka %s": "Epoche %s",
@@ -3078,8 +3078,8 @@ const Map<String, String> _deMap = {
   "oferowane %s GB · zajęte %s GB": "angeboten %s GB · %s GB belegt",
   "kopii u Ciebie: %s · dowody 7 dni: %s ✓ %s ✗":
       "Kopien bei dir: %s · Beweise 7 Tage: %s ✓ %s ✗",
-  "zarobek 7 dni: %s · łącznie: %s GALU":
-      "Verdienst 7 Tage: %s · gesamt: %s GALU",
+  "otrzymane 7 dni: %s · łącznie: %s GALU":
+      "Erhalten 7 Tage: %s · gesamt: %s GALU",
   "Odłączyć %s?": "%s trennen?",
   "Token przystawki zostanie odebrany, agent natychmiast traci dostęp.":
       "Der Token der Erweiterung wird entzogen; der Agent verliert sofort den Zugriff.",
@@ -3200,8 +3200,8 @@ const Map<String, String> _deMap = {
   "Szukam…": "Suche…",
   "Paruję…": "Koppeln…",
   "Włącz lokalizację w telefonie": "Schalte die Standortbestimmung am Telefon ein",
-  "Pozycja jest za daleko od miejsca, z którego łączy się brama (%s). Brama jest sparowana, ale bez pozycji nie zarabia.": "Die Position ist zu weit von dem Ort entfernt, von dem aus sich das Gateway verbindet (%s). Das Gateway ist gekoppelt, verdient aber ohne Position nichts.",
-  "Pozycja jest w innym kraju niż łącze bramy. Brama jest sparowana, ale bez pozycji nie zarabia.": "Die Position liegt in einem anderen Land als der Anschluss des Gateways. Das Gateway ist gekoppelt, verdient aber ohne Position nichts.",
+  "Pozycja jest za daleko od miejsca, z którego łączy się brama (%s). Brama jest sparowana, ale bez pozycji nie otrzymuje przydziału.": "Die Position ist zu weit von dem Ort entfernt, von dem aus sich das Gateway verbindet (%s). Das Gateway ist gekoppelt, erhält aber ohne Position keine Zuteilung.",
+  "Pozycja jest w innym kraju niż łącze bramy. Brama jest sparowana, ale bez pozycji nie otrzymuje przydziału.": "Die Position liegt in einem anderen Land als der Anschluss des Gateways. Das Gateway ist gekoppelt, erhält aber ohne Position keine Zuteilung.",
   "Nie udało się ustawić pozycji (%s).": "Position konnte nicht gesetzt werden (%s).",
   "EUI bramy to 16 znaków szesnastkowych": "Die Gateway-EUI besteht aus 16 Hexadezimalzeichen",
   "Podaj pozycję bramy": "Gib die Position des Gateways an",
@@ -3210,7 +3210,7 @@ const Map<String, String> _deMap = {
   "Brama sparowana": "Gateway gekoppelt",
   "Brama LoRaWAN": "LoRaWAN-Gateway",
   "Dodaj bramę LoRaWAN": "LoRaWAN-Gateway hinzufügen",
-  "W panelu bramy (packet forwarder → dodatkowy serwer) dopisz serwer sensmos.com:1700. Gdy brama zacznie do nas wysyłać, wpisz tu jej EUI. Brama słyszy nody Sensmos, nadaje beacon i zarabia jak node.": "Trage im Panel des Gateways (Packet Forwarder → zusätzlicher Server) den Server sensmos.com:1700 ein. Sobald das Gateway an uns sendet, gib hier seine EUI ein. Das Gateway hört Sensmos-Nodes, sendet einen Beacon und verdient wie ein Node.",
+  "W panelu bramy (packet forwarder → dodatkowy serwer) dopisz serwer sensmos.com:1700. Gdy brama zacznie do nas wysyłać, wpisz tu jej EUI. Brama słyszy nody Sensmos, nadaje beacon i otrzymuje przydział jak node.": "Trage im Panel des Gateways (Packet Forwarder → zusätzlicher Server) den Server sensmos.com:1700 ein. Sobald das Gateway an uns sendet, gib hier seine EUI ein. Das Gateway hört Sensmos-Nodes, sendet einen Beacon und erhält eine Zuteilung wie ein Node.",
   "EUI bramy": "Gateway-EUI",
   "Nazwa (opcjonalnie)": "Name (optional)",
   "np. brama na dachu": "z. B. Gateway auf dem Dach",
@@ -3219,27 +3219,27 @@ const Map<String, String> _deMap = {
   "Jestem przy bramie — użyj pozycji telefonu": "Ich bin beim Gateway — Position des Telefons verwenden",
   "Pozycja musi zgadzać się z krajem i okolicą, z której łączy się brama.": "Die Position muss zu Land und Gegend passen, aus der sich das Gateway verbindet.",
   "Sparuj z portfelem": "Mit dem Wallet koppeln",
-  "Bez pozycji — brama nie zarabia. Ustaw pozycję.": "Keine Position — das Gateway verdient nichts. Lege die Position fest.",
+  "Bez pozycji — brama nie otrzymuje przydziału. Ustaw pozycję.": "Keine Position — das Gateway erhält keine Zuteilung. Lege die Position fest.",
   "Nazwa i pozycja": "Name und Position",
   "Odepnij bramę": "Gateway entkoppeln",
   "Dodaj bramę LoRaWAN (np. RAK, Dragino)": "LoRaWAN-Gateway hinzufügen (z. B. RAK, Dragino)",
-  "Nowa pozycja odrzucona — zostaje poprzednia, brama dalej zarabia.": "Neue Position abgelehnt — die bisherige bleibt, das Gateway verdient weiter.",
+  "Nowa pozycja odrzucona — zostaje poprzednia, brama dalej otrzymuje przydział.": "Neue Position abgelehnt — die bisherige bleibt, das Gateway erhält weiter seine Zuteilung.",
   "Wpisana pozycja jest za daleko od miejsca, z którego łączy się brama (%s). Przyjęliśmy przybliżoną pozycję z łącza.": "Die eingegebene Position ist zu weit von dem Ort entfernt, von dem aus sich das Gateway verbindet (%s). Wir haben eine ungefähre Position aus seinem Anschluss übernommen.",
   "Wpisana pozycja jest w innym kraju niż łącze bramy. Przyjęliśmy przybliżoną pozycję z łącza.": "Die eingegebene Position liegt in einem anderen Land als der Anschluss des Gateways. Wir haben eine ungefähre Position aus seinem Anschluss übernommen.",
   "Podaj obie współrzędne albo zostaw obie puste": "Gib beide Koordinaten an oder lass beide leer",
   "Pozycja jest opcjonalna — bez niej bierzemy przybliżoną z łącza bramy. Wpisana musi zgadzać się z krajem i okolicą łącza.": "Die Position ist optional — ohne sie nehmen wir eine ungefähre aus dem Anschluss des Gateways. Eine eingegebene Position muss zu Land und Gegend dieses Anschlusses passen.",
   "Pozycja: wpisana": "Position: eingegeben",
   "Pozycja: przybliżona z łącza bramy": "Position: ungefähr, aus dem Anschluss des Gateways",
-  "Bez pozycji — brama nie zarabia.": "Keine Position — das Gateway verdient nichts.",
+  "Bez pozycji — brama nie otrzymuje przydziału.": "Keine Position — das Gateway erhält keine Zuteilung.",
   "Słyszy nodów: %s · słyszą ją: %s (24 h)": "Hört Nodes: %s · gehört von: %s (24 h)",
   "Ramki Sensmos (24 h): %s": "Sensmos-Frames (24 h): %s",
   "Beacon: jeszcze nie nadany": "Beacon: noch nicht gesendet",
   "Beacon: przed chwilą": "Beacon: gerade eben",
   "Beacon: %s temu": "Beacon: vor %s",
   "brama odrzuciła (%s)": "vom Gateway abgelehnt (%s)",
-  "Zarobek: %s GALU": "Verdient: %s GALU",
+  "Otrzymane: %s GALU": "Erhalten: %s GALU",
   "Odpiąć bramę?": "Gateway entkoppeln?",
-  "Brama %s zniknie z Twojego portfela i przestanie zarabiać. Możesz ją później sparować ponownie po EUI. Zarobione GALU zostają w portfelu.": "Gateway %s wird aus deinem Wallet entfernt und verdient nichts mehr. Du kannst es später über seine EUI erneut koppeln. Bereits verdiente GALU bleiben in deinem Wallet.",
+  "Brama %s zniknie z Twojego portfela i przestanie otrzymywać przydział. Możesz ją później sparować ponownie po EUI. Otrzymane GALU zostają w portfelu.": "Gateway %s wird aus deinem Wallet entfernt und erhält keine Zuteilung mehr. Du kannst es später über seine EUI erneut koppeln. Bereits erhaltene GALU bleiben in deinem Wallet.",
   "Brama odpięta": "Gateway entkoppelt",
   "Zapisano": "Gespeichert",
   "Zegar telefonu odbiega o ponad godzinę — włącz automatyczny czas i spróbuj ponownie.": "Die Uhr deines Telefons weicht um mehr als eine Stunde ab — schalte die automatische Uhrzeit ein und versuche es erneut.",

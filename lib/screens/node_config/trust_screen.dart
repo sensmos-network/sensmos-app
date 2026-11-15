@@ -468,7 +468,7 @@ class _TrustScreenState extends State<TrustScreen> {
                   style: const TextStyle(color: AppTheme.text, fontSize: 14)),
               subtitle: Text(
                   _fwSupportsGhost
-                      ? tr('Ukryty z mapy, 0 nagród. Dane działają lokalnie; za subskrypcje płacisz.')
+                      ? tr('Ukryty z mapy, przydział 0 GALU. Dane działają lokalnie; za subskrypcje płacisz.')
                       : tr('Wymaga firmware 0.25+ — zaktualizuj node.'),
                   style: const TextStyle(color: AppTheme.muted, fontSize: 12)),
             ),
@@ -514,7 +514,7 @@ class _TrustScreenState extends State<TrustScreen> {
                 if (trusted) ...[
                   const SizedBox(height: 6),
                   Text(
-                      tr('Nagrody naliczają się po ok. 4 godzinach online w danej dobie — '
+                      tr('Przydział nalicza się po ok. 4 godzinach online w danej dobie — '
                          'zero na starcie jest normalne.'),
                       style: const TextStyle(color: AppTheme.muted, fontSize: 11)),
                 ],
@@ -542,7 +542,7 @@ class _TrustScreenState extends State<TrustScreen> {
                 _step('1', tr('Telefon musi być w tej samej sieci Wi-Fi co Hub.')),
                 _step('2', tr('Hub podpisuje jednorazowe wyzwanie swoim kluczem, Ty podpisujesz portfelem.')),
                 _step('3', tr('Sieć sprawdza oba podpisy i to, że telefon i Hub łączą się z internetem z tego samego adresu.')),
-                _step('4', tr('Potwierdzony Hub zarabia GALU z połową wagi noda ESP32.')),
+                _step('4', tr('Potwierdzony Hub otrzymuje GALU z połową wagi noda ESP32.')),
               ] else ...[
               _step('1', tr('Node restartuje się w tryb Bluetooth (zostaw go włączony).')),
               _step('2', tr('Telefon łączy się i wykonuje szybkie rundy challenge — '

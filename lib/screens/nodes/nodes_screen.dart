@@ -415,9 +415,9 @@ class _NodesScreenState extends State<NodesScreen> {
   Widget _geoNotice(bool ghost) {
     final color = ghost ? const Color(0xFF3B82F6) : const Color(0xFFFF4444);
     final text = ghost
-        ? tr('Tryb prywatny — node nie jest pokazywany na mapie i zarabia w obniżonej '
-             'stawce, bo nie współtworzy publicznego pokrycia sieci.')
-        : tr('Brak potwierdzonej lokalizacji GPS — ten node prawie nie zarabia. '
+        ? tr('Tryb prywatny — node nie jest pokazywany na mapie i otrzymuje obniżony '
+             'przydział, bo nie współtworzy publicznego pokrycia sieci.')
+        : tr('Brak potwierdzonej lokalizacji GPS — ten node prawie nie otrzymuje przydziału. '
              'Podejdź do niego z telefonem i ustaw lokalizację.');
     return Container(
       padding: const EdgeInsets.all(10),
@@ -488,13 +488,13 @@ class _NodesScreenState extends State<NodesScreen> {
       builder: (ctx) => AlertDialog(
         title: Text(gateway != null ? tr('Odpiąć bramę?') : tr('Usunąć node z sieci?')),
         content: Text(gateway != null
-            ? tr('Brama %s zniknie z Twojego portfela i przestanie zarabiać. '
+            ? tr('Brama %s zniknie z Twojego portfela i przestanie otrzymywać przydział. '
                 'Możesz ją później sparować ponownie po EUI. '
-                'Zarobione GALU zostają w portfelu.', [gateway])
+                'Otrzymane GALU zostają w portfelu.', [gateway])
             : tr(
             'Node %s i WSZYSTKIE jego dane zostaną trwale usunięte z SENSMOS. '
             'Możesz go później dodać ponownie (onboarding przez Bluetooth). '
-            'Zarobione GALU pozostają w Twoim portfelu.', [short])),
+            'Otrzymane GALU pozostają w Twoim portfelu.', [short])),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(tr('Anuluj'))),
           TextButton(onPressed: () => Navigator.pop(ctx, true),
@@ -1328,7 +1328,7 @@ class _NodesScreenState extends State<NodesScreen> {
     if (isStore && store != null) {
       info = '${tr('oferowane %s GB · zajęte %s GB', [_gbS(store['capacity_b']), _gbS(store['used_b'])])}\n'
           '${tr('kopii u Ciebie: %s · dowody 7 dni: %s ✓ %s ✗', [store['objects'] ?? 0, store['proof_ok_7d'] ?? 0, store['proof_fail_7d'] ?? 0])}\n'
-          '${tr('zarobek 7 dni: %s · łącznie: %s GALU', [_galuS(store['earned_7d']), _galuS(store['earned_total'])])}';
+          '${tr('otrzymane 7 dni: %s · łącznie: %s GALU', [_galuS(store['earned_7d']), _galuS(store['earned_total'])])}';
     } else {
       info = tr('meldunków: %s', [a['req_count'] ?? 0]) + sinceS;
     }
@@ -1444,7 +1444,7 @@ class _NodesScreenState extends State<NodesScreen> {
           _gwStat(Icons.place_outlined,
               geo == 'gps' ? tr('Pozycja: wpisana')
                   : geo == 'geoip' ? tr('Pozycja: przybliżona z łącza bramy')
-                  : tr('Bez pozycji — brama nie zarabia.'),
+                  : tr('Bez pozycji — brama nie otrzymuje przydziału.'),
               warn: geo != 'gps' && geo != 'geoip'),
           if (st != null) ...[
             _gwStat(Icons.hearing, tr('Słyszy nodów: %s · słyszą ją: %s (24 h)',
@@ -1452,7 +1452,7 @@ class _NodesScreenState extends State<NodesScreen> {
             _gwStat(Icons.graphic_eq, tr('Ramki Sensmos (24 h): %s', ['${st['frames_24h'] ?? 0}'])),
             _gwStat(Icons.wifi_tethering, _beaconLine(st)),
           ],
-          _gwStat(Icons.savings_outlined, tr('Zarobek: %s GALU',
+          _gwStat(Icons.savings_outlined, tr('Otrzymane: %s GALU',
               [(double.tryParse('${g['earned_total']}') ?? 0).toStringAsFixed(2)])),
           const SizedBox(height: 10),
           Row(children: [

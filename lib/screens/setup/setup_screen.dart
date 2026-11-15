@@ -338,7 +338,7 @@ class _SetupScreenState extends State<SetupScreen> {
           backgroundColor: AppTheme.amber,
           duration: const Duration(seconds: 8),
           content: Text(
-              tr('Node dodany, ale weryfikacja się nie powiodła — bez niej nie nalicza nagród. '
+              tr('Node dodany, ale weryfikacja się nie powiodła — bez niej node nie otrzymuje przydziału. '
                  'Powtórz ceremonię w ustawieniach noda (Zaufanie).'),
               style: const TextStyle(color: Colors.black)),
         ));
@@ -562,7 +562,7 @@ class _SetupScreenState extends State<SetupScreen> {
             Expanded(
                 child: Text(
                     tr('Zaraz poprosimy o lokalizację (GPS) — potwierdza, że node jest '
-                        'fizycznie tutaj. Bez niej node działa, ale zarabia znacznie mniej.'),
+                        'fizycznie tutaj. Bez niej node działa, ale otrzymuje znacznie mniejszy przydział.'),
                     style: const TextStyle(
                         color: AppTheme.amber, fontSize: 12, height: 1.35))),
           ]),
@@ -599,7 +599,7 @@ class _SetupScreenState extends State<SetupScreen> {
               title: Text(tr('Tryb prywatny (ghost)'),
                   style: const TextStyle(color: AppTheme.text, fontSize: 14)),
               subtitle: Text(
-                  tr('Node w ogóle nie pojawi się na mapie. Zarabia mniej, bo nie '
+                  tr('Node w ogóle nie pojawi się na mapie. Otrzymuje mniejszy przydział, bo nie '
                      'współtworzy publicznego pokrycia sieci.'),
                   style: const TextStyle(color: AppTheme.muted, fontSize: 12)),
             ),

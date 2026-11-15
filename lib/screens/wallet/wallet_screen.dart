@@ -346,7 +346,7 @@ class _WalletScreenState extends State<WalletScreen> {
             .timeout(const Duration(seconds: 8));
       }
       if (res.statusCode != 200) {
-        final msg = (jsonDecode(res.body) as Map)['error'] ?? tr('Brak nagród');
+        final msg = (jsonDecode(res.body) as Map)['error'] ?? tr('Brak przydziału');
         _snack('$msg', error: true);
         return;
       }
@@ -369,10 +369,10 @@ class _WalletScreenState extends State<WalletScreen> {
       }
 
       final claimedBefore = _claimed;
-      _snack(tr('Odbieranie nagród…'));
+      _snack(tr('Odbieranie przydziału…'));
       final h = await _eth.claim(pk, cumulativeWei, proof);
       final ok = await _eth.waitReceipt(h);
-      _snack(ok ? tr('Odebrano nagrody') : tr('Odbiór odrzucony przez kontrakt'), error: !ok);
+      _snack(ok ? tr('Odebrano przydział') : tr('Odbiór odrzucony przez kontrakt'), error: !ok);
       await _load();
       if (ok) _settleClaim(addr, claimedBefore);   // BEZ await — inaczej scrim wisiałby minutę
     } catch (e) {
@@ -786,7 +786,7 @@ class _WalletScreenState extends State<WalletScreen> {
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
           tilePadding: const EdgeInsets.symmetric(horizontal: 14),
-          title: Text(tr('Nagrody portfela'),
+          title: Text(tr('Przydziały portfela'),
               style: const TextStyle(
                   color: AppTheme.text, fontSize: 14, fontWeight: FontWeight.w600)),
           subtitle: Text(tr('za nody i za usługi — per miesiąc i per epoka'),
@@ -806,7 +806,7 @@ class _WalletScreenState extends State<WalletScreen> {
                 if (epochs.isEmpty) {
                   return Padding(
                     padding: const EdgeInsets.all(16),
-                    child: Text(tr('Brak nagród — node zarabia od pierwszej pełnej epoki online.'),
+                    child: Text(tr('Brak przydziałów — node otrzymuje GALU od pierwszej pełnej epoki online.'),
                         style: const TextStyle(color: AppTheme.muted, fontSize: 12)),
                   );
                 }
@@ -1069,7 +1069,7 @@ class _WalletScreenState extends State<WalletScreen> {
               ),
               const SizedBox(height: 6),
               Text(
-                  tr('Zarobione GALU — do odbioru na portfel on-chain albo do wykorzystania na usługi (Store, LoRa).'),
+                  tr('Otrzymane GALU — do odbioru na portfel on-chain albo do wykorzystania na usługi (Store, LoRa).'),
                   style: const TextStyle(color: AppTheme.muted, fontSize: 12)),
               const SizedBox(height: 14),
               SizedBox(
@@ -1095,7 +1095,7 @@ class _WalletScreenState extends State<WalletScreen> {
                 _smallRow(tr('Wypłata w toku'), _claimPending),
               ],
               const Divider(color: AppTheme.border, height: 24),
-              _smallRow(tr('Zarobione'), _earned),
+              _smallRow(tr('Otrzymane'), _earned),
               if (_spent > 0) _smallRow(tr('Wydane'), _spent),
               if (kDepositEnabled || _deposited > 0)
                 _smallRow(tr('Zdeponowane'), _deposited),
@@ -1163,7 +1163,7 @@ class _WalletScreenState extends State<WalletScreen> {
               if (_lowGas) ...[
                 const SizedBox(height: 8),
                 Text(
-                    tr('Za mało POL — odbiór nagród (claim) wymaga gazu. '
+                    tr('Za mało POL — odbiór przydziału (claim) wymaga gazu. '
                        'Wpłać POL na adres portfela (QR na górze).'),
                     style: const TextStyle(color: AppTheme.amber, fontSize: 12)),
               ],
@@ -1329,7 +1329,7 @@ class _WalletScreenState extends State<WalletScreen> {
               'Importujesz INNY portfel (%s) niż obecny (%s).\n\n'
               'Twoje nody pozostaną przypisane do obecnego portfela, dopóki nie dodasz ich '
               'ponownie przez Bluetooth (to zmieni właściciela i wymaga ponownej weryfikacji — '
-              'bez resetu urządzenia). Zarobione GALU zostają przy portfelu, który je zarobił.',
+              'bez resetu urządzenia). Otrzymane GALU zostają przy portfelu, który je otrzymał.',
               [_shortAddr(newAddr), _shortAddr(current)]),
               style: const TextStyle(color: AppTheme.muted, fontSize: 13)),
           actions: [

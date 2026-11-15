@@ -179,7 +179,7 @@ class _TesterScreenState extends State<TesterScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(tr('Program testów'))),
       body: ListView(padding: const EdgeInsets.all(20), children: [
-        Text(tr('Testujesz nowe wersje apki, hubu i firmware według scenariuszy, a serwer zalicza je automatycznie. Nagrody w GALU z puli testów, co miesiąc według punktów. Bez maila: liczy się tylko portfel.'),
+        Text(tr('Testujesz nowe wersje apki, hubu i firmware według scenariuszy, a serwer zalicza je automatycznie. Przydział GALU z puli testów, co miesiąc według punktów. Bez maila: liczy się tylko portfel.'),
             style: const TextStyle(color: AppTheme.muted, fontSize: 13)),
         const SizedBox(height: 16),
         Card(child: Padding(padding: const EdgeInsets.all(16), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
