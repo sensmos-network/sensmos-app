@@ -10,6 +10,7 @@ import '../../core/core_bloc.dart';
 import '../../services/kom_ble.dart';
 import '../../services/kom_chat.dart';
 import '../../services/wallet_service.dart';
+import 'kom_home_screen.dart';
 import 'kom_pin_screen.dart';
 
 const _headers = {'Content-Type': 'application/json', 'X-App-Key': Config.appKey};
@@ -406,6 +407,20 @@ class _KomDeviceState extends State<KomDevice> with AutomaticKeepAliveClientMixi
                 : tr('Najpierw internet; bez internetu przez ten komunikator (radio).'),
             style: const TextStyle(color: AppTheme.muted, fontSize: 12, height: 1.4)),
       ),
+      _section(tr('Dom bez internetu')),
+      Card(child: ListTile(
+        leading: const Icon(Icons.home_outlined, color: AppTheme.teal),
+        title: Text(i['home_id8'] != null ? '${tr('Nod')} ${i['home_id8']}' : tr('Ustaw dom'),
+            style: const TextStyle(color: AppTheme.text)),
+        subtitle: Text(
+            i.containsKey('home_id8')
+                ? tr('Wiadomość radiem prosto do noda w domu i do Home Assistant, bez internetu.')
+                : tr('Wymaga firmware komunikatora 0.17-kom lub nowszego.'),
+            style: const TextStyle(color: AppTheme.muted, fontSize: 12)),
+        trailing: const Icon(Icons.chevron_right, color: AppTheme.muted),
+        enabled: ready,
+        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => KomHomeScreen(kom: widget.kom))),
+      )),
       _section(tr('PIN')),
       Card(child: ListTile(
         leading: const Icon(Icons.pin_outlined, color: AppTheme.teal),
