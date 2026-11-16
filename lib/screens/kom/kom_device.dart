@@ -407,6 +407,20 @@ class _KomDeviceState extends State<KomDevice> with AutomaticKeepAliveClientMixi
                 : tr('Najpierw internet; bez internetu przez ten komunikator (radio).'),
             style: const TextStyle(color: AppTheme.muted, fontSize: 12, height: 1.4)),
       ),
+      _section(tr('Tablica ogłoszeń osiedla')),
+      Card(child: SwitchListTile(
+        secondary: const Icon(Icons.campaign_outlined, color: AppTheme.teal),
+        title: Text(tr('Powtarzaj ogłoszenia moich grup'), style: const TextStyle(color: AppTheme.text)),
+        subtitle: Text(
+            i.containsKey('board')
+                ? tr('Komunikator z zasilacza, np. na balkonie, co pół godziny powtarza przez dobę ostatnie ogłoszenia Twoich grup, więc dotrą też do sąsiadów, którzy byli poza zasięgiem. Teraz na tablicy: %s.',
+                    ['${i['board_n'] ?? 0}'])
+                : tr('Wymaga firmware komunikatora 0.19-kom lub nowszego.'),
+            style: const TextStyle(color: AppTheme.muted, fontSize: 12, height: 1.4)),
+        value: i['board'] == true,
+        activeColor: AppTheme.teal,
+        onChanged: can && i.containsKey('board') ? (v) => _run(() => widget.kom.request('set', {'board': v})) : null,
+      )),
       _section(tr('Dom bez internetu')),
       Card(child: ListTile(
         leading: const Icon(Icons.home_outlined, color: AppTheme.teal),
