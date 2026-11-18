@@ -14,6 +14,7 @@ import '../../core/core_event.dart';
 import '../../services/wallet_service.dart';
 import '../../services/owner_token_service.dart';
 import '../../services/store_card_pref.dart';
+import '../../widgets/weather_station_card.dart';
 import '../../services/node_service.dart';
 import '../../services/ble_service.dart';
 import '../../log.dart';
@@ -740,6 +741,8 @@ class _NodesScreenState extends State<NodesScreen> {
                     NewsSection(owner: state.wallet?.address),
                     ...list.map(_buildCard),
                     ..._myGateways.map(_gatewayCard),
+                    // Moja stacja pogodowa (WeatherXM) obok nodów: ta sama karta co w sensmos.com/my
+                    const WeatherStationCard(),
                     // Karta Storage: na portfel, nie na noda — dlatego pod listą, nie w karcie.
                     // Warunku „co najmniej jeden node" JUŻ NIE MA (2026-09-09): miejsce kupuje się
                     // na adres, a pokrycie sprawdza BE przy zakładaniu pakietu. Ukrywanie karty
