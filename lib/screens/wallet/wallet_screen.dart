@@ -1037,11 +1037,12 @@ class _WalletScreenState extends State<WalletScreen> {
                     _snack(tr('Adres skopiowany'));
                   },
                 ),
-                IconButton(
-                  icon: const Icon(Icons.qr_code,
-                      size: 20, color: AppTheme.teal),
-                  onPressed: () => _showReceive(addr),
-                ),
+                if (!kPlayStore)
+                  IconButton(
+                    icon: const Icon(Icons.qr_code,
+                        size: 20, color: AppTheme.teal),
+                    onPressed: () => _showReceive(addr),
+                  ),
               ]),
             ],
           ),
